@@ -9,16 +9,17 @@ public final class CommandContext {
 
     static {
         commandMap.put("catalog", new CatalogCommand());
+        commandMap.put("unknown", new UnknownCommand());
     }
 
     private CommandContext() {}
 
-    public static Command getCommand(String nameOfCommand) {
-        if (nameOfCommand != null && !commandMap.containsKey(nameOfCommand)) {
-            return new UnknownCommand();
+    public static Command getCommand(String commandName) {
+        if (commandName != null && commandMap.containsKey(commandName)) {
+            return commandMap.get(commandName);
         }
 
-        return commandMap.get(nameOfCommand);
+        return commandMap.get("unknown");
     }
 
 }
