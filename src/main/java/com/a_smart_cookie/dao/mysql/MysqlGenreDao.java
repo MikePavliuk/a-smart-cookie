@@ -1,6 +1,7 @@
 package com.a_smart_cookie.dao.mysql;
 
 import com.a_smart_cookie.dao.GenreDao;
+import com.a_smart_cookie.dao.ResourceReleaser;
 import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.exception.DaoException;
@@ -34,8 +35,8 @@ public class MysqlGenreDao extends GenreDao {
         } catch (SQLException e) {
             throw new DaoException("Exception occurred while finding all genres in " + language, e);
         } finally {
-            close(rs);
-            close(pstmt);
+            ResourceReleaser.close(rs);
+            ResourceReleaser.close(pstmt);
         }
     }
 
