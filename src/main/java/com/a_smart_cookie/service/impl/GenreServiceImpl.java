@@ -1,32 +1,34 @@
 package com.a_smart_cookie.service.impl;
 
+import com.a_smart_cookie.dao.EntityTransaction;
 import com.a_smart_cookie.dao.GenreDao;
-import com.a_smart_cookie.dao.mysql.MysqlGenreDao;
-import com.a_smart_cookie.dao.pool.StandardConnectionPool;
 import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.GenreService;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class GenreServiceImpl implements GenreService {
 
-    public List<Genre> findAllGenresByLanguage(Language language) throws ServiceException {
-        Connection conn = null;
-        GenreDao genreDao = new MysqlGenreDao();
+    private final GenreDao genreDao;
+    private final EntityTransaction transaction;
 
+    public GenreServiceImpl(GenreDao genreDao, EntityTransaction transaction) {
+        this.genreDao = genreDao;
+        this.transaction = transaction;
+    }
+
+    public List<Genre> findAllGenresByLanguage(Language language) throws ServiceException {
         try {
-            conn = StandardConnectionPool.getConnection();
-            genreDao.setConnection(conn);
+            transaction.init(genreDao);
             return genreDao.findAllByLanguage(language);
         } catch (SQLException | DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Can't find all genres in " + language.name().toLowerCase(), e);
         } finally {
-            genreDao.close(conn);
+            transaction.end();
         }
     }
 

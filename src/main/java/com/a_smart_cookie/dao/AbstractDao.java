@@ -12,14 +12,4 @@ public abstract class AbstractDao<T extends Entity> {
         this.connection = connection;
     }
 
-    public void close(AutoCloseable autoCloseable) {
-        if (autoCloseable != null) {
-            try {
-                autoCloseable.close();
-            } catch (Exception e) {
-                // log
-            }
-        }
-    }
-
 }
