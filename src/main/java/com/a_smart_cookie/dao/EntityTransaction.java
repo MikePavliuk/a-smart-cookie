@@ -11,14 +11,12 @@ public final class EntityTransaction {
 
     private Connection connection;
 
-    public void init(AbstractDao<? extends Entity> dao) throws SQLException {
-        if (connection == null) {
-            connection = StandardConnectionPool.getConnection();
-        }
-        dao.setConnection(connection);
+    public void init(AbstractDao<? extends Entity> dao) throws DaoException {
+		initializeConnection();
+		dao.setConnection(connection);
     }
 
-    public void end() {
+	public void end() {
         if (connection != null) {
             ResourceReleaser.close(connection);
         }
@@ -26,15 +24,9 @@ public final class EntityTransaction {
 
     @SafeVarargs
     public final <T extends Entity> void initTransaction(AbstractDao<T> dao, AbstractDao<T>... daos) throws DaoException {
-        if (connection == null) {
-            try {
-                connection = StandardConnectionPool.getConnection();
-            } catch (SQLException e) {
-                throw new DaoException("Can't get connection from pool for initializing transaction", e);
-            }
-        }
+		initializeConnection();
 
-        try {
+		try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new DaoException("Exception occurred while setting auto commit to false", e);
@@ -45,6 +37,7 @@ public final class EntityTransaction {
             daoElement.setConnection(connection);
         }
     }
+
     public void endTransaction() throws DaoException {
 
         if (connection != null) {
@@ -57,6 +50,7 @@ public final class EntityTransaction {
         }
 
     }
+
     public void commit() throws DaoException {
         try {
             connection.commit();
@@ -64,6 +58,7 @@ public final class EntityTransaction {
             throw new DaoException("Can't commit changes because of occurred exception", e);
         }
     }
+
     public void rollback() throws DaoException {
         try {
             connection.rollback();
@@ -71,4 +66,15 @@ public final class EntityTransaction {
             throw new DaoException("Can't make a rollback because of occurred exception", e);
         }
     }
+
+	private void initializeConnection() throws DaoException {
+		if (connection == null) {
+			try {
+				connection = StandardConnectionPool.getConnection();
+			} catch (SQLException e) {
+				throw new DaoException("Can't get connection from pool for initializing transaction", e);
+			}
+		}
+	}
+
 }

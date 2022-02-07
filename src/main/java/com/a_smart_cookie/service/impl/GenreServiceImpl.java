@@ -8,7 +8,6 @@ import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.GenreService;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class GenreServiceImpl implements GenreService {
@@ -25,7 +24,7 @@ public class GenreServiceImpl implements GenreService {
         try {
             transaction.init(genreDao);
             return genreDao.findAllByLanguage(language);
-        } catch (SQLException | DaoException e) {
+        } catch (DaoException e) {
             throw new ServiceException("Can't find all genres in " + language.name().toLowerCase(), e);
         } finally {
             transaction.end();
