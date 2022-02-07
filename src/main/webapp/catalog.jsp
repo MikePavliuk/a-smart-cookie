@@ -4,6 +4,6 @@
     <title>Catalog</title>
 </head>
 <body>
-    Catalog
+    ${requestScope.message}
 </body>
 </html>

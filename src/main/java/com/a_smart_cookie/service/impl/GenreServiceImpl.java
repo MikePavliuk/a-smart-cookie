@@ -1,5 +1,6 @@
 package com.a_smart_cookie.service.impl;
 
+import com.a_smart_cookie.dao.DaoFactory;
 import com.a_smart_cookie.dao.EntityTransaction;
 import com.a_smart_cookie.dao.GenreDao;
 import com.a_smart_cookie.entity.Genre;
@@ -12,16 +13,10 @@ import java.util.List;
 
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreDao genreDao;
-    private final EntityTransaction transaction;
-
-    public GenreServiceImpl(GenreDao genreDao, EntityTransaction transaction) {
-        this.genreDao = genreDao;
-        this.transaction = transaction;
-    }
-
     public List<Genre> findAllGenresByLanguage(Language language) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction();
         try {
+            GenreDao genreDao = DaoFactory.getInstance().getGenreDao();
             transaction.init(genreDao);
             return genreDao.findAllByLanguage(language);
         } catch (DaoException e) {
