@@ -11,7 +11,7 @@ public final class EntityTransaction {
 
     private Connection connection;
 
-    public void init(AbstractDao<? extends Entity> dao) throws DaoException {
+    public void init(AbstractDao<? extends Entity<?>> dao) throws DaoException {
 		initializeConnection();
 		dao.setConnection(connection);
     }
@@ -23,7 +23,7 @@ public final class EntityTransaction {
     }
 
     @SafeVarargs
-    public final <T extends Entity> void initTransaction(AbstractDao<T> dao, AbstractDao<T>... daos) throws DaoException {
+    public final <T extends Entity<?>> void initTransaction(AbstractDao<T> dao, AbstractDao<T>... daos) throws DaoException {
 		initializeConnection();
 
 		try {
@@ -33,13 +33,13 @@ public final class EntityTransaction {
         }
 
         dao.setConnection(connection);
-        for (AbstractDao<? extends Entity> daoElement : daos) {
+        for (AbstractDao<? extends Entity<?>> daoElement : daos) {
             daoElement.setConnection(connection);
         }
+
     }
 
     public void endTransaction() throws DaoException {
-
         if (connection != null) {
             try {
                 connection.setAutoCommit(true);
@@ -48,7 +48,6 @@ public final class EntityTransaction {
             }
             ResourceReleaser.close(connection);
         }
-
     }
 
     public void commit() throws DaoException {

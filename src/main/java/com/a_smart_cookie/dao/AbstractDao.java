@@ -4,7 +4,7 @@ import com.a_smart_cookie.entity.Entity;
 
 import java.sql.Connection;
 
-public abstract class AbstractDao<T extends Entity> {
+public abstract class AbstractDao<T extends Entity<?>> {
 
     protected Connection connection;
 
