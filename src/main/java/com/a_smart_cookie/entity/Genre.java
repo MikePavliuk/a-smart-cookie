@@ -1,16 +1,12 @@
 package com.a_smart_cookie.entity;
 
-public final class Genre implements Entity {
-    private final Integer id;
+public class Genre extends Entity<Integer> {
+    private static final long serialVersionUID = 1736008828428984307L;
     private final String name;
 
     public Genre(Integer id, String name) {
-        this.id = id;
+        super.setId(id);
         this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getName() {
@@ -20,7 +16,7 @@ public final class Genre implements Entity {
     @Override
     public String toString() {
         return "Genre{" +
-                "id=" + id +
+                "id=" + super.getId() +
                 ", name='" + name + '\'' +
                 '}';
     }

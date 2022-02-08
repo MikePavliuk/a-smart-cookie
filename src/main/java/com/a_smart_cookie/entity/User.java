@@ -2,8 +2,8 @@ package com.a_smart_cookie.entity;
 
 import java.util.List;
 
-public final class User implements Entity {
-    private final Integer id;
+public final class User extends Entity<Integer> {
+    private static final long serialVersionUID = 1780660780275961115L;
     private final String email;
     private final byte[] password;
     private final byte[] salt;
@@ -13,7 +13,7 @@ public final class User implements Entity {
     private final List<Subscription> subscriptions;
 
     private User(UserBuilder userBuilder) {
-        this.id = userBuilder.id;
+        super.setId(userBuilder.id);
         this.email = userBuilder.email;
         this.password = userBuilder.password;
         this.salt = userBuilder.salt;
@@ -21,10 +21,6 @@ public final class User implements Entity {
         this.status = userBuilder.status;
         this.role = userBuilder.role;
         this.subscriptions = userBuilder.subscriptions;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getEmail() {
@@ -58,7 +54,7 @@ public final class User implements Entity {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + super.getId() +
                 ", email='" + email + '\'' +
                 ", userDetail=" + userDetail +
                 ", status=" + status.name().toLowerCase() +
@@ -109,7 +105,7 @@ public final class User implements Entity {
         }
 
         public UserBuilder fromUser(User user) {
-            this.id = user.id;
+            this.id = user.getId();
             this.userDetail = user.userDetail;
             this.subscriptions = user.subscriptions;
             return this;
