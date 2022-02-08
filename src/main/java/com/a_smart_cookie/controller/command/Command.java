@@ -1,35 +1,20 @@
 package com.a_smart_cookie.controller.command;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 
-public abstract class Command {
-    protected ServletContext context;
-    protected HttpServletRequest request;
-    protected HttpServletResponse response;
+public abstract class Command implements Serializable {
 
-    public void init(
-            ServletContext servletContext,
-            HttpServletRequest servletRequest,
-            HttpServletResponse servletResponse) {
-        this.context = servletContext;
-        this.request = servletRequest;
-        this.response = servletResponse;
-    }
+	private static final long serialVersionUID = 4513060755527075000L;
 
-    public abstract void process() throws ServletException, IOException;
+	public abstract String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
-    protected void forward(String target) throws ServletException, IOException {
-        target = String.format("/%s.jsp", target);
-        context.getRequestDispatcher(target).forward(request, response);
-    }
-
-    protected void sendRedirect(String target) throws IOException {
-        target = String.format("%s.jsp", target);
-        response.sendRedirect(target);
-    }
+	@Override
+	public final String toString() {
+		return getClass().getSimpleName();
+	}
 
 }

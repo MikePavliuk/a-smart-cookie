@@ -1,5 +1,6 @@
 package com.a_smart_cookie.dao.mysql;
 
+import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dao.GenreDao;
 import com.a_smart_cookie.dao.ResourceReleaser;
 import com.a_smart_cookie.entity.Genre;
@@ -26,8 +27,8 @@ public class MysqlGenreDao extends GenreDao {
 
             while (rs.next()) {
                 genres.add(new Genre(
-                        rs.getInt(ColumnName.ID.getName()),
-                        rs.getString(ColumnName.NAME.getName())));
+                        rs.getInt(EntityColumn.Genre.ID.getName()),
+                        rs.getString(EntityColumn.Genre.NAME.getName())));
             }
 
             return genres;

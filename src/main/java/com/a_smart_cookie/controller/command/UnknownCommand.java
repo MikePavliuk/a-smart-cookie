@@ -1,12 +1,18 @@
 package com.a_smart_cookie.controller.command;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
+import com.a_smart_cookie.controller.WebPath;
 
-public final class UnknownCommand extends Command {
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-    @Override
-    public void process() throws IOException {
-        sendRedirect("error");
-    }
+public class UnknownCommand extends Command {
+
+	private static final long serialVersionUID = 4594491816420609558L;
+
+	@Override
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
+		request.setAttribute("errorMessage", "No such command");
+		return WebPath.Page.ERROR.getValue();
+	}
+
 }
