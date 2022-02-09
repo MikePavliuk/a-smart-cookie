@@ -1,6 +1,11 @@
 package com.a_smart_cookie.entity;
 
+import com.a_smart_cookie.util.translator.strategies.GenreTranslatorStrategies;
+import com.a_smart_cookie.util.translator.Translatable;
+import com.a_smart_cookie.util.translator.TranslatorContext;
+
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 public final class Publication extends Entity {
     private static final long serialVersionUID = 5722602323493897338L;
@@ -41,4 +46,27 @@ public final class Publication extends Entity {
 				", pricePerMonth=" + pricePerMonth +
 				'}';
 	}
+
+	public enum Genre implements Translatable {
+		FICTION,
+		NOVEL,
+		COOKBOOK,
+		DETECTIVE,
+		HISTORICAL,
+		HORROR,
+		SCIENCE;
+
+		public static Genre fromString(String genreName) throws IllegalArgumentException {
+			return Arrays.stream(Genre.values())
+					.filter(genre -> genre.name().toLowerCase().equals(genreName))
+					.findFirst()
+					.orElse(FICTION);
+		}
+
+		@Override
+		public String getTranslatedValue(Language language) {
+			return TranslatorContext.translateInto(GenreTranslatorStrategies.getTranslatorByLanguage(language), this);
+		}
+	}
+
 }
