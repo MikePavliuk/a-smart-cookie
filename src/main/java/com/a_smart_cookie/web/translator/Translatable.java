@@ -1,4 +1,4 @@
-package com.a_smart_cookie.util.translator;
+package com.a_smart_cookie.web.translator;
 
 import com.a_smart_cookie.entity.Language;
 

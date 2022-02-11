@@ -1,4 +1,4 @@
-package com.a_smart_cookie.util.pagination;
+package com.a_smart_cookie.web.pagination;
 
 import java.util.Arrays;
 

@@ -8,7 +8,7 @@ import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
-import com.a_smart_cookie.util.pagination.ItemsPerPage;
+import com.a_smart_cookie.web.pagination.ItemsPerPage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
