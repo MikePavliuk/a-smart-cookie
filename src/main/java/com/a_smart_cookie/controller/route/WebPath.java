@@ -1,8 +1,8 @@
-package com.a_smart_cookie.controller;
+package com.a_smart_cookie.controller.route;
 
 public final class WebPath {
 
-	public enum Page {
+	public enum Page implements Routable {
 		ERROR("/WEB-INF/jsp/error.jsp"),
 		CATALOG("/WEB-INF/jsp/catalog.jsp");
 
@@ -17,8 +17,8 @@ public final class WebPath {
 		}
 	}
 
-	public enum Command {
-		GENRES_IN_ENGLISH("/controller?command=catalog&lang=ua");
+	public enum Command implements Routable {
+		CATALOG_FIRST_PAGE("/controller?command=catalog&page=1");
 
 		private final String value;
 

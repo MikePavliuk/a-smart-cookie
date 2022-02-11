@@ -2,6 +2,7 @@ package com.a_smart_cookie.controller;
 
 import com.a_smart_cookie.controller.command.Command;
 import com.a_smart_cookie.controller.command.CommandContext;
+import com.a_smart_cookie.controller.route.HttpPath;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,15 +35,19 @@ public class FrontController extends HttpServlet {
 		// obtain command object by its name
 		Command command = CommandContext.getCommand(commandName);
 
-		// execute command and get forward address
-		String forward = command.execute(req, resp);
+		// execute command and get http handler type with path
+		HttpPath httpPath = command.execute(req, resp);
 
-		// if the forward address is not null go to the address
-		if (forward != null) {
-			RequestDispatcher disp = req.getRequestDispatcher(forward);
-			disp.forward(req, resp);
+		switch (httpPath.getHttpHandlerType()) {
+			case FORWARD:
+				RequestDispatcher disp = req.getRequestDispatcher(httpPath.getPath().getValue());
+				disp.forward(req, resp);
+				break;
+
+			case SEND_REDIRECT:
+				resp.sendRedirect(req.getContextPath() + httpPath.getPath().getValue());
+				break;
 		}
-
 	}
 
 }
