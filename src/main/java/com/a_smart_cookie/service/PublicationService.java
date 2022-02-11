@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface PublicationService {
 
-	List<Publication> findAllPublicationsByLanguage(Language language) throws ServiceException;
+	List<Publication> findAllByLanguage(Language language) throws ServiceException;
+
+	List<Publication> findLimitedWithOffsetByLanguage(int limit, int offset, Language language) throws ServiceException;
+
+	int getTotalNumberOfPublications() throws ServiceException;
 
 }

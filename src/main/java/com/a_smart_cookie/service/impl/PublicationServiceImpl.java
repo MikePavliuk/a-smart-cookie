@@ -14,7 +14,7 @@ import java.util.List;
 public class PublicationServiceImpl implements PublicationService {
 
 	@Override
-	public List<Publication> findAllPublicationsByLanguage(Language language) throws ServiceException {
+	public List<Publication> findAllByLanguage(Language language) throws ServiceException {
 		EntityTransaction transaction = new EntityTransaction();
 		try {
 			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
@@ -27,4 +27,31 @@ public class PublicationServiceImpl implements PublicationService {
 		}
 	}
 
+	@Override
+	public List<Publication> findLimitedWithOffsetByLanguage(int limit, int offset, Language language) throws ServiceException {
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+			return publicationDao.findLimitedWithOffsetByLanguage(limit, offset, language);
+		} catch (DaoException e) {
+			throw new ServiceException("Can't find " + limit +" publications with offset of " + offset + " in " + language, e);
+		} finally {
+			transaction.end();
+		}
+	}
+
+	@Override
+	public int getTotalNumberOfPublications() throws ServiceException {
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+			return publicationDao.getTotalNumberOfPublications();
+		} catch (DaoException e) {
+			throw new ServiceException("Can't get total number of publications", e);
+		} finally {
+			transaction.end();
+		}
+	}
 }

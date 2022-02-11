@@ -1,5 +1,6 @@
 package com.a_smart_cookie.entity;
 
+import com.a_smart_cookie.util.StringHandler;
 import com.a_smart_cookie.util.translator.strategies.GenreTranslatorStrategies;
 import com.a_smart_cookie.util.translator.Translatable;
 import com.a_smart_cookie.util.translator.TranslatorContext;
@@ -65,7 +66,9 @@ public final class Publication extends Entity {
 
 		@Override
 		public String getTranslatedValue(Language language) {
-			return TranslatorContext.translateInto(GenreTranslatorStrategies.getTranslatorByLanguage(language), this);
+			return StringHandler.capitaliseFirstLetter(
+					TranslatorContext.translateInto(GenreTranslatorStrategies.getTranslatorByLanguage(language), this)
+			);
 		}
 	}
 
