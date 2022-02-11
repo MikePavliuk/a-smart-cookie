@@ -1,0 +1,13 @@
+<%--=========================================================================== 
+Footer (bottom area). 
+===========================================================================--%>
+
+<div class="footer">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<p>&copy;Mykhailo Pavliuk, 2022</p>
+			</div>
+		</div>
+	</div>
+</div>

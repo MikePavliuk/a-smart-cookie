@@ -1,0 +1,15 @@
+<%--=========================================================================== 
+Header (top area). 
+===========================================================================--%> 
+
+<%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+
+<div class="header">
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#">A Smart Cookie</a>
+    </nav>
+</div>
+
+
+
