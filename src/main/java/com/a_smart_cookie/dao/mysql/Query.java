@@ -29,6 +29,19 @@ public final class Query {
 						"(SELECT id FROM a_smart_cookie.language WHERE name = ?)"
 		),
 
+		BUILDER_FIND_SEARCHED_BY_LANGUAGE_AND_TITLE(
+				"SELECT genre.id, genre.name, " +
+						"publication.id, publication.price_per_month, publication_info.title, publication_info.description " +
+						"FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"JOIN a_smart_cookie.genre " +
+						"ON publication.genre_id = genre.id " +
+						"WHERE publication_info.language_id = " +
+							"(SELECT id FROM a_smart_cookie.language WHERE name = ?) " +
+						"AND publication_info.title LIKE CONCAT( '%',?,'%') "
+		),
+
 		FIND_LIMITED_NUMBER_OF_ITEMS_WITH_OFFSET_BY_LANGUAGE_IN_NATURAL_ORDER(
 				"SELECT genre.id, genre.name, " +
 						"publication.id, publication.price_per_month, publication_info.title, publication_info.description " +
@@ -44,6 +57,15 @@ public final class Query {
 
 		GET_TOTAL_NUMBER_OF_ROWS(
 				"SELECT count(*) AS count FROM a_smart_cookie.publication;"
+		),
+
+		GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE_AND_TITLE(
+				"SELECT count(*) AS count FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"WHERE publication_info.language_id = " +
+							"(SELECT id FROM a_smart_cookie.language WHERE name = ?) " +
+						"AND publication_info.title LIKE CONCAT( '%',?,'%') ;"
 		);
 
 		private final String query;

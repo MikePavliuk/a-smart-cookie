@@ -21,6 +21,16 @@ public interface PublicationService {
 			SortingParameter sortingParameter,
 			SortingDirection sortingDirection) throws ServiceException;
 
+	List<Publication> findBySearchedTitleLimitedWithOffsetByLanguageAndWithSortingParameters(
+			String searched,
+			int itemsPerPage,
+			int offset,
+			Language language,
+			SortingParameter sortingParameter,
+			SortingDirection sortingDirection) throws ServiceException;
+
 	int getTotalNumberOfPublications() throws ServiceException;
+
+	int getNumberOfFoundedPublicationsByLanguageAndSearchedTitle(Language language, String title) throws ServiceException;
 
 }

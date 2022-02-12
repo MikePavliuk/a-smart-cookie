@@ -72,6 +72,35 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
+	public List<Publication> findBySearchedTitleLimitedWithOffsetByLanguageAndWithSortingParameters(
+			String searched,
+			int itemsPerPage,
+			int offset,
+			Language language,
+			SortingParameter sortingParameter,
+			SortingDirection sortingDirection) throws ServiceException {
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+			return publicationDao.findBySearchedTitleLimitedWithOffsetByLanguageAndWithSortingParameters(
+					searched,
+					itemsPerPage,
+					offset,
+					language,
+					sortingParameter,
+					sortingDirection);
+		} catch (DaoException e) {
+			throw new ServiceException(
+					"Can't find by title + '" + searched + "' " + itemsPerPage +" publications with offset of "
+							+ offset + " in " + language + " with sorting parameter "
+							+ sortingParameter.getValue() + " and direction of sorting " + sortingDirection.name(), e);
+		} finally {
+			transaction.end();
+		}
+	}
+
+	@Override
 	public int getTotalNumberOfPublications() throws ServiceException {
 		EntityTransaction transaction = new EntityTransaction();
 		try {
@@ -80,6 +109,21 @@ public class PublicationServiceImpl implements PublicationService {
 			return publicationDao.getTotalNumberOfPublications();
 		} catch (DaoException e) {
 			throw new ServiceException("Can't get total number of publications", e);
+		} finally {
+			transaction.end();
+		}
+	}
+
+	@Override
+	public int getNumberOfFoundedPublicationsByLanguageAndSearchedTitle(Language language, String title) throws ServiceException {
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+			return publicationDao.getNumberOfFoundedPublicationsByLanguageAndSearchedTitle(language, title);
+		} catch (DaoException e) {
+			throw new ServiceException("Can't get total number of publications in " + language +
+					" and with searched title '" + title + "'", e);
 		} finally {
 			transaction.end();
 		}

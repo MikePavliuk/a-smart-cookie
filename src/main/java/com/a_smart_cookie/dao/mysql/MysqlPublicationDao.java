@@ -44,7 +44,12 @@ public class MysqlPublicationDao extends PublicationDao {
 			SortingParameter sortingParameter,
 			SortingDirection sortingDirection) throws DaoException {
 
-		StringBuilder queryBuilder = generateQuery(itemsPerPage, offset, sortingParameter, sortingDirection);
+		StringBuilder queryBuilder = generateQueryWithSortingAndPaginationParams(
+				Query.Publication.BUILDER_FIND_ALL_BY_LANGUAGE.getQuery(),
+				itemsPerPage,
+				offset,
+				sortingParameter,
+				sortingDirection);
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -65,9 +70,53 @@ public class MysqlPublicationDao extends PublicationDao {
 		}
 	}
 
-	private StringBuilder generateQuery(int itemsPerPage, int offset, SortingParameter sortingParameter, SortingDirection sortingDirection) {
+	@Override
+	public List<Publication> findBySearchedTitleLimitedWithOffsetByLanguageAndWithSortingParameters(
+			String searched,
+			int itemsPerPage,
+			int offset,
+			Language language,
+			SortingParameter sortingParameter,
+			SortingDirection sortingDirection) throws DaoException {
+
+		StringBuilder queryBuilder = generateQueryWithSortingAndPaginationParams(
+				Query.Publication.BUILDER_FIND_SEARCHED_BY_LANGUAGE_AND_TITLE.getQuery(),
+				itemsPerPage,
+				offset,
+				sortingParameter,
+				sortingDirection);
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(queryBuilder.toString());
+			pstmt.setString(1, language.name().toLowerCase());
+			pstmt.setString(2, searched);
+			rs = pstmt.executeQuery();
+
+			return extractPublications(rs);
+
+		} catch (SQLException e) {
+			throw new DaoException(
+					"Exception occurred while finding title + '" + searched + "' " + itemsPerPage +
+							" publications with offset of " + offset + " in " + language +
+							" with query: " + queryBuilder, e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	private StringBuilder generateQueryWithSortingAndPaginationParams(
+			String initialQueryBuilder,
+			int itemsPerPage,
+			int offset,
+			SortingParameter sortingParameter,
+			SortingDirection sortingDirection) {
+
 		StringBuilder queryBuilder = new StringBuilder();
-		queryBuilder.append(Query.Publication.BUILDER_FIND_ALL_BY_LANGUAGE.getQuery());
+		queryBuilder.append(initialQueryBuilder);
+
 		queryBuilder.append(" ORDER BY ");
 
 		if (sortingParameter != null) {
@@ -137,6 +186,33 @@ public class MysqlPublicationDao extends PublicationDao {
 
 		} catch (SQLException e) {
 			throw new DaoException("Exception occurred while getting total number of publications", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int getNumberOfFoundedPublicationsByLanguageAndSearchedTitle(Language language, String title) throws DaoException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE_AND_TITLE.getQuery());
+			pstmt.setString(1, language.name().toLowerCase());
+			pstmt.setString(2, title);
+			rs = pstmt.executeQuery();
+
+			int numberOfRows = 0;
+
+			if (rs.next()) {
+				numberOfRows = rs.getInt("count");
+			}
+
+			return numberOfRows;
+
+		} catch (SQLException e) {
+			throw new DaoException("Exception occurred while getting number of publications in " + language.name().toLowerCase()
+					+ " and with searched title = '" + title + "'", e);
 		} finally {
 			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);

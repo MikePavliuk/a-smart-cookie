@@ -21,6 +21,16 @@ public abstract class PublicationDao extends AbstractDao<Publication> {
 			SortingParameter sortingParameter,
 			SortingDirection sortingDirection) throws DaoException;
 
+	public abstract List<Publication> findBySearchedTitleLimitedWithOffsetByLanguageAndWithSortingParameters(
+			String searchTitle,
+			int itemsPerPage,
+			int offset,
+			Language language,
+			SortingParameter sortingParameter,
+			SortingDirection sortingDirection) throws DaoException;
+
 	public abstract int getTotalNumberOfPublications() throws DaoException;
+
+	public abstract int getNumberOfFoundedPublicationsByLanguageAndSearchedTitle(Language language, String title) throws DaoException;
 
 }
