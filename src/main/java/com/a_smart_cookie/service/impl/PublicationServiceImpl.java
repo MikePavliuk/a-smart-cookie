@@ -8,6 +8,8 @@ import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
+import com.a_smart_cookie.util.sorting.SortingDirection;
+import com.a_smart_cookie.util.sorting.SortingParameter;
 
 import java.util.List;
 
@@ -39,6 +41,34 @@ public class PublicationServiceImpl implements PublicationService {
 		} finally {
 			transaction.end();
 		}
+	}
+
+	@Override
+	public List<Publication> findLimitedWithOffsetByLanguageAndWithSortingParameters(
+			int itemsPerPage,
+			int offset,
+			Language language,
+			SortingParameter sortingParameter,
+			SortingDirection sortingDirection) throws ServiceException {
+
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+			return publicationDao.findLimitedWithOffsetByLanguageAndWithSortingParameters(
+					itemsPerPage,
+					offset,
+					language,
+					sortingParameter,
+					sortingDirection);
+		} catch (DaoException e) {
+			throw new ServiceException(
+					"Can't find " + itemsPerPage +" publications with offset of " + offset + " in " + language +
+					" with sorting parameter " + sortingParameter.getValue() + " and direction of sorting " + sortingDirection.name(), e);
+		} finally {
+			transaction.end();
+		}
+
 	}
 
 	@Override

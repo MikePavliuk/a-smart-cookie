@@ -45,3 +45,8 @@ Catalog Style
 .publication-item {
 	margin: 10px 0;
 }
+
+.sorting:first-child {
+	margin: 0 20px;
+}
+

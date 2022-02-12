@@ -57,7 +57,7 @@ public final class Publication extends Entity {
 		HORROR,
 		SCIENCE;
 
-		public static Genre fromString(String genreName) throws IllegalArgumentException {
+		public static Genre safeFromString(String genreName) {
 			return Arrays.stream(Genre.values())
 					.filter(genre -> genre.name().toLowerCase().equals(genreName))
 					.findFirst()

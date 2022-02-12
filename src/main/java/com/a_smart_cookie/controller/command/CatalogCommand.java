@@ -9,6 +9,8 @@ import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.pagination.ItemsPerPage;
+import com.a_smart_cookie.util.sorting.SortingDirection;
+import com.a_smart_cookie.util.sorting.SortingParameter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,23 +25,32 @@ public class CatalogCommand extends Command {
 		try {
 			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 
-			int itemsPerPage = getItemsPerPage(request);
+			int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
 			int totalNumberOfPublications = publicationService.getTotalNumberOfPublications();
 			int numberOfPages = getNumberOfPages(itemsPerPage, totalNumberOfPublications);
 			int currentPage = getCurrentPage(request, numberOfPages);
+			Language language = Language.safeFromString(request.getParameter("lang"));
+			SortingParameter activeSortingParam = SortingParameter.safeFromString(request.getParameter("sort"));
+			SortingDirection activeSortingDirection = SortingDirection.safeFromString(request.getParameter("direction"));
 
-			Language language = Language.fromString(request.getParameter("lang"));
+			List<Publication> publications;
 
-			List<Publication> publications = publicationService.findLimitedWithOffsetByLanguage(
+			publications = publicationService.findLimitedWithOffsetByLanguageAndWithSortingParameters(
 					itemsPerPage,
 					itemsPerPage * (currentPage-1),
-					language);
+					language,
+					activeSortingParam,
+					activeSortingDirection
+			);
 
 			request.setAttribute("language", language);
 			request.setAttribute("publications", publications);
 			request.setAttribute("numberOfPages", numberOfPages);
 			request.setAttribute("currentPage", currentPage);
 			request.setAttribute("itemsPerPage", itemsPerPage);
+
+			request.setAttribute("sort", activeSortingParam.getValue().toLowerCase());
+			request.setAttribute("direction", activeSortingDirection.name().toLowerCase());
 
 			return new HttpPath(WebPath.Page.CATALOG, HttpHandlerType.FORWARD);
 
@@ -48,16 +59,6 @@ public class CatalogCommand extends Command {
 		}
 
 		return new HttpPath(WebPath.Page.ERROR, HttpHandlerType.SEND_REDIRECT);
-	}
-
-	private int getItemsPerPage(HttpServletRequest request) {
-		int itemsPerPage;
-		try {
-			itemsPerPage = ItemsPerPage.fromString(request.getParameter("limit")).getLimit();
-		} catch (IllegalArgumentException e) {
-			itemsPerPage = ItemsPerPage.ONE.getLimit();
-		}
-		return itemsPerPage;
 	}
 
 	private int getNumberOfPages(int itemsPerPage, int totalNumberOfPublications) {

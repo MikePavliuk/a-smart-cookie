@@ -5,6 +5,7 @@ import java.util.Arrays;
 public enum ItemsPerPage {
 	ONE(1),
 	TWO(2),
+	FIVE(5),
 	TEN(10),
 	TWENTY(20);
 
@@ -14,15 +15,15 @@ public enum ItemsPerPage {
 		this.limit = limit;
 	}
 
-	public static ItemsPerPage fromString(String limitString) throws IllegalArgumentException {
+	public static ItemsPerPage safeFromString(String limitString) {
 		if (limitString == null || !limitString.matches("[0-9]+")) {
-			return ONE;
+			return TWO;
 		}
 
 		return Arrays.stream(ItemsPerPage.values())
 				.filter(limit -> limit.getLimit().equals(Integer.parseInt(limitString)))
 				.findFirst()
-				.orElseThrow(IllegalArgumentException::new);
+				.orElse(TWO);
 	}
 
 	public Integer getLimit() {
