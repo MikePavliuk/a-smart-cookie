@@ -1,8 +1,8 @@
-package com.a_smart_cookie.web.translator.strategies;
+package com.a_smart_cookie.util.translator.strategies;
 
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
-import com.a_smart_cookie.web.translator.Translator;
+import com.a_smart_cookie.util.translator.Translator;
 
 public final class GenreTranslatorStrategies {
 

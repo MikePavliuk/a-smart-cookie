@@ -1,9 +1,9 @@
 package com.a_smart_cookie.entity;
 
 import com.a_smart_cookie.util.StringHandler;
-import com.a_smart_cookie.web.translator.strategies.GenreTranslatorStrategies;
-import com.a_smart_cookie.web.translator.Translatable;
-import com.a_smart_cookie.web.translator.TranslatorContext;
+import com.a_smart_cookie.util.translator.strategies.GenreTranslatorStrategies;
+import com.a_smart_cookie.util.translator.Translatable;
+import com.a_smart_cookie.util.translator.TranslatorContext;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
