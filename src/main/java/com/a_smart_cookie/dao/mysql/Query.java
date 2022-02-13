@@ -2,7 +2,8 @@ package com.a_smart_cookie.dao.mysql;
 
 public final class Query {
 
-    private Query() {}
+	private Query() {
+	}
 
 	public enum Publication {
 		BUILDER_FIND_ALL_BY_LANGUAGE(
@@ -17,19 +18,6 @@ public final class Query {
 						"(SELECT id FROM a_smart_cookie.language WHERE name = ?)"
 		),
 
-		GET_TOTAL_NUMBER_OF_ROWS(
-				"SELECT count(*) AS count FROM a_smart_cookie.publication;"
-		),
-
-		GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE_AND_TITLE(
-				"SELECT count(*) AS count FROM a_smart_cookie.publication " +
-						"JOIN a_smart_cookie.publication_info " +
-						"ON publication.id = publication_info.publication_id " +
-						"WHERE publication_info.language_id = " +
-							"(SELECT id FROM a_smart_cookie.language WHERE name = ?) " +
-						"AND publication_info.title LIKE CONCAT( '%',?,'%') ;"
-		),
-
 		BUILDER_GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE(
 				"SELECT count(*) AS count FROM a_smart_cookie.publication " +
 						"JOIN a_smart_cookie.publication_info " +
@@ -37,12 +25,31 @@ public final class Query {
 						"JOIN a_smart_cookie.genre " +
 						"ON publication.genre_id = genre.id " +
 						"WHERE publication_info.language_id = " +
-							"(SELECT id FROM a_smart_cookie.language WHERE name = ?) "
+						"(SELECT id FROM a_smart_cookie.language WHERE name = ?) "
 		);
 
 		private final String query;
 
 		Publication(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
+
+	public enum Genre {
+		GET_ALL_DISTINCT_USED_IN_PUBLICATION_TABLE(
+				"SELECT DISTINCT genre.name " +
+						"FROM a_smart_cookie.genre " +
+						"JOIN a_smart_cookie.publication " +
+						"ON genre.id = publication.genre_id;"
+		);
+
+		private final String query;
+
+		Genre(String query) {
 			this.query = query;
 		}
 

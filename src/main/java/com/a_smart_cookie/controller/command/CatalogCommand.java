@@ -5,6 +5,7 @@ import com.a_smart_cookie.adapter.filtering_data.catalog.FilterParameters;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
+import com.a_smart_cookie.dto.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.ServiceException;
@@ -27,7 +28,7 @@ public class CatalogCommand extends Command {
 		try {
 			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 
-			Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("genre"));
+			Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("specificGenre"));
 			String searchedTitle = request.getParameter("search");
 			Language language = Language.safeFromString(request.getParameter("lang"));
 			int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
@@ -48,16 +49,24 @@ public class CatalogCommand extends Command {
 					searchedTitle
 			);
 
+			PublicationsWithAllUsedGenres publicationsWithAllUsedGenres = publicationService
+					.findPublicationsByFilterParameters(filterParameters);
 
-			List<Publication> publications = publicationService.findPublicationsByFilterParameters(filterParameters);
+			List<Publication> publications = publicationsWithAllUsedGenres.getPublications();
+			List<Publication.Genre> usedGenres = publicationsWithAllUsedGenres.getGenres();
 
 
 			if (searchedTitle != null) {
 				request.setAttribute("search", searchedTitle);
 			}
 
+			if (genreRestriction != null) {
+				request.setAttribute("specificGenre", genreRestriction);
+			}
+
 			request.setAttribute("language", language);
 			request.setAttribute("publications", publications);
+			request.setAttribute("genres", usedGenres);
 
 			request.setAttribute("numberOfPages", numberOfPages);
 			request.setAttribute("currentPage", currentPage);

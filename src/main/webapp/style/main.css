@@ -28,15 +28,16 @@ Footer style
 	text-align: center;
 	background: #AAAAFF;
 	margin-top: 15px;
+	height: 50px;
 }
 
 /***************************************************************
 Content style
 ***************************************************************/
 .content {
+	min-height: calc(100vh - 130px);
 	margin: 10px 0;
 }
-
 
 /***************************************************************
 Catalog Style
@@ -46,7 +47,11 @@ Catalog Style
 	margin: 10px 0;
 }
 
-.sorting:first-child {
-	margin: 0 20px;
+.publication-filter-params {
+	margin: 10px 0;
+}
+
+.publication-filter-param {
+	margin: 0 10px;
 }
 

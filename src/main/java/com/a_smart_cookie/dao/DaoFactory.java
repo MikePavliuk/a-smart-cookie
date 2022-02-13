@@ -37,4 +37,6 @@ public abstract class DaoFactory {
 
     public abstract PublicationDao getPublicationDao();
 
+    public abstract GenreDao getGenreDao();
+
 }

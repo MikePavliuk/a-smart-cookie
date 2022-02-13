@@ -59,14 +59,14 @@ public final class Publication extends Entity {
 
 		public static Genre safeFromString(String genreName) {
 			return Arrays.stream(Genre.values())
-					.filter(genre -> genre.name().toLowerCase().equals(genreName))
+					.filter(genre -> genre.name().equalsIgnoreCase(genreName))
 					.findFirst()
 					.orElse(FICTION);
 		}
 
 		public static Genre fromString(String genreName) {
 			return Arrays.stream(Genre.values())
-					.filter(genre -> genre.name().toLowerCase().equals(genreName))
+					.filter(genre -> genre.name().equalsIgnoreCase(genreName))
 					.findFirst()
 					.orElse(null);
 		}

@@ -4,27 +4,36 @@ import com.a_smart_cookie.adapter.filtering_data.catalog.CountRowsParameters;
 import com.a_smart_cookie.adapter.filtering_data.catalog.FilterParameters;
 import com.a_smart_cookie.dao.DaoFactory;
 import com.a_smart_cookie.dao.EntityTransaction;
+import com.a_smart_cookie.dao.GenreDao;
 import com.a_smart_cookie.dao.PublicationDao;
-import com.a_smart_cookie.entity.Publication;
+import com.a_smart_cookie.dto.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 
-import java.util.List;
-
 public class PublicationServiceImpl implements PublicationService {
 
 	@Override
-	public List<Publication> findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException {
+	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException {
 		EntityTransaction transaction = new EntityTransaction();
+		PublicationsWithAllUsedGenres publicationsAndGenres = new PublicationsWithAllUsedGenres();
+
 		try {
 			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
-			transaction.init(publicationDao);
-			return publicationDao.findPublicationsByFilterParameters(filterParameters);
+			GenreDao genreDao = DaoFactory.getInstance().getGenreDao();
+
+			transaction.initTransaction(publicationDao, genreDao);
+
+			publicationsAndGenres.setPublications(publicationDao.findPublicationsByFilterParameters(filterParameters));
+			publicationsAndGenres.setGenres(genreDao.findAllUsedInPublicationsGenres());
+
+			transaction.commit();
+			return publicationsAndGenres;
 		} catch (DaoException e) {
-			throw new ServiceException("Can't find publication with " + filterParameters, e);
+			transaction.rollback();
+			throw new ServiceException("Can't find genres and publications with " + filterParameters, e);
 		} finally {
-			transaction.end();
+			transaction.endTransaction();
 		}
 	}
 

@@ -21,13 +21,13 @@ public final class EntityTransaction {
         }
     }
 
-    public void initTransaction(AbstractDao dao, AbstractDao... daos) throws DaoException {
+    public void initTransaction(AbstractDao dao, AbstractDao... daos) {
 		initializeConnection();
 
 		try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            throw new DaoException("Exception occurred while setting auto commit to false", e);
+			//log
         }
 
         dao.setConnection(connection);
@@ -37,39 +37,39 @@ public final class EntityTransaction {
 
     }
 
-    public void endTransaction() throws DaoException {
+    public void endTransaction() {
         if (connection != null) {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                throw new DaoException("Exception occurred while setting auto commit to true", e);
+				//log
             }
             ResourceReleaser.close(connection);
         }
     }
 
-    public void commit() throws DaoException {
+    public void commit() {
         try {
             connection.commit();
         } catch (SQLException e) {
-            throw new DaoException("Can't commit changes because of occurred exception", e);
+			//log
         }
     }
 
-    public void rollback() throws DaoException {
+    public void rollback() {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            throw new DaoException("Can't make a rollback because of occurred exception", e);
+			//log
         }
     }
 
-	private void initializeConnection() throws DaoException {
+	private void initializeConnection() {
 		if (connection == null) {
 			try {
 				connection = StandardConnectionPool.getConnection();
 			} catch (SQLException e) {
-				throw new DaoException("Can't get connection from pool for initializing transaction", e);
+				//log
 			}
 		}
 	}

@@ -42,7 +42,9 @@ public class MysqlPublicationDao extends PublicationDao {
 		queryBuilder.append(Query.Publication.BUILDER_FIND_ALL_BY_LANGUAGE.getQuery());
 
 		if (filterParameters.getSpecificGenre() != null) {
-			queryBuilder.append(" AND genre.name = ").append(filterParameters.getSpecificGenre().name().toLowerCase());
+			queryBuilder.append(" AND genre.name = '")
+					.append(filterParameters.getSpecificGenre().name().toLowerCase())
+					.append("'");
 		}
 
 		if (filterParameters.getSearchedTitle() != null) {
@@ -91,7 +93,9 @@ public class MysqlPublicationDao extends PublicationDao {
 		queryBuilder.append(Query.Publication.BUILDER_GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE.getQuery());
 
 		if (countRowsParameters.getGenre() != null ) {
-			queryBuilder.append(" AND genre.name = ").append(countRowsParameters.getGenre().name().toLowerCase());
+			queryBuilder.append(" AND genre.name = '")
+					.append(countRowsParameters.getGenre().name().toLowerCase())
+					.append("'");
 		}
 
 		if (countRowsParameters.getSearchedTitle() != null) {
