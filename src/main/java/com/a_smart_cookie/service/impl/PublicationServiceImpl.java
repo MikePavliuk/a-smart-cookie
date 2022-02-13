@@ -1,12 +1,12 @@
 package com.a_smart_cookie.service.impl;
 
-import com.a_smart_cookie.adapter.filtering_data.catalog.CountRowsParameters;
-import com.a_smart_cookie.adapter.filtering_data.catalog.FilterParameters;
+import com.a_smart_cookie.dto.catalog.CountRowsParameters;
+import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dao.DaoFactory;
 import com.a_smart_cookie.dao.EntityTransaction;
 import com.a_smart_cookie.dao.GenreDao;
 import com.a_smart_cookie.dao.PublicationDao;
-import com.a_smart_cookie.dto.PublicationsWithAllUsedGenres;
+import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;

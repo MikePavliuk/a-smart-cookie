@@ -1,4 +1,4 @@
-package com.a_smart_cookie.adapter.filtering_data.catalog;
+package com.a_smart_cookie.dto.catalog;
 
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;

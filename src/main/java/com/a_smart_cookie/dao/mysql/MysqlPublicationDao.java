@@ -1,7 +1,7 @@
 package com.a_smart_cookie.dao.mysql;
 
-import com.a_smart_cookie.adapter.filtering_data.catalog.CountRowsParameters;
-import com.a_smart_cookie.adapter.filtering_data.catalog.FilterParameters;
+import com.a_smart_cookie.dto.catalog.CountRowsParameters;
+import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dao.PublicationDao;
 import com.a_smart_cookie.dao.ResourceReleaser;

@@ -1,11 +1,11 @@
 package com.a_smart_cookie.controller.command;
 
-import com.a_smart_cookie.adapter.filtering_data.catalog.CountRowsParameters;
-import com.a_smart_cookie.adapter.filtering_data.catalog.FilterParameters;
+import com.a_smart_cookie.dto.catalog.CountRowsParameters;
+import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
-import com.a_smart_cookie.dto.PublicationsWithAllUsedGenres;
+import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.ServiceException;
