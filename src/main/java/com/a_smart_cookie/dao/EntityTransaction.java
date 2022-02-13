@@ -1,7 +1,6 @@
 package com.a_smart_cookie.dao;
 
 import com.a_smart_cookie.dao.pool.StandardConnectionPool;
-import com.a_smart_cookie.entity.Entity;
 import com.a_smart_cookie.exception.DaoException;
 
 import java.sql.Connection;
@@ -11,64 +10,68 @@ public final class EntityTransaction {
 
     private Connection connection;
 
-    public void init(AbstractDao<? extends Entity> dao) throws SQLException {
-        if (connection == null) {
-            connection = StandardConnectionPool.getConnection();
-        }
-        dao.setConnection(connection);
+    public void init(AbstractDao dao) throws DaoException {
+		initializeConnection();
+		dao.setConnection(connection);
     }
 
-    public void end() {
+	public void end() {
         if (connection != null) {
             ResourceReleaser.close(connection);
         }
     }
 
-    @SafeVarargs
-    public final <T extends Entity> void initTransaction(AbstractDao<T> dao, AbstractDao<T>... daos) throws DaoException {
-        if (connection == null) {
-            try {
-                connection = StandardConnectionPool.getConnection();
-            } catch (SQLException e) {
-                throw new DaoException("Can't get connection from pool for initializing transaction", e);
-            }
-        }
+    public void initTransaction(AbstractDao dao, AbstractDao... daos) {
+		initializeConnection();
 
-        try {
+		try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            throw new DaoException("Exception occurred while setting auto commit to false", e);
+			//log
         }
 
         dao.setConnection(connection);
-        for (AbstractDao<? extends Entity> daoElement : daos) {
+        for (AbstractDao daoElement : daos) {
             daoElement.setConnection(connection);
         }
-    }
-    public void endTransaction() throws DaoException {
 
+    }
+
+    public void endTransaction() {
         if (connection != null) {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                throw new DaoException("Exception occurred while setting auto commit to true", e);
+				//log
             }
             ResourceReleaser.close(connection);
         }
-
     }
-    public void commit() throws DaoException {
+
+    public void commit() {
         try {
             connection.commit();
         } catch (SQLException e) {
-            throw new DaoException("Can't commit changes because of occurred exception", e);
+			//log
         }
     }
-    public void rollback() throws DaoException {
+
+    public void rollback() {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            throw new DaoException("Can't make a rollback because of occurred exception", e);
+			//log
         }
     }
+
+	private void initializeConnection() {
+		if (connection == null) {
+			try {
+				connection = StandardConnectionPool.getConnection();
+			} catch (SQLException e) {
+				//log
+			}
+		}
+	}
+
 }
