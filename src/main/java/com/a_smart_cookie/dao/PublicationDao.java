@@ -7,7 +7,7 @@ import com.a_smart_cookie.exception.DaoException;
 
 import java.util.List;
 
-public abstract class PublicationDao extends AbstractDao<Publication> {
+public abstract class PublicationDao extends AbstractDao {
 
 	public abstract List<Publication> findPublicationsByFilterParameters(FilterParameters filterParameters) throws DaoException;
 

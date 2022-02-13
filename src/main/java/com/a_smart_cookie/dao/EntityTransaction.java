@@ -1,7 +1,6 @@
 package com.a_smart_cookie.dao;
 
 import com.a_smart_cookie.dao.pool.StandardConnectionPool;
-import com.a_smart_cookie.entity.Entity;
 import com.a_smart_cookie.exception.DaoException;
 
 import java.sql.Connection;
@@ -11,7 +10,7 @@ public final class EntityTransaction {
 
     private Connection connection;
 
-    public void init(AbstractDao<? extends Entity> dao) throws DaoException {
+    public void init(AbstractDao dao) throws DaoException {
 		initializeConnection();
 		dao.setConnection(connection);
     }
@@ -22,8 +21,7 @@ public final class EntityTransaction {
         }
     }
 
-    @SafeVarargs
-    public final <T extends Entity> void initTransaction(AbstractDao<T> dao, AbstractDao<T>... daos) throws DaoException {
+    public void initTransaction(AbstractDao dao, AbstractDao... daos) throws DaoException {
 		initializeConnection();
 
 		try {
@@ -33,7 +31,7 @@ public final class EntityTransaction {
         }
 
         dao.setConnection(connection);
-        for (AbstractDao<? extends Entity> daoElement : daos) {
+        for (AbstractDao daoElement : daos) {
             daoElement.setConnection(connection);
         }
 
