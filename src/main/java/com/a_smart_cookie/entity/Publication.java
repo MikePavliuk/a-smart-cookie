@@ -64,6 +64,13 @@ public final class Publication extends Entity {
 					.orElse(FICTION);
 		}
 
+		public static Genre fromString(String genreName) {
+			return Arrays.stream(Genre.values())
+					.filter(genre -> genre.name().toLowerCase().equals(genreName))
+					.findFirst()
+					.orElse(null);
+		}
+
 		@Override
 		public String getTranslatedValue(Language language) {
 			return StringHandler.capitaliseFirstLetter(

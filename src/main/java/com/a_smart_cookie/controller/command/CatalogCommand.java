@@ -1,5 +1,7 @@
 package com.a_smart_cookie.controller.command;
 
+import com.a_smart_cookie.adapter.filtering_data.catalog.CountRowsParameters;
+import com.a_smart_cookie.adapter.filtering_data.catalog.FilterParameters;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
@@ -25,35 +27,33 @@ public class CatalogCommand extends Command {
 		try {
 			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 
+			Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("genre"));
 			String searchedTitle = request.getParameter("search");
 			Language language = Language.safeFromString(request.getParameter("lang"));
 			int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
-			int totalNumberOfFoundedPublications = getNumberOfFoundedPublications(publicationService, searchedTitle, language);
+			int totalNumberOfFoundedPublications = publicationService
+					.getTotalNumberOfRequestedQueryRows(new CountRowsParameters(language, genreRestriction, searchedTitle));
 			int numberOfPages = getNumberOfPages(itemsPerPage, totalNumberOfFoundedPublications);
 			int currentPage = getCurrentPage(request, numberOfPages);
 			SortingParameter activeSortingParam = SortingParameter.safeFromString(request.getParameter("sort"));
 			SortingDirection activeSortingDirection = SortingDirection.safeFromString(request.getParameter("direction"));
 
-			List<Publication> publications;
+			FilterParameters filterParameters = new FilterParameters(
+					itemsPerPage,
+					itemsPerPage * (currentPage-1),
+					language,
+					activeSortingDirection,
+					activeSortingParam,
+					genreRestriction,
+					searchedTitle
+			);
+
+
+			List<Publication> publications = publicationService.findPublicationsByFilterParameters(filterParameters);
+
 
 			if (searchedTitle != null) {
-				publications = publicationService.findBySearchedTitleLimitedWithOffsetByLanguageAndWithSortingParameters(
-						request.getParameter("search"),
-						itemsPerPage,
-						itemsPerPage * (currentPage-1),
-						language,
-						activeSortingParam,
-						activeSortingDirection
-				);
 				request.setAttribute("search", searchedTitle);
-			} else {
-				publications = publicationService.findLimitedWithOffsetByLanguageAndWithSortingParameters(
-						itemsPerPage,
-						itemsPerPage * (currentPage-1),
-						language,
-						activeSortingParam,
-						activeSortingDirection
-				);
 			}
 
 			request.setAttribute("language", language);
@@ -73,18 +73,6 @@ public class CatalogCommand extends Command {
 		}
 
 		return new HttpPath(WebPath.Page.ERROR, HttpHandlerType.SEND_REDIRECT);
-	}
-
-	private int getNumberOfFoundedPublications(PublicationService publicationService, String searchedTitle, Language language) throws ServiceException {
-		int totalNumberOfFoundedPublications;
-
-		if (searchedTitle != null) {
-			totalNumberOfFoundedPublications
-					= publicationService.getNumberOfFoundedPublicationsByLanguageAndSearchedTitle(language, searchedTitle);
-		} else {
-			totalNumberOfFoundedPublications = publicationService.getTotalNumberOfPublications();
-		}
-		return totalNumberOfFoundedPublications;
 	}
 
 	private int getNumberOfPages(int itemsPerPage, int totalNumberOfPublications) {

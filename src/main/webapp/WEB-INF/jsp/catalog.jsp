@@ -21,8 +21,9 @@
 					action="${pageContext.request.contextPath}/controller"
 			>
 				<input type="hidden" name="command" value="catalog">
-				<input class="form-control col-8" type="search" name="search" placeholder="${requestScope.search}"
-					   aria-label="Search">
+				<input type="hidden" name="lang" value="${requestScope.language.abbr}">
+				<input class="form-control col-8" type="search" name="search" placeholder="Enter title to search"
+					   aria-label="Search" value="${requestScope.search}">
 				<button class="btn btn-outline-success col-2 ml-3" type="submit">Search</button>
 			</form>
 		</div>
