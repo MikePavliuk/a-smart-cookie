@@ -5,6 +5,10 @@ import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.util.sorting.SortingDirection;
 import com.a_smart_cookie.util.sorting.SortingParameter;
 
+/**
+ * Data transfer object that used as holder of filter params to get requested publications by that params.
+ *
+ */
 public class FilterParameters {
 	private final Integer itemsPerPage;
 	private final Integer paginationOffset;

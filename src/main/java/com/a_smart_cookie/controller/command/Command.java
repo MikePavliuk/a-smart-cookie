@@ -8,10 +8,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * Main interface for implementing Command pattern.
+ *
+ */
 public abstract class Command implements Serializable {
 
 	private static final long serialVersionUID = 4513060755527075000L;
 
+	/**
+	 * Execution method for command.
+	 * @return Address to go once the command is executed and type of http handling.
+	 * @see HttpPath
+	 */
 	public abstract HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
 	@Override

@@ -4,8 +4,18 @@ import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.util.translator.Translator;
 
+/**
+ * Holder of Translators for Genre enum.
+ * Uses Strategy pattern and lambdas for easy scaling and extending.
+ *
+ */
 public final class GenreTranslatorStrategies {
 
+	/**
+	 * Gets Translator for Genre in English
+	 *
+	 * @return Translator for Genre in English
+	 */
 	private static Translator<Publication.Genre> getEnglishGenreTranslator() {
 		return element -> {
 			switch (element) {
@@ -35,6 +45,11 @@ public final class GenreTranslatorStrategies {
 		};
 	}
 
+	/**
+	 * Gets Translator for Genre in Ukrainian
+	 *
+	 * @return Translator for Genre in Ukrainian
+	 */
 	private static Translator<Publication.Genre> getUkrainianGenreTranslator() {
 		return element -> {
 			switch (element) {
@@ -64,6 +79,12 @@ public final class GenreTranslatorStrategies {
 		};
 	}
 
+	/**
+	 * Context method for getting needed translator for Genre enum by input language.
+	 *
+	 * @param language Language to be translated into.
+	 * @return Specific Translator in the desired language.
+	 */
 	public static Translator<Publication.Genre> getTranslatorByLanguage(Language language) {
 		switch (language) {
 			case ENGLISH:

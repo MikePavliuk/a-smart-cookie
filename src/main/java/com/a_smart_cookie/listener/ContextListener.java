@@ -9,8 +9,8 @@ import javax.servlet.ServletContextListener;
 
 /**
  * Represents the context listener class, which initializes all necessary components.
+ *
  */
-
 public class ContextListener implements ServletContextListener {
 
 	private static final Logger LOG = Logger.getLogger(ContextListener.class);
@@ -34,7 +34,7 @@ public class ContextListener implements ServletContextListener {
 	/**
 	 * Initializes log4j framework.
 	 *
-	 * @param servletContext
+	 * @param servletContext External servlet context
 	 */
 	private void initLog4J(ServletContext servletContext) {
 		log("Log4J initialization started");
@@ -50,7 +50,6 @@ public class ContextListener implements ServletContextListener {
 
 	/**
 	 * Initializes CommandContext.
-	 *
 	 */
 	private void initCommandContext() {
 		LOG.debug("Command container initialization started");

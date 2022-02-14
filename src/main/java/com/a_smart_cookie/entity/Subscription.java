@@ -3,6 +3,10 @@ package com.a_smart_cookie.entity;
 import java.sql.Date;
 import java.time.LocalDate;
 
+/**
+ * Subscription entity.
+ *
+ */
 public class Subscription extends Entity {
     private static final long serialVersionUID = 8110419913226734658L;
     private final Publication publication;

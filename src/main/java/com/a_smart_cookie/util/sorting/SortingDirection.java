@@ -8,10 +8,20 @@ import com.a_smart_cookie.util.translator.strategies.SortingDirectionTranslatorS
 
 import java.util.Arrays;
 
+/**
+ * Holder of possible sorting directions.
+ *
+ */
 public enum SortingDirection implements Translatable {
 	DESC,
 	ASC;
 
+	/**
+	 * Gets SortingDirection value by input string and returns ASC by default, if something went wrong.
+	 *
+	 * @param directionString String meant to be listed as value of enum.
+	 * @return SortingDirection enum value by itself.
+	 */
 	public static SortingDirection safeFromString(final String directionString) {
 		return Arrays.stream(SortingDirection.values())
 				.filter(direction -> direction.name().equalsIgnoreCase(directionString))

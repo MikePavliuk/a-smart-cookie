@@ -1,25 +1,42 @@
 package com.a_smart_cookie.controller.command;
 
+import org.apache.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Holder for all implemented commands.
+ *
+ */
 public final class CommandContext {
 
-    private static final Map<String, Command> commandMap = new HashMap<>();
+	private static final Logger LOG = Logger.getLogger(CommandContext.class);
 
-    static {
-        commandMap.put("catalog", new CatalogCommand());
-        commandMap.put("unknown", new UnknownCommand());
-    }
+	private static final Map<String, Command> commandMap = new HashMap<>();
 
-    private CommandContext() {}
+	static {
+		commandMap.put("catalog", new CatalogCommand());
+		commandMap.put("unknown", new UnknownCommand());
 
-    public static Command getCommand(String commandName) {
-        if (commandName != null && commandMap.containsKey(commandName)) {
-            return commandMap.get(commandName);
-        }
+		LOG.debug("Command context was successfully initialized");
+		LOG.trace("Number of commands --> " + commandMap.size());
+	}
 
-        return commandMap.get("unknown");
-    }
+	private CommandContext() {}
+
+	/**
+	 * Returns command object with the given name.
+	 *
+	 * @param commandName Name of the command.
+	 * @return Command object.
+	 */
+	public static Command getCommand(String commandName) {
+		if (commandName != null && commandMap.containsKey(commandName)) {
+			return commandMap.get(commandName);
+		}
+
+		return commandMap.get("unknown");
+	}
 
 }
