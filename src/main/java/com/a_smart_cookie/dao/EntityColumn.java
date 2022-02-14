@@ -1,7 +1,15 @@
 package com.a_smart_cookie.dao;
 
+/**
+ * Entity column names holder.
+ *
+ */
 public final class EntityColumn {
 
+	/**
+	 * Holds column names of Genre entity.
+	 *
+	 */
 	public enum Genre {
 		ID("id"),
 		NAME("name");
@@ -17,6 +25,10 @@ public final class EntityColumn {
 		}
 	}
 
+	/**
+	 * Holds column names of Publication entity.
+	 *
+	 */
 	public enum Publication {
 		ID("id"),
 		PRICE_PER_MONTH("price_per_month");
@@ -32,6 +44,10 @@ public final class EntityColumn {
 		}
 	}
 
+	/**
+	 * Holds column names of PublicationInfo entity.
+	 *
+	 */
 	public enum PublicationInfo {
 		TITLE("title"),
 		DESCRIPTION("description");

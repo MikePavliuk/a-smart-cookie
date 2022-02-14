@@ -8,6 +8,10 @@ import com.a_smart_cookie.util.translator.TranslatorContext;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+/**
+ * Publication entity.
+ *
+ */
 public final class Publication extends Entity {
     private static final long serialVersionUID = 5722602323493897338L;
     private final Genre genre;
@@ -48,6 +52,10 @@ public final class Publication extends Entity {
 				'}';
 	}
 
+	/**
+	 * Language entity with ability to be translated.
+	 *
+	 */
 	public enum Genre implements Translatable {
 		FICTION,
 		NOVEL,

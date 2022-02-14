@@ -2,6 +2,10 @@ package com.a_smart_cookie.entity;
 
 import java.math.BigDecimal;
 
+/**
+ * UserDetail entity.
+ *
+ */
 public final class UserDetail extends Entity {
     private static final long serialVersionUID = -4008634113365032333L;
 	private final Integer id;

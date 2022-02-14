@@ -7,6 +7,10 @@ import com.a_smart_cookie.util.translator.strategies.LanguageTranslatorStrategie
 
 import java.util.Arrays;
 
+/**
+ * Language entity with ability to be translated.
+ *
+ */
 public enum Language implements Translatable {
     UKRAINIAN("ua"),
     ENGLISH("eng");

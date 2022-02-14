@@ -1,8 +1,12 @@
-package com.a_smart_cookie.adapter.filtering_data.catalog;
+package com.a_smart_cookie.dto.catalog;
 
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 
+/**
+ * Data transfer object that used as holder of filter params to get count of requested rows by that params.
+ *
+ */
 public class CountRowsParameters {
 	private final Language language;
 	private final Publication.Genre genre;

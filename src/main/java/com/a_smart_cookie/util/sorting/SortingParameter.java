@@ -9,6 +9,10 @@ import com.a_smart_cookie.util.translator.strategies.SortingParameterTranslatorS
 
 import java.util.Arrays;
 
+/**
+ * Holder of possible sorting parameters on catalog page.
+ *
+ */
 public enum SortingParameter implements Translatable {
 	PRICE(EntityColumn.Publication.PRICE_PER_MONTH.getName()),
 	TITLE(EntityColumn.PublicationInfo.TITLE.getName());
@@ -23,6 +27,12 @@ public enum SortingParameter implements Translatable {
 		return value;
 	}
 
+	/**
+	 * Gets SortingParameter value by input string and returns TITLE by default, if something went wrong.
+	 *
+	 * @param parameterString String meant to be listed as value of enum.
+	 * @return SortingParameter enum value by itself.
+	 */
 	public static SortingParameter safeFromString(String parameterString) {
 		return Arrays.stream(SortingParameter.values())
 				.filter(parameter -> parameter.value.equalsIgnoreCase(parameterString))

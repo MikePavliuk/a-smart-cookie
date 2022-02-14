@@ -1,10 +1,18 @@
 package com.a_smart_cookie.dao.mysql;
 
+/**
+ * Queries holder for db entities.
+ *
+ */
 public final class Query {
 
 	private Query() {
 	}
 
+	/**
+	 * Represents queries holder for obtaining publications.
+	 *
+	 */
 	public enum Publication {
 		BUILDER_FIND_ALL_BY_LANGUAGE(
 				"SELECT genre.id, genre.name, " +
@@ -39,6 +47,10 @@ public final class Query {
 		}
 	}
 
+	/**
+	 * Represents queries holder for obtaining genres.
+	 *
+	 */
 	public enum Genre {
 		GET_ALL_DISTINCT_USED_IN_PUBLICATION_TABLE(
 				"SELECT DISTINCT genre.name " +

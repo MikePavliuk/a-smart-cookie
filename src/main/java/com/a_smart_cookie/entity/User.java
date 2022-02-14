@@ -2,6 +2,11 @@ package com.a_smart_cookie.entity;
 
 import java.util.List;
 
+/**
+ * User entity.
+ * Uses Builder pattern for constructing implementation.
+ *
+ */
 public final class User extends Entity {
     private static final long serialVersionUID = 1780660780275961115L;
 	private final Integer id;
@@ -68,6 +73,10 @@ public final class User extends Entity {
                 '}';
     }
 
+    /**
+     * Implements Builder pattern and provide with ability to construct immutable User object.
+     *
+     */
     public static class UserBuilder {
         private Integer id;
         private final String email;
@@ -118,11 +127,19 @@ public final class User extends Entity {
 
     }
 
+    /**
+     * Role entity.
+     *
+     */
     public enum Role {
         SUBSCRIBER,
         ADMIN
     }
 
+    /**
+     * Status entity.
+     *
+     */
     public enum Status {
         ACTIVE,
         BLOCKED
