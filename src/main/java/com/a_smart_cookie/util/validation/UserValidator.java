@@ -6,8 +6,18 @@ import com.a_smart_cookie.dto.catalog.UserSignUpDto;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserValidator {
+/**
+ * Util method that returns validation results by dto.
+ *
+ */
+public final class UserValidator {
 
+	/**
+	 * Gets validation result by UserSignUpDto
+	 *
+	 * @param user UserSignUpDto
+	 * @return Map with string key - name of field and boolean value - is valid answer.
+	 */
 	public static Map<String, Boolean> getValidationResults(UserSignUpDto user) {
 		Map<String, Boolean> validationResult = new HashMap<>();
 
@@ -28,6 +38,9 @@ public class UserValidator {
 				FieldValidator.getValidatorByFieldName(EntityColumn.User.PASSWORD.getName()).isValid(user.getPassword()));
 
 		return validationResult;
+	}
+
+	private UserValidator() {
 	}
 
 }

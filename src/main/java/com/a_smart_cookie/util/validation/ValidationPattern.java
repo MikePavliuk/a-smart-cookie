@@ -1,5 +1,9 @@
 package com.a_smart_cookie.util.validation;
 
+/**
+ * Holds validation patterns.
+ *
+ */
 public enum ValidationPattern {
 
 	NAME("[A-Z][a-z]{1,49}"),
