@@ -1,14 +1,47 @@
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
                       http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-         version="4.0">
+		 version="4.0">
 
-<!--============================================================
-	Context listener
-=============================================================-->
-    <listener>
-        <listener-class>com.a_smart_cookie.listener.ContextListener</listener-class>
-    </listener>
+	<!--============================================================
+		i18n support
+	=============================================================-->
+	<!-- this way we set the resource bundle name -->
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+		<param-value>messages</param-value>
+	</context-param>
+
+	<!-- this way we set the default locale (optional) -->
+	<!-- the (preferable) browser's locale will be used if we don't set the default locale -->
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+		<param-value>uk</param-value>
+	</context-param>
+
+	<!--============================================================
+		Cookie locale setter filter
+	=============================================================-->
+	<filter>
+		<filter-name>LocaleFilter</filter-name>
+		<filter-class>com.a_smart_cookie.filter.LocaleFilter</filter-class>
+		<init-param>
+			<param-name>locale</param-name>
+			<param-value>uk</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>LocaleFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--============================================================
+		Context listener
+	=============================================================-->
+	<listener>
+		<listener-class>com.a_smart_cookie.listener.ContextListener</listener-class>
+	</listener>
 
 </web-app>
