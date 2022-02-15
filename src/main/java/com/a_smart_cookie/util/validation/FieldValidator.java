@@ -17,28 +17,28 @@ public final class FieldValidator {
 
 		validatorMap.put(EntityColumn.UserDetail.NAME.getName(), (name) -> {
 			if (name != null) {
-				return name.matches("[A-Z][a-z]{1,49}");
+				return name.matches(ValidationPattern.NAME.getPattern());
 			}
 			return false;
 		});
 
 		validatorMap.put(EntityColumn.UserDetail.SURNAME.getName(), (surname) -> {
 			if (surname != null) {
-				return surname.matches("[A-Z][a-z]{1,49}");
+				return surname.matches(ValidationPattern.SURNAME.getPattern());
 			}
 			return false;
 		});
 
 		validatorMap.put(EntityColumn.User.EMAIL.getName(), (email) -> {
 			if (email != null) {
-				return email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
+				return email.matches(ValidationPattern.EMAIL.getPattern());
 			}
 			return false;
 		});
 
 		validatorMap.put(EntityColumn.User.PASSWORD.getName(), (password) -> {
 			if (password != null) {
-				return password.matches("(?=^.{8,}$)(?=.*\\d)(?=.*[!@#$%^&*]+)(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).{8,32}$");
+				return password.matches(ValidationPattern.PASSWORD.getPattern());
 			}
 			return false;
 		});
