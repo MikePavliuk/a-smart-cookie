@@ -26,33 +26,9 @@ public class FrontController extends HttpServlet {
 
 	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		process(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		process(req, resp);
-    }
-
-	/**
-	 * Main method of this controller, that process all: Get and Post, - requests.
-	 */
-	private void process(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		LOG.debug("Front controller starts");
-
-		// extract command name from the request
-		String commandName = req.getParameter("command");
-		LOG.trace("Request parameter: command --> " + commandName);
-
-		// obtain command object by its name
-		Command command = CommandContext.getCommand(commandName);
-		LOG.trace("Obtained command --> " + command);
-
-		// execute command and get http handler type with path
-		HttpPath httpPath = command.execute(req, resp);
-		LOG.trace("HttpPath --> " + httpPath);
-
-		LOG.debug("Controller finished, now go to address with handling type --> "
+		LOG.debug("Front controller doGet starts");
+		HttpPath httpPath = processRequest(req, resp);
+		LOG.debug("Front controller doGet finished, now go to address with handling type --> "
 				+ httpPath.getPath() + " - " + httpPath.getHttpHandlerType());
 
 		switch (httpPath.getHttpHandlerType()) {
@@ -65,7 +41,34 @@ public class FrontController extends HttpServlet {
 				resp.sendRedirect(req.getContextPath() + httpPath.getPath().getValue());
 				break;
 		}
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		LOG.debug("Front controller doPost starts");
+		HttpPath httpPath = processRequest(req, resp);
+		LOG.debug("Front controller doPost finished, now sendRedirect o --> " + httpPath.getPath());
+
+		resp.sendRedirect(req.getContextPath() + httpPath.getPath().getValue());
+    }
+
+	/**
+	 * Main method of this controller, that process all: Get and Post, - requests.
+	 *
+	 */
+	private HttpPath processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		// extract command name from the request
+		String commandName = req.getParameter("command");
+		LOG.trace("Request parameter: command --> " + commandName);
+
+		// obtain command object by its name
+		Command command = CommandContext.getCommand(commandName);
+		LOG.trace("Obtained command --> " + command);
+
+		// execute command and get http handler type with path
+		HttpPath httpPath = command.execute(req, resp);
+		LOG.trace("HttpPath --> " + httpPath);
+		return httpPath;
 	}
 
 }
