@@ -47,7 +47,7 @@ public class FrontController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		LOG.debug("Front controller doPost starts");
 		HttpPath httpPath = processRequest(req, resp);
-		LOG.debug("Front controller doPost finished, now sendRedirect o --> " + httpPath.getPath());
+		LOG.debug("Front controller doPost finished, now sendRedirect to --> " + httpPath.getPath());
 
 		resp.sendRedirect(req.getContextPath() + httpPath.getPath().getValue());
     }

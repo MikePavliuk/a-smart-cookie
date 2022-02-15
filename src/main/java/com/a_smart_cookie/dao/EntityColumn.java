@@ -7,6 +7,48 @@ package com.a_smart_cookie.dao;
 public final class EntityColumn {
 
 	/**
+	 * Holds column names of User entity.
+	 *
+	 */
+	public enum User {
+		ID("id"),
+		EMAIL("email"),
+		PASSWORD("password"),
+		SALT("salt");
+
+		private final String name;
+
+		User(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+
+	/**
+	 * Holds column names of UserDetail entity.
+	 *
+	 */
+	public enum UserDetail {
+		ID("id"),
+		NAME("name"),
+		SURNAME("surname"),
+		BALANCE("balance");
+
+		private final String name;
+
+		UserDetail(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+
+	/**
 	 * Holds column names of Genre entity.
 	 *
 	 */

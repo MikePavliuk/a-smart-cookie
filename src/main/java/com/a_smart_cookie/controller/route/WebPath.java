@@ -12,7 +12,9 @@ public final class WebPath {
 	 */
 	public enum Page implements Routable {
 		ERROR("/WEB-INF/jsp/error.jsp"),
-		CATALOG("/WEB-INF/jsp/catalog.jsp");
+		CATALOG("/WEB-INF/jsp/catalog.jsp"),
+		SIGN_IN("/sign_in.jsp"),
+		SIGN_UP("/sign_up.jsp");
 
 		private final String value;
 

@@ -17,6 +17,7 @@ public final class CommandContext {
 
 	static {
 		commandMap.put("catalog", new CatalogCommand());
+		commandMap.put("registration", new SignUpCommand());
 		commandMap.put("unknown", new UnknownCommand());
 
 		LOG.debug("Command context was successfully initialized");
