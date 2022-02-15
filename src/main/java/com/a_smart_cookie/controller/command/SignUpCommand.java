@@ -4,7 +4,7 @@ import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dao.EntityColumn;
-import com.a_smart_cookie.dto.catalog.UserSignUpDto;
+import com.a_smart_cookie.dto.UserSignUpDto;
 import com.a_smart_cookie.util.validation.UserValidator;
 import org.apache.log4j.Logger;
 

@@ -1,4 +1,4 @@
-package com.a_smart_cookie.dto.catalog;
+package com.a_smart_cookie.dto;
 
 public class UserSignUpDto {
 	private final String firstName;
