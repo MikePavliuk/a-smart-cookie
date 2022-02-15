@@ -2,42 +2,42 @@
 Header (top area). 
 ===========================================================================--%>
 
-<%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
-<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
-
 <%@ page import="com.a_smart_cookie.entity.Language" %>
 
 <div class="header">
-	<nav class="navbar navbar-light">
-		<a class="navbar-brand" href="#">A Smart Cookie</a>
+	<div class="container">
+		<div class="row justify-content-between">
+			<nav class="navbar navbar-light col-12">
+				<a class="navbar-brand" href="#">A Smart Cookie</a>
 
-		<div class="d-flex">
-			<div class="dropdown">
-				<button
-						class="btn btn-primary dropdown-toggle"
-						type="button"
-						data-toggle="dropdown"
-						aria-haspopup="true"
-						aria-expanded="true">
-					Language
-				</button>
-				<div class="dropdown-menu">
-					<c:forEach var="language" items="${Language.values()}">
-						<a class="btn btn-primary dropdown-item
-							<c:if test="${requestScope.language eq language}">
+				<div class="d-flex">
+					<div class="dropdown">
+						<button
+								class="btn btn-primary dropdown-toggle"
+								type="button"
+								data-toggle="dropdown"
+								aria-haspopup="true"
+								aria-expanded="true">
+							<fmt:message key="language"/>
+						</button>
+						<div class="dropdown-menu">
+							<c:forEach var="language" items="${Language.values()}">
+								<a class="btn btn-primary dropdown-item
+							<c:if test="${cookie['lang'].value eq language.abbr}">
 							  active
 						   	</c:if>"
-
-						   href="<my:replaceParam name='lang' value='${language.abbr}' />"
-						   role="button">
-							<c:out value="${language.getTranslatedValue(requestScope.language)}"/>
-						</a>
-					</c:forEach>
+								   href="<my:replaceParam name='lang' value='${language.abbr}' />"
+								   role="button">
+									<c:out value="${language.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}"/>
+								</a>
+							</c:forEach>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
 
-	</nav>
+			</nav>
+		</div>
+	</div>
 </div>
 
 

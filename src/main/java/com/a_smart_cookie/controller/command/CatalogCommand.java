@@ -11,6 +11,7 @@ import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
+import com.a_smart_cookie.util.CookieHandler;
 import com.a_smart_cookie.util.pagination.ItemsPerPage;
 import com.a_smart_cookie.util.sorting.SortingDirection;
 import com.a_smart_cookie.util.sorting.SortingParameter;
@@ -39,7 +40,7 @@ public class CatalogCommand extends Command {
 
 			Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("specificGenre"));
 			String searchedTitle = request.getParameter("search");
-			Language language = Language.safeFromString(request.getParameter("lang"));
+			Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
 			int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
 			int totalNumberOfFoundedPublications = publicationService
 					.getTotalNumberOfRequestedQueryRows(new CountRowsParameters(language, genreRestriction, searchedTitle));
@@ -76,7 +77,6 @@ public class CatalogCommand extends Command {
 				request.setAttribute("specificGenre", genreRestriction);
 			}
 
-			request.setAttribute("language", language);
 			request.setAttribute("publications", publications);
 			request.setAttribute("genres", usedGenres);
 

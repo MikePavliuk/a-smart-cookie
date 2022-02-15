@@ -13,7 +13,7 @@ public final class LanguageTranslatorStrategies {
 	/**
 	 * Gets Translator for Language in English
 	 *
-	 * @return Translator for Language in UEnglishkrainian
+	 * @return Translator for Language in English
 	 */
 	private static Translator<Language> getEnglishLanguageTranslator() {
 		return element -> {
