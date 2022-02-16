@@ -75,7 +75,7 @@
 									<c:if test="${requestScope.specificGenre eq genre}">
 									  active
 									</c:if>"
-								   href="<my:replaceParam name='specificGenre' value='${genre.name().toLowerCase()}' />"
+								   href="<p:replaceParam name='specificGenre' value='${genre.name().toLowerCase()}' />"
 								   role="button">
 									<c:out value="${genre.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}"/>
 								</a>
@@ -98,7 +98,7 @@
 							  active
 						   	</c:if>"
 
-								   href="<my:replaceParam name='direction' value='${sortingDirection.name()}' />"
+								   href="<p:replaceParam name='direction' value='${sortingDirection.name()}' />"
 								   role="button">
 									<c:out value="${sortingDirection.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}"/>
 								</a>
@@ -121,7 +121,7 @@
 							  active
 						   	</c:if>"
 
-								   href="<my:replaceParam name='sort' value='${sortingParam.getValue()}' />"
+								   href="<p:replaceParam name='sort' value='${sortingParam.getValue()}' />"
 								   role="button">
 									<c:out value="${sortingParam.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}"/>
 								</a>
@@ -144,7 +144,7 @@
 									  active
 									</c:if>"
 
-								   href="<my:replaceParam name='limit' value='${perPageOption.getLimit()}' />"
+								   href="<p:replaceParam name='limit' value='${perPageOption.getLimit()}' />"
 								   role="button">
 									<c:out value="${perPageOption.getLimit()}"/>
 								</a>
@@ -188,7 +188,7 @@
 							<c:if test="${requestScope.currentPage != 1}">
 								<li class="page-item">
 									<a class="page-link"
-									   href="<my:replaceParam name='page' value='${requestScope.currentPage-1}' />">
+									   href="<p:replaceParam name='page' value='${requestScope.currentPage-1}' />">
 										<fmt:message key="pagination.previous"/>
 									</a>
 								</li>
@@ -206,7 +206,7 @@
 									<c:otherwise>
 										<li class="page-item">
 											<a class="page-link"
-											   href="<my:replaceParam name='page' value='${i}' />">
+											   href="<p:replaceParam name='page' value='${i}' />">
 													${i}
 											</a>
 										</li>
@@ -217,7 +217,7 @@
 							<c:if test="${requestScope.currentPage lt requestScope.numberOfPages}">
 								<li class="page-item">
 									<a class="page-link"
-									   href="<my:replaceParam name='page' value='${requestScope.currentPage+1}' />">
+									   href="<p:replaceParam name='page' value='${requestScope.currentPage+1}' />">
 										<fmt:message key="pagination.next"/>
 									</a>
 								</li>

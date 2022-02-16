@@ -27,11 +27,16 @@ public class LoginCommand extends Command {
 
 	private static final long serialVersionUID = -6045416586328449454L;
 
-	private static final Logger LOG = Logger.getLogger(CatalogCommand.class);
+	private static final Logger LOG = Logger.getLogger(LoginCommand.class);
 
 	@Override
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
+
+		if (request.getSession().getAttribute("user") != null) {
+			LOG.debug("Command finished because user exists in session");
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
+		}
 
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
@@ -78,7 +83,7 @@ public class LoginCommand extends Command {
 
 			session.invalidate();
 			session = request.getSession();
-			session.setAttribute("loggedUser", user);
+			session.setAttribute("user", user.get());
 
 			LOG.debug("Command finished with signed in user");
 			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);

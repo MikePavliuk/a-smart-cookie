@@ -21,6 +21,12 @@ Header style
 	margin-bottom: 15px;
 }
 
+.header .text-nav {
+	color: #5d21bd;
+	display: flex;
+	align-self: center;
+}
+
 /***************************************************************
 Footer style
 ***************************************************************/

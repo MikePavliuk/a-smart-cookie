@@ -14,6 +14,11 @@ JSTL i18n tag library.
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%--===========================================================================
-Custon JSTL tag ligrary
+JSTL tag ligrary for using adding/editing parameter in request with saving previous ones
 ===========================================================================--%>
-<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="p" tagdir="/WEB-INF/tags" %>
+
+<%--===========================================================================
+JSTL tag ligrary for redirecting if some attribute in session
+===========================================================================--%>
+<%@ taglib prefix="r" uri="/WEB-INF/redirect_if_in_session" %>

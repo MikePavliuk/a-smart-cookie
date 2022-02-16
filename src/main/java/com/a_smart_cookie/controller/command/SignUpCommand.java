@@ -32,6 +32,11 @@ public class SignUpCommand extends Command {
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
+		if (request.getSession().getAttribute("user") != null) {
+			LOG.debug("Command finished because user exists in session");
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
+		}
+
 		HttpSession session = request.getSession();
 
 		UserSignUpDto userSignUpDto = new UserSignUpDto(

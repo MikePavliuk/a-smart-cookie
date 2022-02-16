@@ -4,6 +4,8 @@
 <%@ include file="/WEB-INF/jspf/directive/locale.jspf" %>
 <%@ page import="com.a_smart_cookie.util.validation.ValidationPattern" %>
 
+<r:redirectIfInSession sessionAttribute="user" redirectPath="controller?command=catalog"/>
+
 <html>
 
 <fmt:message key="sign_up_jsp.title" var="signUpTitle"/>
