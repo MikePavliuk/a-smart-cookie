@@ -156,7 +156,7 @@
 				<div class="row justify-content-around">
 
 					<c:forEach var="publication" items="${requestScope.publications}">
-						<div class="col-6">
+						<div class="col-6" style="display: flex">
 							<div class="card publication-item">
 								<div class="card-body">
 									<h5 class="card-title">
