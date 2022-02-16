@@ -1,5 +1,9 @@
-package com.a_smart_cookie.dto;
+package com.a_smart_cookie.dto.user;
 
+/**
+ * Data transfer object that used as holder of values from registration form for user.
+ *
+ */
 public class UserSignUpDto {
 	private final String firstName;
 	private final String lastName;
@@ -35,7 +39,6 @@ public class UserSignUpDto {
 				"firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +
 				", email='" + email + '\'' +
-				", password='" + password + '\'' +
 				'}';
 	}
 }

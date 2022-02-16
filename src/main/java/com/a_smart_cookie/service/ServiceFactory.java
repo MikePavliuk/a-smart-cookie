@@ -61,4 +61,11 @@ public abstract class ServiceFactory {
 	 */
 	public abstract PublicationService getPublicationService();
 
+	/**
+	 * Method for getting instance of UserService.
+	 *
+	 * @return Instance of requested implementation of UserService.
+	 */
+	public abstract UserService getUserService();
+
 }

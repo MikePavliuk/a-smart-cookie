@@ -76,6 +76,11 @@
 						<fmt:message key="validation.email" />
 					</span>
 				</c:if>
+				<c:if test="${sessionScope.emailAlreadyExists != null && sessionScope.emailAlreadyExists}">
+					<span class="error text-danger">
+						<fmt:message key="validation.emailAlreadyExists" />
+					</span>
+				</c:if>
 			</div>
 			<div class="form-group">
 				<label for="password"><fmt:message key="credentials.password" /></label>

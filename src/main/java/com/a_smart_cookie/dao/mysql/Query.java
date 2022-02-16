@@ -2,7 +2,6 @@ package com.a_smart_cookie.dao.mysql;
 
 /**
  * Queries holder for db entities.
- *
  */
 public final class Query {
 
@@ -11,7 +10,6 @@ public final class Query {
 
 	/**
 	 * Represents queries holder for obtaining publications.
-	 *
 	 */
 	public enum Publication {
 		BUILDER_FIND_ALL_BY_LANGUAGE(
@@ -49,7 +47,6 @@ public final class Query {
 
 	/**
 	 * Represents queries holder for obtaining genres.
-	 *
 	 */
 	public enum Genre {
 		GET_ALL_DISTINCT_USED_IN_PUBLICATION_TABLE(
@@ -69,5 +66,43 @@ public final class Query {
 			return query;
 		}
 	}
+
+	/**
+	 * Represents queries holder for obtaining users.
+	 */
+	public enum User {
+		CHECK_IF_USER_EXISTS_BY_EMAIL(
+				"SELECT EXISTS(SELECT * from a_smart_cookie.user WHERE email=?);"
+		),
+
+		GET_USER_BY_EMAIL(
+				"SELECT user.id, user.email, user.password, user.salt, " +
+						"user_detail.id as userdetail_id, user_detail.name, user_detail.surname, user_detail.balance, " +
+						"user_status.name as userstatus_name, role.name as role_name " +
+						"FROM a_smart_cookie.user " +
+						"LEFT JOIN a_smart_cookie.user_detail " +
+						"ON user.id = user_detail.user_id " +
+						"JOIN a_smart_cookie.user_status " +
+						"ON user.user_status_id = user_status.id " +
+						"JOIN a_smart_cookie.role " +
+						"ON user.role_id = role.id " +
+						"WHERE user.email=?;"
+		),
+
+		INSERT_USER(
+				"INSERT INTO a_smart_cookie.user(email, password, salt, role_id, user_status_id) " +
+						"VALUES (?, ?, ?, ?, ?);"
+		);
+
+		private final String query;
+
+		User(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+		}
 
 }
