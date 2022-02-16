@@ -16,91 +16,98 @@
 
 <div class="content">
 	<div class="container">
-		<form action="${pageContext.request.contextPath}/controller?command=registration" method="post">
-			<div class="form-group">
-				<label for="firstName"><fmt:message key="sign_up_jsp.first_name" /></label>
-				<input
-						type="text"
-						class="form-control"
-						name="firstName"
-						id="firstName"
-						required
-						pattern="${ValidationPattern.NAME.pattern}"
-						title="<fmt:message key="validation.first_name" />"
-				<c:if test="${sessionScope.oldFirstName != null}">
-						value="${sessionScope.oldFirstName}"
-				</c:if>
-				>
-				<c:if test="${sessionScope.isValidName != null && !sessionScope.isValidName}">
+		<div class="row justify-content-center">
+			<form action="${pageContext.request.contextPath}/controller?command=registration" method="post"
+				  class="col-6">
+				<div class="form-group">
+					<label for="firstName"><fmt:message key="sign_up_jsp.first_name"/></label>
+					<input
+							type="text"
+							class="form-control"
+							name="firstName"
+							id="firstName"
+							required
+							pattern="${ValidationPattern.NAME.pattern}"
+							title="<fmt:message key="validation.first_name" />"
+					<c:if test="${sessionScope.oldFirstName != null}">
+							value="${sessionScope.oldFirstName}"
+					</c:if>
+					>
+					<c:if test="${sessionScope.isValidName != null && !sessionScope.isValidName}">
 					<span class="error text-danger">
-						<fmt:message key="validation.first_name" />
+						<fmt:message key="validation.first_name"/>
 					</span>
-				</c:if>
-			</div>
-			<div class="form-group">
-				<label for="lastName"><fmt:message key="sign_up_jsp.last_name" /></label>
-				<input
-						type="text"
-						class="form-control"
-						name="lastName"
-						id="lastName"
-						required
-						pattern="${ValidationPattern.SURNAME.pattern}"
-						title="<fmt:message key="validation.last_name" />"
-						<c:if test="${sessionScope.oldLastName != null}">
-								value="${sessionScope.oldLastName}"
-						</c:if>
-				>
-				<c:if test="${sessionScope.isValidSurname != null && !sessionScope.isValidSurname}">
+					</c:if>
+				</div>
+				<div class="form-group">
+					<label for="lastName"><fmt:message key="sign_up_jsp.last_name"/></label>
+					<input
+							type="text"
+							class="form-control"
+							name="lastName"
+							id="lastName"
+							required
+							pattern="${ValidationPattern.SURNAME.pattern}"
+							title="<fmt:message key="validation.last_name" />"
+					<c:if test="${sessionScope.oldLastName != null}">
+							value="${sessionScope.oldLastName}"
+					</c:if>
+					>
+					<c:if test="${sessionScope.isValidSurname != null && !sessionScope.isValidSurname}">
 					<span class="error text-danger">
-						<fmt:message key="validation.last_name" />
+						<fmt:message key="validation.last_name"/>
 					</span>
-				</c:if>
-			</div>
-			<div class="form-group">
-				<label for="email"><fmt:message key="credentials.email" /></label>
-				<input
-						type="email"
-						class="form-control"
-						name="email"
-						id="email"
-						required
-						pattern="${ValidationPattern.EMAIL.pattern}"
-						title="<fmt:message key="validation.email" />"
-						<c:if test="${sessionScope.oldEmail != null}">
-								value="${sessionScope.oldEmail}"
-						</c:if>
-				>
-				<c:if test="${sessionScope.isValidEmail != null && !sessionScope.isValidEmail}">
+					</c:if>
+				</div>
+				<div class="form-group">
+					<label for="email"><fmt:message key="credentials.email"/></label>
+					<input
+							type="email"
+							class="form-control"
+							name="email"
+							id="email"
+							required
+							pattern="${ValidationPattern.EMAIL.pattern}"
+							title="<fmt:message key="validation.email" />"
+					<c:if test="${sessionScope.oldEmail != null}">
+							value="${sessionScope.oldEmail}"
+					</c:if>
+					>
+					<c:if test="${sessionScope.isValidEmail != null && !sessionScope.isValidEmail}">
 					<span class="error text-danger">
-						<fmt:message key="validation.email" />
+						<fmt:message key="validation.email"/>
 					</span>
-				</c:if>
-				<c:if test="${sessionScope.emailAlreadyExists != null && sessionScope.emailAlreadyExists}">
+					</c:if>
+					<c:if test="${sessionScope.emailAlreadyExists != null && sessionScope.emailAlreadyExists}">
 					<span class="error text-danger">
-						<fmt:message key="validation.emailAlreadyExists" />
+						<fmt:message key="validation.emailAlreadyExists"/>
 					</span>
-				</c:if>
-			</div>
-			<div class="form-group">
-				<label for="password"><fmt:message key="credentials.password" /></label>
-				<input
-						type="password"
-						class="form-control"
-						name="password"
-						id="password"
-						required
-						pattern="${ValidationPattern.PASSWORD.pattern}"
-						title="<fmt:message key="validation.password" />"
-				>
-				<c:if test="${sessionScope.isValidPassword != null && !sessionScope.isValidPassword}">
+					</c:if>
+				</div>
+				<div class="form-group">
+					<label for="password"><fmt:message key="credentials.password"/></label>
+					<input
+							type="password"
+							class="form-control"
+							name="password"
+							id="password"
+							required
+							pattern="${ValidationPattern.PASSWORD.pattern}"
+							title="<fmt:message key="validation.password" />"
+					>
+					<c:if test="${sessionScope.isValidPassword != null && !sessionScope.isValidPassword}">
 					<span class="error text-danger">
-						<fmt:message key="validation.password" />
+						<fmt:message key="validation.password"/>
 					</span>
-				</c:if>
-			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>
+					</c:if>
+				</div>
+				<div class="col text-center">
+					<button type="submit" class="btn btn-primary">
+						<fmt:message key="sign_up_jsp.button.sign_up"/>
+					</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
 
