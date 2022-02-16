@@ -3,6 +3,7 @@ Header (top area).
 ===========================================================================--%>
 
 <%@ page import="com.a_smart_cookie.entity.Language" %>
+<%@ page import="com.a_smart_cookie.entity.User.Role" %>
 
 <div class="header">
 	<div class="container">
@@ -11,7 +12,20 @@ Header (top area).
 				<a class="navbar-brand" href="#">A Smart Cookie</a>
 
 				<div class="d-flex">
-					<div class="dropdown">
+					<div class="text-nav ml-3">
+						<c:choose>
+
+							<c:when test="${sessionScope.user eq Role.SUBSCRIBER}">
+								<c:out value="${sessionScope.user.userDetail.firstName} ${sessionScope.user.userDetail.lastName}"/>
+							</c:when>
+
+							<c:otherwise>
+								<c:out value="${sessionScope.user.email}"/>
+							</c:otherwise>
+
+						</c:choose>
+					</div>
+					<div class="dropdown ml-3">
 						<button
 								class="btn btn-primary dropdown-toggle"
 								type="button"
@@ -26,13 +40,34 @@ Header (top area).
 							<c:if test="${cookie['lang'].value eq language.abbr}">
 							  active
 						   	</c:if>"
-								   href="<my:replaceParam name='lang' value='${language.abbr}' />"
+								   href="<p:replaceParam name='lang' value='${language.abbr}' />"
 								   role="button">
 									<c:out value="${language.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}"/>
 								</a>
 							</c:forEach>
 						</div>
 					</div>
+					<c:choose>
+
+						<c:when test="${not empty sessionScope.user}">
+							<div class="ml-3">
+								<a class="btn btn-info"
+								   href="${pageContext.request.contextPath}/controller?command=logout">
+									<fmt:message key="header_jsp.button.logout"/>
+								</a>
+							</div>
+						</c:when>
+
+						<c:otherwise>
+							<div class="ml-3">
+								<a class="btn btn-info"
+								   href="${pageContext.request.contextPath}/sign_in.jsp">
+									<fmt:message key="header_jsp.button.login"/>
+								</a>
+							</div>
+						</c:otherwise>
+
+					</c:choose>
 				</div>
 
 			</nav>

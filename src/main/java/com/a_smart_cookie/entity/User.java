@@ -118,11 +118,14 @@ public final class User extends Entity {
             return this;
         }
 
-        public UserBuilder fromUser(User user) {
-            this.id = user.id;
-            this.userDetail = user.userDetail;
-            this.subscriptions = user.subscriptions;
-            return this;
+        public static UserBuilder fromUser(User user) {
+            return new User.UserBuilder(
+                    user.email,
+                    user.password,
+                    user.salt,
+                    user.status,
+                    user.role
+            );
         }
 
     }
