@@ -29,15 +29,38 @@ public final class UserValidator {
 				EntityColumn.UserDetail.SURNAME.getName(),
 				FieldValidator.getValidatorByFieldName(EntityColumn.UserDetail.SURNAME.getName()).isValid(user.getLastName()));
 
+		putValidationResultsOfEmailAndPasswordFields(user.getEmail(), user.getPassword(), validationResult);
+
+		return validationResult;
+	}
+
+	/**
+	 * Gets validation result by email and password
+	 *
+	 *
+	 * @param email User email
+	 * @param password User password
+	 * @return Map with string key - name of field and boolean value - is valid answer.
+	 */
+	public static Map<String, Boolean> getValidationResults(String email, String password) {
+		Map<String, Boolean> validationResult = new HashMap<>();
+
+		putValidationResultsOfEmailAndPasswordFields(email, password, validationResult);
+
+		return validationResult;
+	}
+
+	private static void putValidationResultsOfEmailAndPasswordFields(
+			String email,
+			String password,
+			Map<String, Boolean> validationResult) {
 		validationResult.put(
 				EntityColumn.User.EMAIL.getName(),
-				FieldValidator.getValidatorByFieldName(EntityColumn.User.EMAIL.getName()).isValid(user.getEmail()));
+				FieldValidator.getValidatorByFieldName(EntityColumn.User.EMAIL.getName()).isValid(email));
 
 		validationResult.put(
 				EntityColumn.User.PASSWORD.getName(),
-				FieldValidator.getValidatorByFieldName(EntityColumn.User.PASSWORD.getName()).isValid(user.getPassword()));
-
-		return validationResult;
+				FieldValidator.getValidatorByFieldName(EntityColumn.User.PASSWORD.getName()).isValid(password));
 	}
 
 	private UserValidator() {

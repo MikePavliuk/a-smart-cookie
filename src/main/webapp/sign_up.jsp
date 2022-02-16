@@ -108,6 +108,16 @@
 				</div>
 			</form>
 		</div>
+		<div class="row justify-content-center text-center mt-3">
+			<div class="col-6">
+				<p>
+					<fmt:message key="sign_up_jsp.have_acc_question" />
+					<a href="${pageContext.request.contextPath}/sign_in.jsp">
+						<fmt:message key="sign_up_jsp.login" />
+					</a>
+				</p>
+			</div>
+		</div>
 	</div>
 </div>
 
