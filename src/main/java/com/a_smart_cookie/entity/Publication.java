@@ -14,10 +14,16 @@ import java.util.Arrays;
  */
 public final class Publication extends Entity {
     private static final long serialVersionUID = 5722602323493897338L;
+	private Integer id;
     private final Genre genre;
     private final String title;
     private final String description;
     private final BigDecimal pricePerMonth;
+
+	public Publication(Integer id, Genre genre, String title, String description, BigDecimal pricePerMonth) {
+		this(genre, title, description, pricePerMonth);
+		this.id = id;
+	}
 
     public Publication(Genre genre, String title, String description, BigDecimal pricePerMonth) {
         this.genre = genre;
@@ -26,7 +32,15 @@ public final class Publication extends Entity {
         this.pricePerMonth = pricePerMonth;
     }
 
-    public Genre getGenre() {
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Genre getGenre() {
         return genre;
     }
 
@@ -45,7 +59,8 @@ public final class Publication extends Entity {
 	@Override
 	public String toString() {
 		return "Publication{" +
-				"genre=" + genre +
+				"id=" + id +
+				", genre=" + genre +
 				", title='" + title + '\'' +
 				", description='" + description + '\'' +
 				", pricePerMonth=" + pricePerMonth +

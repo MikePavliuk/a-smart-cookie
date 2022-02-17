@@ -172,7 +172,18 @@
 										<fmt:message key="publication.price_per_month"/>: <b><c:out
 											value="${publication.pricePerMonth}"/> $</b>
 									</p>
-									<a href="#" class="card-link">
+									<a
+											<c:choose>
+												<c:when test="${not empty sessionScope.user}">
+													href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}"
+												</c:when>
+
+												<c:otherwise>
+													href="${pageContext.request.contextPath}/sign_in.jsp"
+												</c:otherwise>
+											</c:choose>
+											class="card-link"
+									>
 										<fmt:message key="publication.subscribe"/>
 									</a>
 								</div>

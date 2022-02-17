@@ -9,7 +9,7 @@ Header (top area).
 	<div class="container">
 		<div class="row justify-content-between">
 			<nav class="navbar navbar-light col-12">
-				<a class="navbar-brand" href="#">A Smart Cookie</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/controller?command=catalog">A Smart Cookie</a>
 
 				<div class="d-flex">
 					<div class="text-nav ml-3">

@@ -111,6 +111,7 @@ public class MysqlPublicationDao extends PublicationDao {
 	 */
 	private Publication extractPublication(ResultSet rs) throws SQLException {
 		return new Publication(
+				rs.getInt(EntityColumn.Publication.ID.getName()),
 				Publication.Genre.safeFromString(rs.getString(EntityColumn.Genre.NAME.getName())),
 				rs.getString(EntityColumn.PublicationInfo.TITLE.getName()),
 				rs.getString(EntityColumn.PublicationInfo.DESCRIPTION.getName()),
