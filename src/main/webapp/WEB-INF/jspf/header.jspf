@@ -3,7 +3,7 @@ Header (top area).
 ===========================================================================--%>
 
 <%@ page import="com.a_smart_cookie.entity.Language" %>
-<%@ page import="com.a_smart_cookie.entity.User.Role" %>
+<%@ page import="com.a_smart_cookie.entity.Role" %>
 
 <div class="header">
 	<div class="container">
@@ -15,7 +15,7 @@ Header (top area).
 					<div class="text-nav ml-3">
 						<c:choose>
 
-							<c:when test="${sessionScope.user eq Role.SUBSCRIBER}">
+							<c:when test="${sessionScope.user.role eq Role.SUBSCRIBER}">
 								<c:out value="${sessionScope.user.userDetail.firstName} ${sessionScope.user.userDetail.lastName}"/>
 							</c:when>
 

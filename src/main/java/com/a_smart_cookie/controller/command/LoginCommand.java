@@ -4,6 +4,7 @@ import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dao.EntityColumn;
+import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.HashingException;
 import com.a_smart_cookie.exception.ServiceException;
@@ -74,7 +75,7 @@ public class LoginCommand extends Command {
 				return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 			}
 
-			if (user.get().getStatus() == User.Status.BLOCKED) {
+			if (user.get().getStatus() == Status.BLOCKED) {
 				session.setAttribute("isBlocked",true);
 				setOldEmailToSession(email, session);
 				LOG.debug("Command finished with blocked user");

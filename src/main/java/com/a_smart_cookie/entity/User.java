@@ -130,22 +130,4 @@ public final class User extends Entity {
 
     }
 
-    /**
-     * Role entity.
-     *
-     */
-    public enum Role {
-        SUBSCRIBER,
-        ADMIN
-    }
-
-    /**
-     * Status entity.
-     *
-     */
-    public enum Status {
-        ACTIVE,
-        BLOCKED
-    }
-
 }

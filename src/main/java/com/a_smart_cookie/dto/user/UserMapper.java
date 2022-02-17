@@ -1,5 +1,7 @@
 package com.a_smart_cookie.dto.user;
 
+import com.a_smart_cookie.entity.Role;
+import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.HashingException;
 import com.a_smart_cookie.util.hashing.PBKDF2Hash;
@@ -22,8 +24,8 @@ public final class UserMapper {
 				userSignUpDto.getEmail(),
 				hashSaltPair.getHash(),
 				hashSaltPair.getSalt(),
-				User.Status.ACTIVE,
-				User.Role.SUBSCRIBER).build();
+				Status.ACTIVE,
+				Role.SUBSCRIBER).build();
 	}
 
 	private UserMapper() {

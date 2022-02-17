@@ -3,6 +3,8 @@ package com.a_smart_cookie.dao.mysql;
 import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dao.ResourceReleaser;
 import com.a_smart_cookie.dao.UserDao;
+import com.a_smart_cookie.entity.Role;
+import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.entity.UserDetail;
 import com.a_smart_cookie.exception.DaoException;
@@ -88,8 +90,8 @@ public class MysqlUserDao extends UserDao {
 			pstmt.setString(1, user.getEmail());
 			pstmt.setBytes(2, user.getPassword());
 			pstmt.setBytes(3, user.getSalt());
-			pstmt.setInt(4, user.getRole().ordinal()+1);
-			pstmt.setInt(5, user.getStatus().ordinal()+1);
+			pstmt.setInt(4, user.getRole().getId());
+			pstmt.setInt(5, user.getStatus().getId());
 
 			LOG.trace(pstmt);
 
@@ -133,18 +135,18 @@ public class MysqlUserDao extends UserDao {
 	 */
 	private User extractUser(ResultSet rs) throws SQLException {
 
-		User.Role role = User.Role.valueOf(rs.getString("role_" + EntityColumn.Role.NAME.getName()).toUpperCase());
+		Role role = Role.valueOf(rs.getString("role_" + EntityColumn.Role.NAME.getName()).toUpperCase());
 
 		User.UserBuilder userBuilder = new User.UserBuilder(
 				rs.getString(EntityColumn.User.EMAIL.getName()),
 				rs.getBytes(EntityColumn.User.PASSWORD.getName()),
 				rs.getBytes(EntityColumn.User.SALT.getName()),
-				User.Status.valueOf(rs.getString("userstatus_" + EntityColumn.UserStatus.NAME.getName()).toUpperCase()),
+				Status.valueOf(rs.getString("userstatus_" + EntityColumn.UserStatus.NAME.getName()).toUpperCase()),
 				role);
 
 		userBuilder.withId(rs.getInt(EntityColumn.User.ID.getName()));
 
-		if (role == User.Role.SUBSCRIBER) {
+		if (role == Role.SUBSCRIBER) {
 			userBuilder.withUserDetail(new UserDetail(
 							rs.getInt("userdetail_" + EntityColumn.UserDetail.ID),
 							rs.getString(EntityColumn.UserDetail.NAME.getName()),

@@ -73,8 +73,9 @@ public class UserServiceImpl implements UserService {
 			transaction.init(userDao);
 
 			User user = UserMapper.convertFromDtoToEntity(userSignUpDto);
+			LOG.trace("user before insert --> " + user);
 			Optional<Integer> generatedId = userDao.insertUser(user);
-
+			LOG.trace("generatedId --> " + generatedId.orElse(null));
 
 			LOG.debug("Finished creating user");
 			return generatedId.map(id -> User.UserBuilder
