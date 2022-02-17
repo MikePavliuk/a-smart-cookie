@@ -76,7 +76,7 @@ public class SignUpCommand extends Command {
 				}
 
 				session = request.getSession();
-				session.setAttribute("loggedUser", user.get());
+				session.setAttribute("registeredEmail", user.get().getEmail());
 
 				LOG.debug("Command finished with registered user");
 				return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
