@@ -1,4 +1,4 @@
-package com.a_smart_cookie.util.tag;
+package com.a_smart_cookie.tag;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

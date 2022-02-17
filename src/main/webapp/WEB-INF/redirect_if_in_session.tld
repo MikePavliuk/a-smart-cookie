@@ -10,7 +10,7 @@
 	<tag>
 		<description>Tag provide with ability not use scriplets in code and redirect from login and logout page if user attr in session.</description>
 		<name>redirectIfInSession</name>
-		<tag-class>com.a_smart_cookie.util.tag.RedirectIfInSessionTag</tag-class>
+		<tag-class>com.a_smart_cookie.tag.RedirectIfInSessionTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<description>Session attribute to check if exists</description>
