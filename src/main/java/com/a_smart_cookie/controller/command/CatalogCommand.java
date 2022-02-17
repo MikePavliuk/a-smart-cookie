@@ -66,7 +66,7 @@ public class CatalogCommand extends Command {
 			List<Publication> publications = publicationsWithAllUsedGenres.getPublications();
 			LOG.trace("Found in DB publications --> " + publications);
 			List<Publication.Genre> usedGenres = publicationsWithAllUsedGenres.getGenres();
-			LOG.trace("Found in DB used genres --> " + publications);
+			LOG.trace("Found in DB used genres --> " + usedGenres);
 
 
 			if (searchedTitle != null) {
