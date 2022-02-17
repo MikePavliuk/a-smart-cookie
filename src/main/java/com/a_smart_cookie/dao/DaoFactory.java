@@ -79,4 +79,11 @@ public abstract class DaoFactory {
 	 */
 	public abstract UserDao getUserDao();
 
+	/**
+	 * Method for getting instance of UserDetailDao.
+	 *
+	 * @return Instance of requested implementation of UserDetailDao.
+	 */
+	public abstract UserDetailDao getUserDetailDao();
+
 }

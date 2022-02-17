@@ -35,6 +35,6 @@ public abstract class UserDao extends AbstractDao {
 	 * @param user User information for creating record in db.
 	 * @return Generated id for inserted user or empty if something went wrong.
 	 */
-	public abstract Optional<Integer> insertUser(User user) throws DaoException;
+	public abstract Optional<User> insertUser(User user) throws DaoException;
 
 }

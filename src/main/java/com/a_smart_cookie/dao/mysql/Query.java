@@ -68,7 +68,7 @@ public final class Query {
 	}
 
 	/**
-	 * Represents queries holder for obtaining users.
+	 * Represents queries holder for user entity.
 	 */
 	public enum User {
 		CHECK_IF_USER_EXISTS_BY_EMAIL(
@@ -104,5 +104,31 @@ public final class Query {
 			return query;
 		}
 		}
+
+	/**
+	 * Represents queries holder for user detail entity.
+	 */
+	public enum UserDetail {
+		GET_USER_DETAIL_BY_USER_ID(
+				"SELECT id, name, surname, balance " +
+						"FROM a_smart_cookie.user_detail " +
+						"WHERE user_id = ?;"
+		),
+
+		INSERT_USER_DETAIL(
+				"INSERT INTO a_smart_cookie.user_detail(name, surname, user_id) " +
+						"VALUES (?, ?, ?);"
+		);
+
+		private final String query;
+
+		UserDetail(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
 
 }
