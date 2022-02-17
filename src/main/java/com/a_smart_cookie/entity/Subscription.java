@@ -9,16 +9,16 @@ import java.time.LocalDate;
  */
 public class Subscription extends Entity {
     private static final long serialVersionUID = 8110419913226734658L;
-    private final Publication publication;
+    private final Integer publicationId;
     private final LocalDate startDate;
 
-    public Subscription(Publication publication, Date startDate) {
-        this.publication = publication;
+    public Subscription(Integer publicationId, Date startDate) {
+        this.publicationId = publicationId;
         this.startDate = startDate.toLocalDate();
     }
 
-    public Publication getPublication() {
-        return publication;
+    public Integer getPublicationId() {
+        return publicationId;
     }
 
     public LocalDate getStartDate() {
@@ -28,7 +28,7 @@ public class Subscription extends Entity {
     @Override
     public String toString() {
         return "Subscription{" +
-                "publication=" + publication +
+                "publicationId=" + publicationId +
                 ", startDate=" + startDate +
                 '}';
     }

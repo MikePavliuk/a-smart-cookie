@@ -28,5 +28,10 @@ public class MysqlDaoFactory extends DaoFactory {
 		return new MysqlUserDetailDao();
 	}
 
+	@Override
+	public SubscriptionDao getSubscriptionDao() {
+		return new MysqlSubscriptionDao();
+	}
+
 
 }

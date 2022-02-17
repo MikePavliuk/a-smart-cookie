@@ -11,6 +11,28 @@ public final class Query {
 	/**
 	 * Represents queries holder for obtaining publications.
 	 */
+	public enum Subscription {
+		GET_ALL_BY_USER_ID(
+				"SELECT subscription.publication_id, subscription.start_date " +
+						"FROM a_smart_cookie.subscription " +
+						"WHERE subscription.user_id = ?;"
+		);
+
+		private final String query;
+
+		Subscription(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
+
+
+	/**
+	 * Represents queries holder for obtaining publications.
+	 */
 	public enum Publication {
 		BUILDER_FIND_ALL_BY_LANGUAGE(
 				"SELECT genre.id, genre.name, " +
@@ -103,7 +125,7 @@ public final class Query {
 		public String getQuery() {
 			return query;
 		}
-		}
+	}
 
 	/**
 	 * Represents queries holder for user detail entity.

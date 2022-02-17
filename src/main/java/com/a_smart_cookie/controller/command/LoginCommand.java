@@ -59,7 +59,7 @@ public class LoginCommand extends Command {
 		try {
 			UserService userService = ServiceFactory.getInstance().getUserService();
 
-			Optional<User> user = userService.getUserWithoutSubscriptionsByEmail(email);
+			Optional<User> user = userService.getUserByEmail(email);
 
 			if (user.isEmpty()) {
 				session.setAttribute("badCredentials", true);
@@ -85,6 +85,7 @@ public class LoginCommand extends Command {
 			session.invalidate();
 			session = request.getSession();
 			session.setAttribute("user", user.get());
+			LOG.trace("user --> " + user);
 
 			LOG.debug("Command finished with signed in user");
 			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);

@@ -50,7 +50,7 @@ public class MysqlUserDao extends UserDao {
 	}
 
 	@Override
-	public Optional<User> getUserByEmail(String email) throws DaoException {
+	public Optional<User> getUserWithoutSubscriptionsByEmail(String email) throws DaoException {
 		LOG.debug("Starts getting user");
 
 		PreparedStatement pstmt = null;
