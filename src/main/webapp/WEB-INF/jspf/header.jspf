@@ -1,7 +1,7 @@
 <%--=========================================================================== 
 Header (top area). 
 ===========================================================================--%>
-
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 <%@ page import="com.a_smart_cookie.entity.Language" %>
 <%@ page import="com.a_smart_cookie.entity.Role" %>
 

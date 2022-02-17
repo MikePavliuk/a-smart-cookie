@@ -43,7 +43,7 @@
 					   placeholder="<fmt:message key="catalog_jsp.search.placeholder"/>"
 					   aria-label="Search" value="${requestScope.search}">
 				<button id="search-button" class="btn btn-outline-success col-2 ml-3" type="submit">
-					<fmt:message key="button.search" />
+					<fmt:message key="button.search"/>
 				</button>
 			</form>
 		</div>
@@ -112,7 +112,7 @@
 								data-toggle="dropdown"
 								aria-haspopup="true"
 								aria-expanded="true">
-							<fmt:message key="param.sorting.parameter" />
+							<fmt:message key="param.sorting.parameter"/>
 						</button>
 						<div class="dropdown-menu">
 							<c:forEach var="sortingParam" items="${SortingParameter.values()}">
@@ -172,20 +172,26 @@
 										<fmt:message key="publication.price_per_month"/>: <b><c:out
 											value="${publication.pricePerMonth}"/> $</b>
 									</p>
-									<a
-											<c:choose>
-												<c:when test="${not empty sessionScope.user}">
-													href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}"
-												</c:when>
+									<c:choose>
+										<c:when test="${empty sessionScope.user}">
+											<a href="${pageContext.request.contextPath}/sign_in.jsp">
+												<fmt:message key="publication.subscribe"/>
+											</a>
+										</c:when>
 
-												<c:otherwise>
-													href="${pageContext.request.contextPath}/sign_in.jsp"
-												</c:otherwise>
-											</c:choose>
-											class="card-link"
-									>
-										<fmt:message key="publication.subscribe"/>
-									</a>
+										<c:when test="${sessionScope.user != null && cfn:contains(sessionScope.user.subscriptions, publication.id)}">
+											<span class="text-success">
+													<fmt:message key="publication.subscription_present" />
+											</span>
+										</c:when>
+
+										<c:otherwise>
+											<a href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}">
+												<fmt:message key="publication.subscribe"/>
+											</a>
+										</c:otherwise>
+									</c:choose>
+
 								</div>
 							</div>
 						</div>

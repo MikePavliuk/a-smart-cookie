@@ -22,3 +22,8 @@ JSTL tag ligrary for using adding/editing parameter in request with saving previ
 JSTL tag ligrary for redirecting if some attribute in session
 ===========================================================================--%>
 <%@ taglib prefix="r" uri="/WEB-INF/redirect_if_in_session" %>
+
+<%--===========================================================================
+JSTL tag ligrary for checking whether publication is in subscrption list
+===========================================================================--%>
+<%@ taglib uri="/WEB-INF/publication_checker.tld" prefix="cfn" %>

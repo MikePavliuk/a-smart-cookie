@@ -35,7 +35,7 @@ public final class Query {
 	 */
 	public enum Publication {
 		BUILDER_FIND_ALL_BY_LANGUAGE(
-				"SELECT genre.id, genre.name, " +
+				"SELECT genre.name, " +
 						"publication.id, publication.price_per_month, publication_info.title, publication_info.description " +
 						"FROM a_smart_cookie.publication " +
 						"JOIN a_smart_cookie.publication_info " +
