@@ -8,8 +8,6 @@ import java.io.IOException;
 
 public class RedirectIfInSessionTag extends SimpleTagSupport {
 
-	private static final long serialVersionUID = 8915588365838201611L;
-
 	private String sessionAttribute;
 	private String redirectPath;
 
