@@ -31,8 +31,8 @@
 							required
 							pattern="${ValidationPattern.EMAIL.pattern}"
 							title="<fmt:message key="validation.email" />"
-					<c:if test="${sessionScope.oldEmail != null}">
-							value="${sessionScope.oldEmail}"
+					<c:if test="${sessionScope.oldLoginEmail != null}">
+							value="${sessionScope.oldLoginEmail}"
 					</c:if>
 					>
 					<c:if test="${sessionScope.isValidEmail != null && !sessionScope.isValidEmail}">

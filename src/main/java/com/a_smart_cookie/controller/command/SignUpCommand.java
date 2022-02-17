@@ -96,6 +96,6 @@ public class SignUpCommand extends Command {
 	private void addOldFieldValuesToSession(HttpServletRequest request, HttpSession session) {
 		session.setAttribute("oldFirstName", request.getParameter("firstName"));
 		session.setAttribute("oldLastName", request.getParameter("lastName"));
-		session.setAttribute("oldEmail", request.getParameter("email"));
+		session.setAttribute("oldSignUpEmail", request.getParameter("email"));
 	}
 }

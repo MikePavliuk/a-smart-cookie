@@ -96,7 +96,7 @@ public class LoginCommand extends Command {
 	}
 
 	private void setOldEmailToSession(String email, HttpSession session) {
-		session.setAttribute("oldEmail", email);
+		session.setAttribute("oldLoginEmail", email);
 	}
 
 }
