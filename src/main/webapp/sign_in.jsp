@@ -31,9 +31,17 @@
 							required
 							pattern="${ValidationPattern.EMAIL.pattern}"
 							title="<fmt:message key="validation.email" />"
-					<c:if test="${sessionScope.oldEmail != null}">
-							value="${sessionScope.oldEmail}"
-					</c:if>
+							<c:choose>
+
+								<c:when test="${sessionScope.oldLoginEmail != null}">
+									value="${sessionScope.oldLoginEmail}"
+								</c:when>
+
+								<c:when test="${sessionScope.registeredEmail != null}">
+										value="${sessionScope.registeredEmail}"
+								</c:when>
+
+							</c:choose>
 					>
 					<c:if test="${sessionScope.isValidEmail != null && !sessionScope.isValidEmail}">
 					<span class="error text-danger">
@@ -78,9 +86,9 @@
 		<div class="row justify-content-center text-center mt-3">
 			<div class="col-6">
 				<p>
-					<fmt:message key="sign_in_jsp.dont_have_acc_question" />
+					<fmt:message key="sign_in_jsp.dont_have_acc_question"/>
 					<a href="${pageContext.request.contextPath}/sign_up.jsp">
-						<fmt:message key="sign_in_jsp.register" />
+						<fmt:message key="sign_in_jsp.register"/>
 					</a>
 				</p>
 			</div>

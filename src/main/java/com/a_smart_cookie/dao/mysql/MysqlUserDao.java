@@ -50,7 +50,7 @@ public class MysqlUserDao extends UserDao {
 	}
 
 	@Override
-	public Optional<User> getUserByEmail(String email) throws DaoException {
+	public Optional<User> getUserWithoutSubscriptionsByEmail(String email) throws DaoException {
 		LOG.debug("Starts getting user");
 
 		PreparedStatement pstmt = null;
@@ -80,7 +80,7 @@ public class MysqlUserDao extends UserDao {
 	}
 
 	@Override
-	public Optional<Integer> insertUser(User user) throws DaoException {
+	public Optional<User> insertUser(User user) throws DaoException {
 		LOG.debug("Starts inserting user");
 
 		PreparedStatement pstmt = null;
@@ -98,7 +98,7 @@ public class MysqlUserDao extends UserDao {
 			if (pstmt.executeUpdate() > 0) {
 				rs = pstmt.getGeneratedKeys();
 				if (rs.next()) {
-					return Optional.of(rs.getInt(1));
+					return Optional.of(User.UserBuilder.fromUser(user).withId(rs.getInt(1)).build());
 				}
 			}
 			return Optional.empty();
@@ -137,6 +137,8 @@ public class MysqlUserDao extends UserDao {
 
 		Role role = Role.valueOf(rs.getString("role_" + EntityColumn.Role.NAME.getName()).toUpperCase());
 
+		LOG.trace(role);
+
 		User.UserBuilder userBuilder = new User.UserBuilder(
 				rs.getString(EntityColumn.User.EMAIL.getName()),
 				rs.getBytes(EntityColumn.User.PASSWORD.getName()),
@@ -153,6 +155,8 @@ public class MysqlUserDao extends UserDao {
 							rs.getString(EntityColumn.UserDetail.SURNAME.getName()),
 							rs.getBigDecimal(EntityColumn.UserDetail.BALANCE.getName())));
 		}
+
+		LOG.trace(userBuilder);
 
 		return userBuilder.build();
 

@@ -3,8 +3,11 @@ package com.a_smart_cookie.dto.user;
 import com.a_smart_cookie.entity.Role;
 import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
+import com.a_smart_cookie.entity.UserDetail;
 import com.a_smart_cookie.exception.HashingException;
 import com.a_smart_cookie.util.hashing.PBKDF2Hash;
+
+import java.math.BigDecimal;
 
 /**
  * Maps User dto to entity.
@@ -25,7 +28,9 @@ public final class UserMapper {
 				hashSaltPair.getHash(),
 				hashSaltPair.getSalt(),
 				Status.ACTIVE,
-				Role.SUBSCRIBER).build();
+				Role.SUBSCRIBER)
+				.withUserDetail(new UserDetail(userSignUpDto.getFirstName(), userSignUpDto.getLastName(), BigDecimal.ZERO))
+				.build();
 	}
 
 	private UserMapper() {

@@ -27,7 +27,7 @@ public abstract class UserDao extends AbstractDao {
 	 * @return User without subscriptions if he exists - otherwise empty optional.
 	 * @throws DaoException Exception on db layer.
 	 */
-	public abstract Optional<User> getUserByEmail(String email) throws DaoException;
+	public abstract Optional<User> getUserWithoutSubscriptionsByEmail(String email) throws DaoException;
 
 	/**
 	 * Insert user into db and returns its set id.
@@ -35,6 +35,6 @@ public abstract class UserDao extends AbstractDao {
 	 * @param user User information for creating record in db.
 	 * @return Generated id for inserted user or empty if something went wrong.
 	 */
-	public abstract Optional<Integer> insertUser(User user) throws DaoException;
+	public abstract Optional<User> insertUser(User user) throws DaoException;
 
 }

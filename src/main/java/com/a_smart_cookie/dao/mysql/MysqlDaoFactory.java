@@ -1,9 +1,6 @@
 package com.a_smart_cookie.dao.mysql;
 
-import com.a_smart_cookie.dao.DaoFactory;
-import com.a_smart_cookie.dao.GenreDao;
-import com.a_smart_cookie.dao.PublicationDao;
-import com.a_smart_cookie.dao.UserDao;
+import com.a_smart_cookie.dao.*;
 
 /**
  * Implementation of DaoFactory with Mysql.
@@ -24,6 +21,16 @@ public class MysqlDaoFactory extends DaoFactory {
 	@Override
 	public UserDao getUserDao() {
 		return new MysqlUserDao();
+	}
+
+	@Override
+	public UserDetailDao getUserDetailDao() {
+		return new MysqlUserDetailDao();
+	}
+
+	@Override
+	public SubscriptionDao getSubscriptionDao() {
+		return new MysqlSubscriptionDao();
 	}
 
 

@@ -11,9 +11,31 @@ public final class Query {
 	/**
 	 * Represents queries holder for obtaining publications.
 	 */
+	public enum Subscription {
+		GET_ALL_BY_USER_ID(
+				"SELECT subscription.publication_id, subscription.start_date " +
+						"FROM a_smart_cookie.subscription " +
+						"WHERE subscription.user_id = ?;"
+		);
+
+		private final String query;
+
+		Subscription(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
+
+
+	/**
+	 * Represents queries holder for obtaining publications.
+	 */
 	public enum Publication {
 		BUILDER_FIND_ALL_BY_LANGUAGE(
-				"SELECT genre.id, genre.name, " +
+				"SELECT genre.name, " +
 						"publication.id, publication.price_per_month, publication_info.title, publication_info.description " +
 						"FROM a_smart_cookie.publication " +
 						"JOIN a_smart_cookie.publication_info " +
@@ -68,7 +90,7 @@ public final class Query {
 	}
 
 	/**
-	 * Represents queries holder for obtaining users.
+	 * Represents queries holder for user entity.
 	 */
 	public enum User {
 		CHECK_IF_USER_EXISTS_BY_EMAIL(
@@ -103,6 +125,32 @@ public final class Query {
 		public String getQuery() {
 			return query;
 		}
+	}
+
+	/**
+	 * Represents queries holder for user detail entity.
+	 */
+	public enum UserDetail {
+		GET_USER_DETAIL_BY_USER_ID(
+				"SELECT id, name, surname, balance " +
+						"FROM a_smart_cookie.user_detail " +
+						"WHERE user_id = ?;"
+		),
+
+		INSERT_USER_DETAIL(
+				"INSERT INTO a_smart_cookie.user_detail(name, surname, user_id) " +
+						"VALUES (?, ?, ?);"
+		);
+
+		private final String query;
+
+		UserDetail(String query) {
+			this.query = query;
 		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
 
 }

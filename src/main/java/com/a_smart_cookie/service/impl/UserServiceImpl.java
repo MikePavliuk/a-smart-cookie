@@ -1,11 +1,10 @@
 package com.a_smart_cookie.service.impl;
 
-import com.a_smart_cookie.dao.DaoFactory;
-import com.a_smart_cookie.dao.EntityTransaction;
-import com.a_smart_cookie.dao.UserDao;
+import com.a_smart_cookie.dao.*;
 import com.a_smart_cookie.dto.user.UserMapper;
 import com.a_smart_cookie.dto.user.UserSignUpDto;
 import com.a_smart_cookie.entity.User;
+import com.a_smart_cookie.entity.UserDetail;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.HashingException;
 import com.a_smart_cookie.exception.ServiceException;
@@ -43,22 +42,36 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> getUserWithoutSubscriptionsByEmail(String email) throws ServiceException {
+	public Optional<User> getUserByEmail(String email) throws ServiceException {
 		LOG.debug("Starts getting user");
 
 		EntityTransaction transaction = new EntityTransaction();
 
 		try {
 			UserDao userDao = DaoFactory.getInstance().getUserDao();
-			transaction.init(userDao);
+			SubscriptionDao subscriptionDao = DaoFactory.getInstance().getSubscriptionDao();
 
+			transaction.initTransaction(userDao, subscriptionDao);
+
+			Optional<User> userWithoutSubscriptions = userDao.getUserWithoutSubscriptionsByEmail(email);
+
+			if (userWithoutSubscriptions.isEmpty()) {
+				transaction.rollback();
+				LOG.debug("Finished getting user with empty optional");
+				return Optional.empty();
+			}
+
+			transaction.commit();
 			LOG.debug("Finished getting user");
-			return userDao.getUserByEmail(email);
+			return Optional.of(User.UserBuilder.fromUser(userWithoutSubscriptions.get())
+					.withSubscriptions(subscriptionDao.getSubscriptionsByUserId(userWithoutSubscriptions.get().getId()))
+					.build());
 		} catch (DaoException e) {
+			transaction.rollback();
 			LOG.error("Can't get user by email " + email, e);
 			throw new ServiceException("Can't get user by email " + email, e);
 		} finally {
-			transaction.end();
+			transaction.endTransaction();
 		}
 	}
 
@@ -70,24 +83,38 @@ public class UserServiceImpl implements UserService {
 
 		try {
 			UserDao userDao = DaoFactory.getInstance().getUserDao();
-			transaction.init(userDao);
+			UserDetailDao userDetailDao = DaoFactory.getInstance().getUserDetailDao();
+
+			transaction.initTransaction(userDao, userDetailDao);
 
 			User user = UserMapper.convertFromDtoToEntity(userSignUpDto);
-			LOG.trace("user before insert --> " + user);
-			Optional<Integer> generatedId = userDao.insertUser(user);
-			LOG.trace("generatedId --> " + generatedId.orElse(null));
+			Optional<User> insertedUser = userDao.insertUser(user);
 
-			LOG.debug("Finished creating user");
-			return generatedId.map(id -> User.UserBuilder
-					.fromUser(user)
-					.withId(id)
-					.build());
+			if (insertedUser.isEmpty()) {
+				transaction.rollback();
+				LOG.debug("Finished creating user with not created user");
+				return Optional.empty();
+			}
+
+			Optional<UserDetail> userDetail = userDetailDao.insertUserDetail(user.getUserDetail(), insertedUser.get().getId());
+
+			if (userDetail.isPresent()) {
+				user = User.UserBuilder.fromUser(insertedUser.get()).withUserDetail(userDetail.get()).build();
+				transaction.commit();
+				LOG.debug("Finished creating user");
+				return Optional.of(user);
+			}
+
+			transaction.rollback();
+			LOG.debug("Finished creating user with not created user detail");
+			return Optional.empty();
 
 		} catch (DaoException | HashingException e) {
+			transaction.rollback();
 			LOG.error("Can't insert user", e);
 			throw new ServiceException("Can't insert user", e);
 		} finally {
-			transaction.end();
+			transaction.endTransaction();
 		}
 	}
 

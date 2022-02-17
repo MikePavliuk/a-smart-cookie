@@ -1,5 +1,6 @@
 package com.a_smart_cookie.entity;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -119,15 +120,38 @@ public final class User extends Entity {
         }
 
         public static UserBuilder fromUser(User user) {
-            return new User.UserBuilder(
+            UserBuilder userBuilder = new UserBuilder(
                     user.email,
                     user.password,
                     user.salt,
                     user.status,
                     user.role
             );
+
+            if (user.subscriptions != null) {
+                userBuilder.withSubscriptions(user.getSubscriptions());
+            }
+
+            if (user.getUserDetail() != null) {
+                userBuilder.withUserDetail(user.getUserDetail());
+            }
+
+            return userBuilder;
         }
 
-    }
+		@Override
+		public String toString() {
+			return "UserBuilder{" +
+					"id=" + id +
+					", email='" + email + '\'' +
+					", password=" + Arrays.toString(password) +
+					", salt=" + Arrays.toString(salt) +
+					", userDetail=" + userDetail +
+					", status=" + status +
+					", role=" + role +
+					", subscriptions=" + subscriptions +
+					'}';
+		}
+	}
 
 }

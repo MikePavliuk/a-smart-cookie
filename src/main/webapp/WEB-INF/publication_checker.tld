@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+		version="2.0">
+	<description>Tag for checking if user has subscription on some publication</description>
+	<tlib-version>2.1</tlib-version>
+	<short-name>subscribe-checker</short-name>
+	<uri>/WEB-INF/has_user_subscription</uri>
+	<function>
+		<name>contains</name>
+		<function-class>com.a_smart_cookie.tag.SubscriptionCheckerTag</function-class>
+		<function-signature>boolean contains(java.util.List,java.lang.Integer)</function-signature>
+	</function>
+</taglib>

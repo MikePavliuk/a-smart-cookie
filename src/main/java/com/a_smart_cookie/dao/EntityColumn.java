@@ -106,6 +106,26 @@ public final class EntityColumn {
 	}
 
 	/**
+	 * Holds column names of Subscription entity.
+	 *
+	 */
+	public enum Subscription {
+		USER_ID("user_id"),
+		PUBLICATION_ID("publication_id"),
+		START_DATE("start_date");
+
+		private final String name;
+
+		Subscription(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+
+	/**
 	 * Holds column names of Publication entity.
 	 *
 	 */

@@ -21,12 +21,12 @@ public interface UserService {
 	boolean isUserAlreadyExistsByEmail(String email) throws ServiceException;
 
 	/**
-	 * Returns Optional of user without subscriptions if he was found by email.
+	 * Returns Optional of user if he was found by email.
 	 *
 	 * @param email Email which user should be found by.
 	 * @return Optional of user if he exists, otherwise - empty optional.
 	 */
-	Optional<User> getUserWithoutSubscriptionsByEmail(String email) throws ServiceException;
+	Optional<User> getUserByEmail(String email) throws ServiceException;
 
 	/**
 	 * Returns Optional of inserted user with generated id.
