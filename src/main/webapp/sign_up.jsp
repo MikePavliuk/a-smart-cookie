@@ -22,7 +22,7 @@
 			<form action="${pageContext.request.contextPath}/controller?command=registration" method="post"
 				  class="col-6">
 				<div class="form-group">
-					<label for="firstName"><fmt:message key="sign_up_jsp.first_name"/></label>
+					<label for="firstName"><fmt:message key="sign_up_jsp.first_name"/> <span class="text-danger">*</span></label>
 					<input
 							type="text"
 							class="form-control"
@@ -42,7 +42,7 @@
 					</c:if>
 				</div>
 				<div class="form-group">
-					<label for="lastName"><fmt:message key="sign_up_jsp.last_name"/></label>
+					<label for="lastName"><fmt:message key="sign_up_jsp.last_name"/> <span class="text-danger">*</span></label>
 					<input
 							type="text"
 							class="form-control"
@@ -62,7 +62,7 @@
 					</c:if>
 				</div>
 				<div class="form-group">
-					<label for="email"><fmt:message key="credentials.email"/></label>
+					<label for="email"><fmt:message key="credentials.email"/> <span class="text-danger">*</span></label>
 					<input
 							type="email"
 							class="form-control"
@@ -87,7 +87,7 @@
 					</c:if>
 				</div>
 				<div class="form-group">
-					<label for="password"><fmt:message key="credentials.password"/></label>
+					<label for="password"><fmt:message key="credentials.password"/> <span class="text-danger">*</span></label>
 					<input
 							type="password"
 							class="form-control"
