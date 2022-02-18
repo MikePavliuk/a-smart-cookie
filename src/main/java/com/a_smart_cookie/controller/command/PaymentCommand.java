@@ -53,6 +53,7 @@ public class PaymentCommand extends Command {
 						.build();
 
 				session.setAttribute("user", user);
+				session.setAttribute("isCorrectPayment", true);
 				return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 			}
 

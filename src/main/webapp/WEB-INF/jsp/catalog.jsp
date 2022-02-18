@@ -174,19 +174,32 @@
 									</p>
 									<c:choose>
 										<c:when test="${empty sessionScope.user}">
-											<a href="${pageContext.request.contextPath}/sign_in.jsp">
+											<a class="btn btn-danger"
+											   href="${pageContext.request.contextPath}/sign_in.jsp"
+											   role="button">
 												<fmt:message key="publication.subscribe"/>
 											</a>
 										</c:when>
 
 										<c:when test="${sessionScope.user != null && cfn:contains(sessionScope.user.subscriptions, publication.id)}">
-											<span class="text-success">
-													<fmt:message key="publication.subscription_present" />
-											</span>
+											<a class="btn btn-success" role="button">
+												<fmt:message key="publication.subscription_present"/>
+											</a>
+										</c:when>
+
+										<c:when test="${not empty sessionScope.user and sessionScope.user.userDetail.balance < publication.pricePerMonth}">
+											<a class="btn btn-warning"
+											   data-toggle="modal"
+											   data-target="#addFundsModal"
+											   role="button">
+												<fmt:message key="publication.subscribe"/>
+											</a>
 										</c:when>
 
 										<c:otherwise>
-											<a href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}">
+											<a class="btn btn-secondary"
+											   href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}"
+											   role="button">
 												<fmt:message key="publication.subscribe"/>
 											</a>
 										</c:otherwise>

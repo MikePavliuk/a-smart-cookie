@@ -86,6 +86,7 @@ Header (top area).
 											</div>
 										</div>
 									</div>
+
 								</div>
 							</c:when>
 
@@ -145,6 +146,17 @@ Header (top area).
 			</nav>
 		</div>
 	</div>
+
+	<c:if test="${sessionScope.isCorrectPayment}">
+		<%
+			session.removeAttribute("isCorrectPayment");
+		%>
+		<div class="alert alert-success alert-dismissable text-center">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<fmt:message key="header_jsp.payment.alert_success"/>
+		</div>
+	</c:if>
+
 </div>
 
 
