@@ -1,7 +1,6 @@
-package com.a_smart_cookie.util.hashing.hashing;
+package com.a_smart_cookie.util.hashing;
 
 import com.a_smart_cookie.exception.HashingException;
-import com.a_smart_cookie.util.hashing.PBKDF2Hash;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
