@@ -131,10 +131,16 @@ public final class Query {
 	 * Represents queries holder for user detail entity.
 	 */
 	public enum UserDetail {
-		GET_USER_DETAIL_BY_USER_ID(
-				"SELECT id, name, surname, balance " +
+		ADD_BALANCE_TO_USER_BY_ID(
+				"UPDATE a_smart_cookie.user_detail " +
+				"SET user_detail.balance = user_detail.balance + ? " +
+				"WHERE user_detail.user_id = ?;"
+		),
+
+		GET_BALANCE_BY_USER_ID(
+				"SELECT user_detail.balance " +
 						"FROM a_smart_cookie.user_detail " +
-						"WHERE user_id = ?;"
+						"WHERE user_detail.user_id = ?;"
 		),
 
 		INSERT_USER_DETAIL(

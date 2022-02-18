@@ -1,5 +1,6 @@
 package com.a_smart_cookie.dao.mysql;
 
+import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dao.ResourceReleaser;
 import com.a_smart_cookie.dao.UserDetailDao;
 import com.a_smart_cookie.entity.UserDetail;
@@ -49,6 +50,55 @@ public class MysqlUserDetailDao extends UserDetailDao {
 		} catch (SQLException e) {
 			LOG.error("Can't insert user detail", e);
 			throw new DaoException("Can't insert user detail", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean addMoneyToBalanceByUserId(BigDecimal paymentAmount, int userId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.UserDetail.ADD_BALANCE_TO_USER_BY_ID.getQuery());
+			pstmt.setBigDecimal(1, paymentAmount);
+			pstmt.setInt(2, userId);
+
+			LOG.debug("Finished method");
+			return pstmt.executeUpdate() >0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't add money to balance", e);
+			throw new DaoException("Can't add money to balance", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public Optional<BigDecimal> getBalanceByUserId(int userId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.UserDetail.GET_BALANCE_BY_USER_ID.getQuery());
+			pstmt.setInt(1, userId);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				LOG.debug("Finished method with got balance");
+				return Optional.of(rs.getBigDecimal(EntityColumn.UserDetail.BALANCE.getName()));
+			}
+
+			LOG.debug("Finished method with not got balance");
+			return Optional.empty();
+
+		} catch (SQLException e) {
+			LOG.error("Can't get user balance", e);
+			throw new DaoException("Can't get user balance", e);
 		} finally {
 			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);

@@ -1,5 +1,6 @@
 package com.a_smart_cookie.service.impl;
 
+import com.a_smart_cookie.service.PaymentService;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
@@ -12,6 +13,7 @@ public class ServiceFactoryImpl extends ServiceFactory {
 
 	private PublicationService publicationService;
 	private UserService userService;
+	private PaymentService paymentService;
 
 	@Override
 	public PublicationService getPublicationService() {
@@ -27,6 +29,14 @@ public class ServiceFactoryImpl extends ServiceFactory {
 			userService = new UserServiceImpl();
 		}
 		return userService;
+	}
+
+	@Override
+	public PaymentService getPaymentService() {
+		if (paymentService == null) {
+			paymentService = new PaymentServiceImpl();
+		}
+		return paymentService;
 	}
 
 }
