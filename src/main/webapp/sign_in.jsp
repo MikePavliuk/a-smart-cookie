@@ -18,6 +18,7 @@
 
 <div class="content">
 	<div class="container">
+		<h1 class="text-center"><fmt:message key="sign_in_jsp.title"/></h1>
 		<div class="row justify-content-center">
 			<form action="${pageContext.request.contextPath}/controller?command=login" method="post"
 				  class="col-6">
