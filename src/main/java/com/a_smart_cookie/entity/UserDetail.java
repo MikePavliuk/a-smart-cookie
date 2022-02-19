@@ -45,7 +45,6 @@ public final class UserDetail extends Entity {
     public BigDecimal getBalance() {
         return balance;
     }
-
 	@Override
 	public String toString() {
 		return "UserDetail{" +

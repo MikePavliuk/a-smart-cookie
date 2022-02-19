@@ -1,5 +1,6 @@
 package com.a_smart_cookie.service;
 
+import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.util.payment.PaymentMethod;
 
@@ -21,5 +22,14 @@ public interface PaymentService {
 	 * @return If transaction was correctly performed - returns current balance, otherwise - empty optional.
 	 */
 	Optional<BigDecimal> addBalanceToUserById(BigDecimal paymentAmount, PaymentMethod paymentMethod, int userId) throws ServiceException;
+
+	/**
+	 * Performs subscribing user to some publication.
+	 *
+	 * @param user User that wants to subscribe.
+	 * @param publicationId Publication's id to subscribe on.
+	 * @return Optional of updated user if subscribe was correctly issued, otherwise - empty one.
+	 */
+	Optional<User> subscribeToPublication(User user, int publicationId) throws ServiceException;
 
 }

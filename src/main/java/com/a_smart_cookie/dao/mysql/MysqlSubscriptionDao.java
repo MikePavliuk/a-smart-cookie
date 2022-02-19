@@ -46,6 +46,29 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 
 	}
 
+	@Override
+	public boolean insertSubscription(int userId, int publicationId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Subscription.INSERT.getQuery());
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, publicationId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't insert subscription", e);
+			throw new DaoException("Can't insert subscription", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
 	/**
 	 * Extracts subscriptions from ResultSet to List of subscriptions.
 	 *

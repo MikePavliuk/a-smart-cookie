@@ -18,11 +18,15 @@ public final class CommandContext {
 	static {
 		commandMap.put("sign-in", new SignInPageCommand());
 		commandMap.put("sign-up", new SignUpPageCommand());
-		commandMap.put("catalog", new CatalogCommand());
+
 		commandMap.put("registration", new RegistrationCommand());
 		commandMap.put("login", new LoginCommand());
 		commandMap.put("logout", new LogoutCommand());
+
+		commandMap.put("catalog", new CatalogCommand());
 		commandMap.put("payment", new PaymentCommand());
+		commandMap.put("subscribe", new SubscribeCommand());
+
 		commandMap.put("unknown", new UnknownCommand());
 
 		LOG.debug("Command context was successfully initialized");

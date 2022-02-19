@@ -32,6 +32,15 @@ public abstract class UserDetailDao extends AbstractDao {
 	public abstract boolean addMoneyToBalanceByUserId(BigDecimal paymentAmount, int userId) throws DaoException;
 
 	/**
+	 * Minus funds from user account by user id.
+	 *
+	 * @param paymentAmount Amount of money to minus from user in dollars.
+	 * @param userId Id of user to debit funds.
+	 * @return Whether transaction was correctly performed.
+	 */
+	public abstract boolean debitFundsFromBalanceByUserId(BigDecimal paymentAmount, int userId) throws DaoException;
+
+	/**
 	 * Gets users balance.
 	 *
 	 * @param userId Id of user.

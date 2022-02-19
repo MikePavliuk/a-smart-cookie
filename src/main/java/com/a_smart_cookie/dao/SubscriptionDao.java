@@ -20,4 +20,13 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 */
 	public abstract List<Subscription> getSubscriptionsByUserId(int id) throws DaoException;
 
+	/**
+	 * Insert subscription.
+	 *
+	 * @param userId User's id.
+	 * @param publicationId Publication's id.
+	 * @return Optional of subscription if subscription was correctly inserted, otherwise - empty optional.
+	 */
+	public abstract boolean insertSubscription(int userId, int publicationId) throws DaoException;
+
 }

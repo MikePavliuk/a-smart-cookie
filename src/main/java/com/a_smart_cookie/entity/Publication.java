@@ -1,9 +1,9 @@
 package com.a_smart_cookie.entity;
 
 import com.a_smart_cookie.util.StringHandler;
-import com.a_smart_cookie.util.translator.strategies.GenreTranslatorStrategies;
 import com.a_smart_cookie.util.translator.Translatable;
 import com.a_smart_cookie.util.translator.TranslatorContext;
+import com.a_smart_cookie.util.translator.strategies.GenreTranslatorStrategies;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -14,30 +14,22 @@ import java.util.Arrays;
  */
 public final class Publication extends Entity {
     private static final long serialVersionUID = 5722602323493897338L;
-	private Integer id;
+	private final Integer id;
     private final Genre genre;
     private final String title;
     private final String description;
     private final BigDecimal pricePerMonth;
 
-	public Publication(Integer id, Genre genre, String title, String description, BigDecimal pricePerMonth) {
-		this(genre, title, description, pricePerMonth);
-		this.id = id;
+	private Publication(PublicationBuilder publicationBuilder) {
+		this.id = publicationBuilder.id;
+		this.genre = publicationBuilder.genre;
+		this.title = publicationBuilder.title;
+		this.description = publicationBuilder.description;
+		this.pricePerMonth = publicationBuilder.pricePerMonth;
 	}
-
-    public Publication(Genre genre, String title, String description, BigDecimal pricePerMonth) {
-        this.genre = genre;
-        this.title = title;
-        this.description = description;
-        this.pricePerMonth = pricePerMonth;
-    }
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Genre getGenre() {
@@ -65,6 +57,69 @@ public final class Publication extends Entity {
 				", description='" + description + '\'' +
 				", pricePerMonth=" + pricePerMonth +
 				'}';
+	}
+
+	/**
+	 * Implements Builder pattern and provide with ability to construct immutable Publication object.
+	 *
+	 */
+	public static class PublicationBuilder {
+		private Integer id;
+		private Genre genre;
+		private String title;
+		private String description;
+		private BigDecimal pricePerMonth;
+
+		public Publication build() {
+			return new Publication(this);
+		}
+
+		public PublicationBuilder() {
+		}
+
+		public PublicationBuilder(Integer id, Genre genre, String title, String description, BigDecimal pricePerMonth) {
+			this.id = id;
+			this.genre = genre;
+			this.title = title;
+			this.description = description;
+			this.pricePerMonth = pricePerMonth;
+		}
+
+		public PublicationBuilder withId(Integer id) {
+			this.id = id;
+			return this;
+		}
+
+		public PublicationBuilder withGenre(Genre genre) {
+			this.genre = genre;
+			return this;
+		}
+
+		public PublicationBuilder withTitle(String title) {
+			this.title = title;
+			return this;
+		}
+
+		public PublicationBuilder withDescription(String description) {
+			this.description = description;
+			return this;
+		}
+
+		public PublicationBuilder withPricePerMonth(BigDecimal pricePerMonth) {
+			this.pricePerMonth = pricePerMonth;
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return "PublicationBuilder{" +
+					"id=" + id +
+					", genre=" + genre +
+					", title='" + title + '\'' +
+					", description='" + description + '\'' +
+					", pricePerMonth=" + pricePerMonth +
+					'}';
+		}
 	}
 
 	/**

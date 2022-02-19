@@ -78,6 +78,27 @@ public class MysqlUserDetailDao extends UserDetailDao {
 	}
 
 	@Override
+	public boolean debitFundsFromBalanceByUserId(BigDecimal paymentAmount, int userId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.UserDetail.MINUS_BALANCE_FROM_USER_BY_ID.getQuery());
+			pstmt.setBigDecimal(1, paymentAmount);
+			pstmt.setInt(2, userId);
+
+			LOG.debug("Finished method");
+			return pstmt.executeUpdate() >0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't debit funds from balance", e);
+			throw new DaoException("Can't debit funds from balance", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
 	public Optional<BigDecimal> getBalanceByUserId(int userId) throws DaoException {
 		LOG.debug("Starts method");
 

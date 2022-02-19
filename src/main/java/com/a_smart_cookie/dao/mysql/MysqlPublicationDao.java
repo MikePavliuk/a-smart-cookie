@@ -14,10 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Data access object for publication related entities implemented with MySql
- *
  */
 public class MysqlPublicationDao extends PublicationDao {
 
@@ -50,8 +50,71 @@ public class MysqlPublicationDao extends PublicationDao {
 		}
 	}
 
+	@Override
+	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws DaoException {
+		LOG.debug("MysqlPublicationDao starts getting total number of rows by parameters");
+
+		StringBuilder queryBuilder = getQueryWithAppliedCountRowsParameters(countRowsParameters);
+		LOG.trace("Created query --> " + queryBuilder);
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(queryBuilder.toString());
+			pstmt.setString(1, countRowsParameters.getLanguage().name().toLowerCase());
+			rs = pstmt.executeQuery();
+
+			int numberOfRows = 0;
+
+			if (rs.next()) {
+				numberOfRows = rs.getInt("count");
+			}
+
+			LOG.debug("MysqlPublicationDao finished getting total number of rows by parameters");
+			return numberOfRows;
+
+		} catch (SQLException e) {
+			LOG.error("Can't count publications with query '" + queryBuilder + "'", e);
+			throw new DaoException("Can't count publications with query '" + queryBuilder + "'", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public Optional<Publication> getPublicationById(int id) throws DaoException {
+		LOG.debug("Method starts");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.GET_BY_ID.getQuery());
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+
+			LOG.trace(pstmt);
+
+			if (rs.next()) {
+				LOG.trace("Finished --> Found publication");
+				return Optional.of(extractPublication(rs));
+			}
+
+			LOG.trace("Finished --> Didn't find publication");
+			return Optional.empty();
+
+		} catch (SQLException e) {
+			LOG.error("Can't get publication by id " + id, e);
+			throw new DaoException("Can't get publication by id " + id, e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
 	/**
-	 * 	Construct query with filter parameters for getting requested publications.
+	 * Construct query with filter parameters for getting requested publications.
 	 *
 	 * @param filterParameters Possible parameters for constructing query
 	 * @return Built query in StringBuilder
@@ -88,71 +151,6 @@ public class MysqlPublicationDao extends PublicationDao {
 	}
 
 	/**
-	 * Extracts publications from ResultSet to List of publications.
-	 *
-	 * @param rs External ResultSet
-	 * @return List of extracted publications
-	 */
-	private List<Publication> extractPublications(ResultSet rs) throws SQLException {
-		List<Publication> publications = new ArrayList<>();
-
-		while (rs.next()) {
-			publications.add(extractPublication(rs));
-		}
-
-		return publications;
-	}
-
-	/**
-	 * Method to extract publication from ResultSet.
-	 *
-	 * @param rs External ResultSet
-	 * @return Extracted publication
-	 */
-	private Publication extractPublication(ResultSet rs) throws SQLException {
-		return new Publication(
-				rs.getInt(EntityColumn.Publication.ID.getName()),
-				Publication.Genre.safeFromString(rs.getString(EntityColumn.Genre.NAME.getName())),
-				rs.getString(EntityColumn.PublicationInfo.TITLE.getName()),
-				rs.getString(EntityColumn.PublicationInfo.DESCRIPTION.getName()),
-				rs.getBigDecimal(EntityColumn.Publication.PRICE_PER_MONTH.getName())
-		);
-	}
-
-	@Override
-	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws DaoException {
-		LOG.debug("MysqlPublicationDao starts getting total number of rows by parameters");
-
-		StringBuilder queryBuilder = getQueryWithAppliedCountRowsParameters(countRowsParameters);
-		LOG.trace("Created query --> " + queryBuilder);
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			pstmt = connection.prepareStatement(queryBuilder.toString());
-			pstmt.setString(1, countRowsParameters.getLanguage().name().toLowerCase());
-			rs = pstmt.executeQuery();
-
-			int numberOfRows = 0;
-
-			if (rs.next()) {
-				numberOfRows = rs.getInt("count");
-			}
-
-			LOG.debug("MysqlPublicationDao finished getting total number of rows by parameters");
-			return numberOfRows;
-
-		} catch (SQLException e) {
-			LOG.error("Can't count publications with query '" + queryBuilder + "'", e);
-			throw new DaoException("Can't count publications with query '" + queryBuilder + "'", e);
-		} finally {
-			ResourceReleaser.close(rs);
-			ResourceReleaser.close(pstmt);
-		}
-	}
-
-	/**
 	 * Construct query with CountRowsParameters for getting count of requested rows.
 	 *
 	 * @param countRowsParameters Possible parameters for constructing query
@@ -163,7 +161,7 @@ public class MysqlPublicationDao extends PublicationDao {
 
 		queryBuilder.append(Query.Publication.BUILDER_GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE.getQuery());
 
-		if (countRowsParameters.getGenre() != null ) {
+		if (countRowsParameters.getGenre() != null) {
 			queryBuilder.append(" AND genre.name = '")
 					.append(countRowsParameters.getGenre().name().toLowerCase())
 					.append("'");
@@ -178,4 +176,50 @@ public class MysqlPublicationDao extends PublicationDao {
 		queryBuilder.append(";");
 		return queryBuilder;
 	}
+
+	/**
+	 * Extracts publications from ResultSet to List of publications.
+	 *
+	 * @param rs External ResultSet
+	 * @return List of extracted publications
+	 */
+	private List<Publication> extractPublications(ResultSet rs) throws SQLException {
+		List<Publication> publications = new ArrayList<>();
+
+		while (rs.next()) {
+			publications.add(extractPublicationWithFullInfo(rs));
+		}
+
+		return publications;
+	}
+
+	/**
+	 * Method to extract publication from ResultSet.
+	 *
+	 * @param rs External ResultSet
+	 * @return Extracted publication with publication info
+	 */
+	private Publication extractPublicationWithFullInfo(ResultSet rs) throws SQLException {
+		return new Publication.PublicationBuilder()
+				.withId(rs.getInt(EntityColumn.Publication.ID.getName()))
+				.withGenre(Publication.Genre.safeFromString(rs.getString(EntityColumn.Genre.NAME.getName())))
+				.withTitle(rs.getString(EntityColumn.PublicationInfo.TITLE.getName()))
+				.withDescription(rs.getString(EntityColumn.PublicationInfo.DESCRIPTION.getName()))
+				.withPricePerMonth(rs.getBigDecimal(EntityColumn.Publication.PRICE_PER_MONTH.getName()))
+				.build();
+	}
+
+	/**
+	 * Method to extract short publication from ResultSet.
+	 *
+	 * @param rs External ResultSet
+	 * @return Extracted short publication
+	 */
+	private Publication extractPublication(ResultSet rs) throws SQLException {
+		return new Publication.PublicationBuilder()
+				.withId(rs.getInt(EntityColumn.Publication.ID.getName()))
+				.withPricePerMonth(rs.getBigDecimal(EntityColumn.Publication.PRICE_PER_MONTH.getName()))
+				.build();
+	}
+
 }

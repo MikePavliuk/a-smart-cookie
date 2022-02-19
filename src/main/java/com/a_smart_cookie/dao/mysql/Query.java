@@ -16,6 +16,11 @@ public final class Query {
 				"SELECT subscription.publication_id, subscription.start_date " +
 						"FROM a_smart_cookie.subscription " +
 						"WHERE subscription.user_id = ?;"
+		),
+
+		INSERT(
+				"INSERT INTO a_smart_cookie.subscription(user_id, publication_id) " +
+						"VALUES (?, ?); "
 		);
 
 		private final String query;
@@ -34,6 +39,12 @@ public final class Query {
 	 * Represents queries holder for obtaining publications.
 	 */
 	public enum Publication {
+		GET_BY_ID(
+				"SELECT publication.id, publication.price_per_month, genre_id " +
+						"FROM a_smart_cookie.publication " +
+						"WHERE publication.id = ?;"
+		),
+
 		BUILDER_FIND_ALL_BY_LANGUAGE(
 				"SELECT genre.name, " +
 						"publication.id, publication.price_per_month, publication_info.title, publication_info.description " +
@@ -43,7 +54,7 @@ public final class Query {
 						"JOIN a_smart_cookie.genre " +
 						"ON publication.genre_id = genre.id " +
 						"WHERE publication_info.language_id = " +
-						"(SELECT id FROM a_smart_cookie.language WHERE name = ?)"
+						"(SELECT id FROM a_smart_cookie.language WHERE name = ?) "
 		),
 
 		BUILDER_GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE(
@@ -135,6 +146,12 @@ public final class Query {
 				"UPDATE a_smart_cookie.user_detail " +
 				"SET user_detail.balance = user_detail.balance + ? " +
 				"WHERE user_detail.user_id = ?;"
+		),
+
+		MINUS_BALANCE_FROM_USER_BY_ID(
+				"UPDATE a_smart_cookie.user_detail " +
+						"SET user_detail.balance = user_detail.balance - ? " +
+						"WHERE user_detail.user_id = ?;"
 		),
 
 		GET_BALANCE_BY_USER_ID(
