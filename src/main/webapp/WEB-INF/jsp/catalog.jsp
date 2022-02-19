@@ -175,14 +175,14 @@
 									<c:choose>
 										<c:when test="${empty sessionScope.user}">
 											<a class="btn btn-danger"
-											   href="${pageContext.request.contextPath}/sign_in.jsp"
+											   href="${pageContext.request.contextPath}/controller?command=sign-in"
 											   role="button">
 												<fmt:message key="publication.subscribe"/>
 											</a>
 										</c:when>
 
 										<c:when test="${sessionScope.user != null && cfn:contains(sessionScope.user.subscriptions, publication.id)}">
-											<a class="btn btn-success" role="button">
+											<a class="btn btn-secondary" role="button">
 												<fmt:message key="publication.subscription_present"/>
 											</a>
 										</c:when>
@@ -197,7 +197,7 @@
 										</c:when>
 
 										<c:otherwise>
-											<a class="btn btn-secondary"
+											<a class="btn btn-success"
 											   href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}"
 											   role="button">
 												<fmt:message key="publication.subscribe"/>

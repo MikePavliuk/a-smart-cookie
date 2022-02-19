@@ -31,7 +31,7 @@ public class LogoutCommand extends Command {
 		}
 
 		log.debug("Command finished");
-		return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+		return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 	}
 
 }

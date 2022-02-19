@@ -16,8 +16,10 @@ public final class CommandContext {
 	private static final Map<String, Command> commandMap = new HashMap<>();
 
 	static {
+		commandMap.put("sign-in", new SignInPageCommand());
+		commandMap.put("sign-up", new SignUpPageCommand());
 		commandMap.put("catalog", new CatalogCommand());
-		commandMap.put("registration", new SignUpCommand());
+		commandMap.put("registration", new RegistrationCommand());
 		commandMap.put("login", new LoginCommand());
 		commandMap.put("logout", new LogoutCommand());
 		commandMap.put("payment", new PaymentCommand());

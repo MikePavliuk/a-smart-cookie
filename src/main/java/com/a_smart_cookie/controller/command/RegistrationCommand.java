@@ -22,11 +22,11 @@ import java.util.Optional;
  * Provides with sign up mechanism for user.
  *
  */
-public class SignUpCommand extends Command {
+public class RegistrationCommand extends Command {
 
 	private static final long serialVersionUID = -4209296784400138731L;
 
-	private static final Logger LOG = Logger.getLogger(SignUpCommand.class);
+	private static final Logger LOG = Logger.getLogger(RegistrationCommand.class);
 
 	@Override
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
@@ -88,7 +88,7 @@ public class SignUpCommand extends Command {
 			return new HttpPath(WebPath.Page.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
 
 		} catch (ServiceException e) {
-			LOG.error("Command ended with exception");
+			LOG.error("Command finished with exception");
 			return new HttpPath(WebPath.Page.ERROR, HttpHandlerType.SEND_REDIRECT);
 		}
 	}

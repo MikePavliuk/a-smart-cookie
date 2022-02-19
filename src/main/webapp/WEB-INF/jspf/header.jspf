@@ -134,7 +134,7 @@ Header (top area).
 						<c:otherwise>
 							<div class="ml-3">
 								<a class="btn btn-info"
-								   href="${pageContext.request.contextPath}/sign_in.jsp">
+								   href="${pageContext.request.contextPath}/controller?command=sign-in">
 									<fmt:message key="header_jsp.button.login"/>
 								</a>
 							</div>

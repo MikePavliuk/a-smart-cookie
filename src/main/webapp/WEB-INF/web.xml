@@ -5,7 +5,7 @@
 		 version="4.0">
 
 	<welcome-file-list>
-		<welcome-file>sign_in.jsp</welcome-file>
+		<welcome-file>/WEB-INF/jsp/sign_in.jsp</welcome-file>
 	</welcome-file-list>
 
 	<!--============================================================
@@ -64,5 +64,12 @@
 	<listener>
 		<listener-class>com.a_smart_cookie.listener.ContextListener</listener-class>
 	</listener>
+
+	<!--============================================================
+		Session configuration
+	=============================================================-->
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
 
 </web-app>

@@ -4,8 +4,6 @@
 <%@ include file="/WEB-INF/jspf/directive/locale.jspf" %>
 <%@ page import="com.a_smart_cookie.util.validation.ValidationPattern" %>
 
-<r:redirectIfInSession sessionAttribute="user" redirectPath="controller?command=catalog"/>
-
 <html>
 
 <fmt:message key="sign_up_jsp.title" var="signUpTitle"/>
@@ -115,7 +113,7 @@
 			<div class="col-6">
 				<p>
 					<fmt:message key="sign_up_jsp.have_acc_question" />
-					<a href="${pageContext.request.contextPath}/sign_in.jsp">
+					<a href="${pageContext.request.contextPath}/controller?command=sign-up">
 						<fmt:message key="sign_up_jsp.login" />
 					</a>
 				</p>
