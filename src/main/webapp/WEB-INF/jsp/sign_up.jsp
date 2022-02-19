@@ -113,7 +113,7 @@
 			<div class="col-6">
 				<p>
 					<fmt:message key="sign_up_jsp.have_acc_question" />
-					<a href="${pageContext.request.contextPath}/controller?command=sign-up">
+					<a href="${pageContext.request.contextPath}/controller?command=sign-in">
 						<fmt:message key="sign_up_jsp.login" />
 					</a>
 				</p>
