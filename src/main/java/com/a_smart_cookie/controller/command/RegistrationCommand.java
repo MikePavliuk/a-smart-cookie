@@ -79,13 +79,13 @@ public class RegistrationCommand extends Command {
 				session.setAttribute("registeredEmail", user.get().getEmail());
 
 				LOG.debug("Command finished with registered user");
-				return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 			}
 
 			session.setAttribute("emailAlreadyExists", true);
 			addOldFieldValuesToSession(request, session);
 			LOG.debug("Command finished with existed user email");
-			return new HttpPath(WebPath.Page.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
+			return new HttpPath(WebPath.Command.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
 
 		} catch (ServiceException e) {
 			LOG.error("Command finished with exception");

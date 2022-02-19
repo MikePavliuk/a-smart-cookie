@@ -9,6 +9,19 @@
 	</welcome-file-list>
 
 	<!--============================================================
+		Controller
+	=============================================================-->
+	<servlet>
+		<servlet-name>FrontController</servlet-name>
+		<servlet-class>com.a_smart_cookie.controller.FrontController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FrontController</servlet-name>
+		<url-pattern>/controller</url-pattern>
+	</servlet-mapping>
+
+	<!--============================================================
 		i18n support
 	=============================================================-->
 	<!-- this way we set the resource bundle name -->
@@ -23,6 +36,40 @@
 		<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
 		<param-value>uk</param-value>
 	</context-param>
+
+	<!--============================================================
+		Security filter.
+		1) admin: admin commands
+		2) subscriber: subscriber commands
+		3) guest: guest commands
+		4) common: commands for all roles
+		Delimiter - space/tab
+	=============================================================-->
+	<filter>
+		<filter-name>CommandAccessFilter</filter-name>
+		<filter-class>com.a_smart_cookie.filter.CommandAccessFilter</filter-class>
+		<init-param>
+			<param-name>admin</param-name>
+			<param-value>catalog</param-value>
+		</init-param>
+		<init-param>
+			<param-name>subscriber</param-name>
+			<param-value>catalog subscribe payment</param-value>
+		</init-param>
+		<init-param>
+			<param-name>guest</param-name>
+			<param-value>catalog login registration sign-in sign-up</param-value>
+		</init-param>
+		<init-param>
+			<param-name>common</param-name>
+			<param-value>logout unknown</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>CommandAccessFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!--============================================================
 		Cookie locale setter filter

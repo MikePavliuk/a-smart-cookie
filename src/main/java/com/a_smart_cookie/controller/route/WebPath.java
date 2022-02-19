@@ -33,7 +33,9 @@ public final class WebPath {
 	 */
 	public enum Command implements Routable {
 		CATALOG_FIRST_PAGE("/controller?command=catalog&page=1"),
-		SIGN_IN("/controller?command=sign-in");
+		SIGN_IN("/controller?command=sign-in"),
+		SIGN_UP("/controller?command=sign-up"),
+		ERROR("/controller?command=unknown");
 
 		private final String value;
 
