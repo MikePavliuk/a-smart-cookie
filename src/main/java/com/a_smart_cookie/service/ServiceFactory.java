@@ -75,4 +75,11 @@ public abstract class ServiceFactory {
 	 */
 	public abstract PaymentService getPaymentService();
 
+	/**
+	 * Method for getting instance of SubscriptionService.
+	 *
+	 * @return Instance of requested implementation of SubscriptionService.
+	 */
+	public abstract SubscriptionService getSubscriptionService();
+
 }

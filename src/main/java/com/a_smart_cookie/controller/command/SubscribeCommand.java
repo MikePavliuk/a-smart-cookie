@@ -6,8 +6,8 @@ import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.NotUpdatedResultsException;
 import com.a_smart_cookie.exception.ServiceException;
-import com.a_smart_cookie.service.PaymentService;
 import com.a_smart_cookie.service.ServiceFactory;
+import com.a_smart_cookie.service.SubscriptionService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +39,8 @@ public class SubscribeCommand extends Command {
 		User user = (User) session.getAttribute("user");
 
 		try {
-			PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
-			User updatedUser = paymentService.subscribeToPublication(user, Integer.parseInt(publicationIdParam));
+			SubscriptionService subscriptionService = ServiceFactory.getInstance().getSubscriptionService();
+			User updatedUser = subscriptionService.subscribeToPublication(user, Integer.parseInt(publicationIdParam));
 
 			session.setAttribute("user", updatedUser);
 			LOG.debug("Command finished");
