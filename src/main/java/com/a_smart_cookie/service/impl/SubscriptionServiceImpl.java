@@ -1,10 +1,8 @@
 package com.a_smart_cookie.service.impl;
 
 import com.a_smart_cookie.dao.*;
-import com.a_smart_cookie.entity.Publication;
-import com.a_smart_cookie.entity.Subscription;
-import com.a_smart_cookie.entity.User;
-import com.a_smart_cookie.entity.UserDetail;
+import com.a_smart_cookie.dto.SubscriptionWithPublicationInfo;
+import com.a_smart_cookie.entity.*;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.NotUpdatedResultsException;
 import com.a_smart_cookie.exception.ServiceException;
@@ -13,12 +11,12 @@ import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.Savepoint;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Serves subscription purposes of user on Dao layers.
- *
  */
 public class SubscriptionServiceImpl implements SubscriptionService {
 
@@ -38,7 +36,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 			transaction.initTransaction(publicationDao, userDetailDao, subscriptionDao);
 
-			Optional<Publication> publication = publicationDao.getPublicationById(publicationId);
+			Optional<Publication> publication = publicationDao.getPublicationWithoutInfoById(publicationId);
 
 			if (publication.isEmpty()) {
 				transaction.rollback();
@@ -97,6 +95,39 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 			throw new ServiceException("Can't perform subscribing", e);
 		} finally {
 			transaction.endTransaction();
+		}
+	}
+
+	@Override
+	public List<SubscriptionWithPublicationInfo> getSubscriptionsWithFullInfoByUserAndLanguage(User user, Language language) {
+		LOG.debug("Method starts");
+
+		EntityTransaction transaction = new EntityTransaction();
+
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+
+			List<SubscriptionWithPublicationInfo> result = new ArrayList<>();
+
+			Optional<Publication> publication;
+			for (Subscription subscription : user.getSubscriptions()) {
+				publication = publicationDao.getPublicationWithInfoByIdAndLanguage(subscription.getPublicationId(), language);
+
+				publication.ifPresent(value -> result.add(new SubscriptionWithPublicationInfo(
+						value,
+						subscription.getStartDate()
+				)));
+			}
+
+			LOG.debug("Method finished");
+			return result;
+
+		} catch (DaoException e) {
+			LOG.error("Can't get subscriptions", e);
+			throw new ServiceException("Can't get subscriptions", e);
+		} finally {
+			transaction.end();
 		}
 	}
 

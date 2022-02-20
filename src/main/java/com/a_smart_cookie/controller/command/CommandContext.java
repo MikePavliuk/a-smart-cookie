@@ -26,6 +26,7 @@ public final class CommandContext {
 		commandMap.put("catalog", new CatalogCommand());
 		commandMap.put("payment", new PaymentCommand());
 		commandMap.put("subscribe", new SubscribeCommand());
+		commandMap.put("subscriptions", new SubscriptionsCommand());
 
 		LOG.debug("Command context was successfully initialized");
 		LOG.trace("Number of commands --> " + commandMap.size());

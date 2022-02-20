@@ -2,6 +2,7 @@ package com.a_smart_cookie.dao;
 
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
+import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 
@@ -31,11 +32,20 @@ public abstract class PublicationDao extends AbstractDao {
 	public abstract int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws DaoException;
 
 	/**
-	 * Gets publication by its id.
+	 * Gets publication without info by its id.
 	 *
 	 * @param id Publication's id.
 	 * @return Optional of publication if publication was found, otherwise - of empty.
 	 */
-	public abstract Optional<Publication> getPublicationById(int id) throws DaoException;
+	public abstract Optional<Publication> getPublicationWithoutInfoById(int id) throws DaoException;
+
+	/**
+	 * Gets publications with info by its id and language.
+	 *
+	 * @param publicationId Publication's id.
+	 * @param language Requested publication info language.
+	 * @return Optional of publication if publication was found, otherwise - of empty.
+	 */
+	public abstract Optional<Publication> getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException;
 
 }

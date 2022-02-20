@@ -13,7 +13,8 @@ public final class WebPath {
 	public enum Page implements Routable {
 		CATALOG("/WEB-INF/jsp/catalog.jsp"),
 		SIGN_IN("/WEB-INF/jsp/sign_in.jsp"),
-		SIGN_UP("/WEB-INF/jsp/sign_up.jsp");
+		SIGN_UP("/WEB-INF/jsp/sign_up.jsp"),
+		USER_SUBSCRIPTIONS("/WEB-INF/jsp/user_subscriptions.jsp");
 
 		private final String value;
 
@@ -34,7 +35,8 @@ public final class WebPath {
 		CATALOG_FIRST_PAGE("/controller?command=catalog&page=1"),
 		SIGN_IN("/controller?command=sign-in"),
 		SIGN_UP("/controller?command=sign-up"),
-		ERROR("/controller?command=error");
+		ERROR("/controller?command=error"),
+		USER_SUBSCRIPTIONS("/controller?command=subscriptions");
 
 		private final String value;
 

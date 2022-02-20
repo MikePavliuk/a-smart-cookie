@@ -98,6 +98,16 @@ Header (top area).
 
 						</c:choose>
 					</div>
+
+					<div class="ml-3">
+						<c:if test="${not empty sessionScope.user and sessionScope.user.role == Role.SUBSCRIBER}">
+							<a class="btn btn-success"
+							   href="${pageContext.request.contextPath}/controller?command=subscriptions">
+								<fmt:message key="header_jsp.button.subscriptions"/>
+							</a>
+						</c:if>
+					</div>
+
 					<div class="dropdown ml-3">
 						<button
 								class="btn btn-primary dropdown-toggle"

@@ -5,6 +5,7 @@ import com.a_smart_cookie.dao.PublicationDao;
 import com.a_smart_cookie.dao.ResourceReleaser;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
+import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 import org.apache.log4j.Logger;
@@ -84,7 +85,7 @@ public class MysqlPublicationDao extends PublicationDao {
 	}
 
 	@Override
-	public Optional<Publication> getPublicationById(int id) throws DaoException {
+	public Optional<Publication> getPublicationWithoutInfoById(int id) throws DaoException {
 		LOG.debug("Method starts");
 
 		PreparedStatement pstmt = null;
@@ -107,6 +108,37 @@ public class MysqlPublicationDao extends PublicationDao {
 		} catch (SQLException e) {
 			LOG.error("Can't get publication by id " + id, e);
 			throw new DaoException("Can't get publication by id " + id, e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public Optional<Publication> getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException {
+		LOG.debug("Method starts");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.GET_PUBLICATION_WITH_INFO_BY_ID_AND_LANGUAGE.getQuery());
+			pstmt.setInt(1, publicationId);
+			pstmt.setString(2, language.name().toLowerCase());
+			rs = pstmt.executeQuery();
+
+			LOG.trace(pstmt);
+
+			if (rs.next()) {
+				LOG.trace("Finished --> Found publication");
+				return Optional.of(extractPublicationWithFullInfo(rs));
+			}
+
+			LOG.trace("Finished --> Didn't find publication");
+			return Optional.empty();
+
+		} catch (SQLException e) {
+			LOG.error("Can't get publication by id " + publicationId + " in " + language, e);
+			throw new DaoException("Can't get publication by id " + publicationId + " in " + language, e);
 		} finally {
 			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);

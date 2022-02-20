@@ -1,8 +1,12 @@
 package com.a_smart_cookie.service;
 
+import com.a_smart_cookie.dto.SubscriptionWithPublicationInfo;
+import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.NotUpdatedResultsException;
 import com.a_smart_cookie.exception.ServiceException;
+
+import java.util.List;
 
 /**
  * Interface for creating concrete representation of SubscriptionService.
@@ -21,5 +25,14 @@ public interface SubscriptionService {
 	 * @throws NotUpdatedResultsException Occurred when updated results can be got.
 	 */
 	User subscribeToPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException;
+
+	/**
+	 * Gets subscriptions of user.
+	 *
+	 * @param user User.
+	 * @param language Language for publications.
+	 * @return List of subscriptions.
+	 */
+	List<SubscriptionWithPublicationInfo> getSubscriptionsWithFullInfoByUserAndLanguage(User user, Language language);
 
 }
