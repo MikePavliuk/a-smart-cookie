@@ -16,6 +16,16 @@ public final class Query {
 				"SELECT subscription.publication_id, subscription.start_date " +
 						"FROM a_smart_cookie.subscription " +
 						"WHERE subscription.user_id = ?;"
+		),
+
+		INSERT_BY_USER_ID_AND_PUBLICATION_ID(
+				"INSERT INTO a_smart_cookie.subscription(user_id, publication_id) " +
+						"VALUES (?, ?); "
+		),
+
+		REMOVE_BY_USER_ID_AND_PUBLICATION_ID(
+				"DELETE FROM a_smart_cookie.subscription " +
+						"WHERE user_id=? AND publication_id=?;"
 		);
 
 		private final String query;
@@ -34,6 +44,24 @@ public final class Query {
 	 * Represents queries holder for obtaining publications.
 	 */
 	public enum Publication {
+		GET_BY_ID(
+				"SELECT publication.id, publication.price_per_month, genre_id " +
+						"FROM a_smart_cookie.publication " +
+						"WHERE publication.id = ?;"
+		),
+
+		GET_PUBLICATION_WITH_INFO_BY_ID_AND_LANGUAGE(
+				"SELECT publication.id, genre.name, publication.price_per_month, " +
+						"publication_info.title, publication_info.description " +
+						"FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"JOIN a_smart_cookie.genre " +
+						"ON publication.genre_id = genre.id " +
+						"WHERE publication_id = ? " +
+						"AND publication_info.language_id = (SELECT id FROM a_smart_cookie.language WHERE name = ?);"
+		),
+
 		BUILDER_FIND_ALL_BY_LANGUAGE(
 				"SELECT genre.name, " +
 						"publication.id, publication.price_per_month, publication_info.title, publication_info.description " +
@@ -43,7 +71,7 @@ public final class Query {
 						"JOIN a_smart_cookie.genre " +
 						"ON publication.genre_id = genre.id " +
 						"WHERE publication_info.language_id = " +
-						"(SELECT id FROM a_smart_cookie.language WHERE name = ?)"
+						"(SELECT id FROM a_smart_cookie.language WHERE name = ?) "
 		),
 
 		BUILDER_GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE(
@@ -131,10 +159,22 @@ public final class Query {
 	 * Represents queries holder for user detail entity.
 	 */
 	public enum UserDetail {
-		GET_USER_DETAIL_BY_USER_ID(
-				"SELECT id, name, surname, balance " +
+		ADD_BALANCE_TO_USER_BY_ID(
+				"UPDATE a_smart_cookie.user_detail " +
+				"SET user_detail.balance = user_detail.balance + ? " +
+				"WHERE user_detail.user_id = ?;"
+		),
+
+		MINUS_BALANCE_FROM_USER_BY_ID(
+				"UPDATE a_smart_cookie.user_detail " +
+						"SET user_detail.balance = user_detail.balance - ? " +
+						"WHERE user_detail.user_id = ?;"
+		),
+
+		GET_BALANCE_BY_USER_ID(
+				"SELECT user_detail.balance " +
 						"FROM a_smart_cookie.user_detail " +
-						"WHERE user_id = ?;"
+						"WHERE user_detail.user_id = ?;"
 		),
 
 		INSERT_USER_DETAIL(

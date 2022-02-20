@@ -1,5 +1,6 @@
-package com.a_smart_cookie.controller.command;
+package com.a_smart_cookie.controller.command.guest;
 
+import com.a_smart_cookie.controller.command.Command;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
@@ -34,25 +35,13 @@ public class LoginCommand extends Command {
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
-		if (request.getSession().getAttribute("user") != null) {
-			LOG.debug("Command finished because user exists in session");
-			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
-		}
-
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		Map<String, Boolean> validationResult = UserValidator.getValidationResults(email, password);
-
 		HttpSession session = request.getSession();
 
-		if (validationResult.containsValue(false)) {
-			session.setAttribute("isValidEmail", validationResult.get(EntityColumn.User.EMAIL.getName()));
-			session.setAttribute("isValidPassword", validationResult.get(EntityColumn.User.PASSWORD.getName()));
-
-			LOG.debug("Command finished with not valid user");
-			return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
-		}
+		HttpPath notValidHttpPath = performValidationMechanism(email, password, session);
+		if (notValidHttpPath != null) return notValidHttpPath;
 
 		LOG.trace("User is valid");
 
@@ -65,21 +54,21 @@ public class LoginCommand extends Command {
 				session.setAttribute("badCredentials", true);
 				setOldEmailToSession(email, session);
 				LOG.debug("Command finished with not found user");
-				return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 			}
 
 			if (!PBKDF2Hash.verifyHash(password, user.get().getSalt(), user.get().getPassword())) {
 				session.setAttribute("badCredentials", true);
 				setOldEmailToSession(email, session);
 				LOG.debug("Command finished with not equals passwords");
-				return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 			}
 
 			if (user.get().getStatus() == Status.BLOCKED) {
 				session.setAttribute("isBlocked",true);
 				setOldEmailToSession(email, session);
 				LOG.debug("Command finished with blocked user");
-				return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 			}
 
 			session.invalidate();
@@ -92,8 +81,21 @@ public class LoginCommand extends Command {
 
 		} catch (ServiceException | HashingException e) {
 			LOG.error("Command ended with exception");
-			return new HttpPath(WebPath.Page.ERROR, HttpHandlerType.SEND_REDIRECT);
+			throw new ServiceException("Can't perform login user", e);
 		}
+	}
+
+	private HttpPath performValidationMechanism(String email, String password, HttpSession session) {
+		Map<String, Boolean> validationResult = UserValidator.getValidationResults(email, password);
+
+		if (validationResult.containsValue(false)) {
+			session.setAttribute("isValidEmail", validationResult.get(EntityColumn.User.EMAIL.getName()));
+			session.setAttribute("isValidPassword", validationResult.get(EntityColumn.User.PASSWORD.getName()));
+
+			LOG.debug("Command finished with not valid user");
+			return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+		}
+		return null;
 	}
 
 	private void setOldEmailToSession(String email, HttpSession session) {

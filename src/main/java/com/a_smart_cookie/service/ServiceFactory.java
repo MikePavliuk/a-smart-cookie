@@ -68,4 +68,18 @@ public abstract class ServiceFactory {
 	 */
 	public abstract UserService getUserService();
 
+	/**
+	 * Method for getting instance of PaymentService.
+	 *
+	 * @return Instance of requested implementation of PaymentService.
+	 */
+	public abstract PaymentService getPaymentService();
+
+	/**
+	 * Method for getting instance of SubscriptionService.
+	 *
+	 * @return Instance of requested implementation of SubscriptionService.
+	 */
+	public abstract SubscriptionService getSubscriptionService();
+
 }

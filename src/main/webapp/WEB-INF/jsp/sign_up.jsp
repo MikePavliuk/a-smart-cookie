@@ -4,8 +4,6 @@
 <%@ include file="/WEB-INF/jspf/directive/locale.jspf" %>
 <%@ page import="com.a_smart_cookie.util.validation.ValidationPattern" %>
 
-<r:redirectIfInSession sessionAttribute="user" redirectPath="controller?command=catalog"/>
-
 <html>
 
 <fmt:message key="sign_up_jsp.title" var="signUpTitle"/>
@@ -18,11 +16,12 @@
 
 <div class="content">
 	<div class="container">
+		<h1 class="text-center"><fmt:message key="sign_up_jsp.title"/></h1>
 		<div class="row justify-content-center">
 			<form action="${pageContext.request.contextPath}/controller?command=registration" method="post"
 				  class="col-6">
 				<div class="form-group">
-					<label for="firstName"><fmt:message key="sign_up_jsp.first_name"/></label>
+					<label for="firstName"><fmt:message key="sign_up_jsp.first_name"/> <span class="text-danger">*</span></label>
 					<input
 							type="text"
 							class="form-control"
@@ -42,7 +41,7 @@
 					</c:if>
 				</div>
 				<div class="form-group">
-					<label for="lastName"><fmt:message key="sign_up_jsp.last_name"/></label>
+					<label for="lastName"><fmt:message key="sign_up_jsp.last_name"/> <span class="text-danger">*</span></label>
 					<input
 							type="text"
 							class="form-control"
@@ -62,7 +61,7 @@
 					</c:if>
 				</div>
 				<div class="form-group">
-					<label for="email"><fmt:message key="credentials.email"/></label>
+					<label for="email"><fmt:message key="credentials.email"/> <span class="text-danger">*</span></label>
 					<input
 							type="email"
 							class="form-control"
@@ -87,7 +86,7 @@
 					</c:if>
 				</div>
 				<div class="form-group">
-					<label for="password"><fmt:message key="credentials.password"/></label>
+					<label for="password"><fmt:message key="credentials.password"/> <span class="text-danger">*</span></label>
 					<input
 							type="password"
 							class="form-control"
@@ -114,7 +113,7 @@
 			<div class="col-6">
 				<p>
 					<fmt:message key="sign_up_jsp.have_acc_question" />
-					<a href="${pageContext.request.contextPath}/sign_in.jsp">
+					<a href="${pageContext.request.contextPath}/controller?command=sign-in">
 						<fmt:message key="sign_up_jsp.login" />
 					</a>
 				</p>

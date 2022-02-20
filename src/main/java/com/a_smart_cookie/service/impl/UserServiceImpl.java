@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> createNewUser(UserSignUpDto userSignUpDto) throws ServiceException {
+	public User createNewUser(UserSignUpDto userSignUpDto) throws ServiceException {
 		LOG.debug("Starts creating user");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 			if (insertedUser.isEmpty()) {
 				transaction.rollback();
 				LOG.debug("Finished creating user with not created user");
-				return Optional.empty();
+				throw new ServiceException("Can't insert user");
 			}
 
 			Optional<UserDetail> userDetail = userDetailDao.insertUserDetail(user.getUserDetail(), insertedUser.get().getId());
@@ -102,12 +102,12 @@ public class UserServiceImpl implements UserService {
 				user = User.UserBuilder.fromUser(insertedUser.get()).withUserDetail(userDetail.get()).build();
 				transaction.commit();
 				LOG.debug("Finished creating user");
-				return Optional.of(user);
+				return user;
 			}
 
 			transaction.rollback();
 			LOG.debug("Finished creating user with not created user detail");
-			return Optional.empty();
+			throw new ServiceException("Can't insert user detail");
 
 		} catch (DaoException | HashingException e) {
 			transaction.rollback();

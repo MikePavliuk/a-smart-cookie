@@ -1,11 +1,11 @@
 package com.a_smart_cookie.controller.command;
 
 import com.a_smart_cookie.controller.route.HttpPath;
+import com.a_smart_cookie.exception.NotUpdatedResultsException;
+import com.a_smart_cookie.exception.ServiceException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -21,7 +21,7 @@ public abstract class Command implements Serializable {
 	 * @return Address to go once the command is executed and type of http handling.
 	 * @see HttpPath
 	 */
-	public abstract HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	public abstract HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, NotUpdatedResultsException;
 
 	@Override
 	public final String toString() {

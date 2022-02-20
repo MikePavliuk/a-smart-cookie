@@ -1,5 +1,15 @@
 package com.a_smart_cookie.controller.command;
 
+import com.a_smart_cookie.controller.command.common.LogoutCommand;
+import com.a_smart_cookie.controller.command.guest.LoginCommand;
+import com.a_smart_cookie.controller.command.guest.RegistrationCommand;
+import com.a_smart_cookie.controller.command.guest.SignInPageCommand;
+import com.a_smart_cookie.controller.command.guest.SignUpPageCommand;
+import com.a_smart_cookie.controller.command.shared.CatalogCommand;
+import com.a_smart_cookie.controller.command.subscriber.PaymentCommand;
+import com.a_smart_cookie.controller.command.subscriber.SubscribeCommand;
+import com.a_smart_cookie.controller.command.subscriber.SubscriptionsCommand;
+import com.a_smart_cookie.controller.command.subscriber.UnsubscribeCommand;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -16,11 +26,18 @@ public final class CommandContext {
 	private static final Map<String, Command> commandMap = new HashMap<>();
 
 	static {
-		commandMap.put("catalog", new CatalogCommand());
-		commandMap.put("registration", new SignUpCommand());
+		commandMap.put("sign-in", new SignInPageCommand());
+		commandMap.put("sign-up", new SignUpPageCommand());
+
+		commandMap.put("registration", new RegistrationCommand());
 		commandMap.put("login", new LoginCommand());
 		commandMap.put("logout", new LogoutCommand());
-		commandMap.put("unknown", new UnknownCommand());
+
+		commandMap.put("catalog", new CatalogCommand());
+		commandMap.put("payment", new PaymentCommand());
+		commandMap.put("subscribe", new SubscribeCommand());
+		commandMap.put("unsubscribe", new UnsubscribeCommand());
+		commandMap.put("subscriptions", new SubscriptionsCommand());
 
 		LOG.debug("Command context was successfully initialized");
 		LOG.trace("Number of commands --> " + commandMap.size());
@@ -39,7 +56,7 @@ public final class CommandContext {
 			return commandMap.get(commandName);
 		}
 
-		return commandMap.get("unknown");
+		return null;
 	}
 
 }

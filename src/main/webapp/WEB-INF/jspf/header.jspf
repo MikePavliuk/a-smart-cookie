@@ -4,27 +4,110 @@ Header (top area).
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 <%@ page import="com.a_smart_cookie.entity.Language" %>
 <%@ page import="com.a_smart_cookie.entity.Role" %>
+<%@ page import="com.a_smart_cookie.util.payment.PaymentMethod" %>
 
 <div class="header">
 	<div class="container">
 		<div class="row justify-content-between">
 			<nav class="navbar navbar-light col-12">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}/controller?command=catalog">A Smart Cookie</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/controller?command=catalog">A Smart
+					Cookie</a>
 
 				<div class="d-flex">
 					<div class="text-nav ml-3">
 						<c:choose>
 
 							<c:when test="${sessionScope.user.role eq Role.SUBSCRIBER}">
-								<c:out value="${sessionScope.user.userDetail.firstName} ${sessionScope.user.userDetail.lastName}"/>
+								<div class="text-nav ml-3">
+									<c:out value="${sessionScope.user.userDetail.firstName} ${sessionScope.user.userDetail.lastName}"/>
+								</div>
+								<div class="btn-group ml-3" role="group">
+									<button type="button"
+											class="btn btn-outline-light">
+											${sessionScope.user.userDetail.balance}$
+									</button>
+									<button type="button"
+											class="btn btn-warning"
+											data-toggle="modal"
+											data-target="#addFundsModal">
+										<fmt:message key="header_jsp.add_funds" />
+									</button>
+
+									<!-- Modal -->
+									<div class="modal fade" id="addFundsModal" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="modal-title">
+														<fmt:message key="header_jsp.payment.call_to_action"/>
+													</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													<form action="${pageContext.request.contextPath}/controller?command=payment" method="post">
+														<div class="form-group">
+															<label for="paymentAmount">
+																<fmt:message key="header_jsp.payment.payment_amount" />
+															</label>
+															<div class="input-group-append">
+																<input type="number"
+																	   class="form-control"
+																	   id="paymentAmount"
+																	   min="0.01"
+																	   max="999"
+																	   name="paymentAmount"
+																	   step="any"
+																	   placeholder="<fmt:message key="header_jsp.payment.enter_payment_amount" />"
+																	   required>
+																<span class="input-group-text">$</span>
+															</div>
+														</div>
+
+														<div class="form-group">
+															<label for="paymentMethods">
+																<fmt:message key="header_jsp.payment.select_payment_method" />
+															</label>
+															<select class="form-control" id="paymentMethods" name="paymentMethod" required>
+																<c:forEach var="method" items="${PaymentMethod.values()}">
+																	<option value="${method.name()}">${method.getName()}</option>
+																</c:forEach>
+															</select>
+														</div>
+
+														<div class="col text-center">
+															<button type="submit" class="btn btn-primary">
+																<fmt:message key="header_jsp.payment.add_funds" />
+															</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
 							</c:when>
 
 							<c:otherwise>
-								<c:out value="${sessionScope.user.email}"/>
+								<div class="text-nav ml-3">
+									<c:out value="${sessionScope.user.email}"/>
+								</div>
 							</c:otherwise>
 
 						</c:choose>
 					</div>
+
+					<div class="ml-3">
+						<c:if test="${not empty sessionScope.user and sessionScope.user.role == Role.SUBSCRIBER}">
+							<a class="btn btn-success"
+							   href="${pageContext.request.contextPath}/controller?command=subscriptions">
+								<fmt:message key="header_jsp.button.subscriptions"/>
+							</a>
+						</c:if>
+					</div>
+
 					<div class="dropdown ml-3">
 						<button
 								class="btn btn-primary dropdown-toggle"
@@ -61,7 +144,7 @@ Header (top area).
 						<c:otherwise>
 							<div class="ml-3">
 								<a class="btn btn-info"
-								   href="${pageContext.request.contextPath}/sign_in.jsp">
+								   href="${pageContext.request.contextPath}/controller?command=sign-in">
 									<fmt:message key="header_jsp.button.login"/>
 								</a>
 							</div>
@@ -73,6 +156,17 @@ Header (top area).
 			</nav>
 		</div>
 	</div>
+
+	<c:if test="${sessionScope.isCorrectPayment}">
+		<%
+			session.removeAttribute("isCorrectPayment");
+		%>
+		<div class="alert alert-success alert-dismissable text-center">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<fmt:message key="header_jsp.payment.alert_success"/>
+		</div>
+	</c:if>
+
 </div>
 
 

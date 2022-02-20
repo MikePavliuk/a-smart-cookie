@@ -128,6 +128,10 @@ public final class User extends Entity {
                     user.role
             );
 
+            if (user.getId() != null) {
+                userBuilder.withId(user.getId());
+            }
+
             if (user.subscriptions != null) {
                 userBuilder.withSubscriptions(user.getSubscriptions());
             }

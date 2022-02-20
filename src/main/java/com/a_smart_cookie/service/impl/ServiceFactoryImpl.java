@@ -1,8 +1,6 @@
 package com.a_smart_cookie.service.impl;
 
-import com.a_smart_cookie.service.PublicationService;
-import com.a_smart_cookie.service.ServiceFactory;
-import com.a_smart_cookie.service.UserService;
+import com.a_smart_cookie.service.*;
 
 /**
  * Regular implementation of ServiceFactory.
@@ -12,6 +10,8 @@ public class ServiceFactoryImpl extends ServiceFactory {
 
 	private PublicationService publicationService;
 	private UserService userService;
+	private PaymentService paymentService;
+	private SubscriptionService subscriptionService;
 
 	@Override
 	public PublicationService getPublicationService() {
@@ -28,5 +28,22 @@ public class ServiceFactoryImpl extends ServiceFactory {
 		}
 		return userService;
 	}
+
+	@Override
+	public PaymentService getPaymentService() {
+		if (paymentService == null) {
+			paymentService = new PaymentServiceImpl();
+		}
+		return paymentService;
+	}
+
+	@Override
+	public SubscriptionService getSubscriptionService() {
+		if (subscriptionService == null) {
+			subscriptionService = new SubscriptionServiceImpl();
+		}
+		return subscriptionService;
+	}
+
 
 }

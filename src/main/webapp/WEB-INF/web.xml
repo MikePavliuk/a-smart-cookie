@@ -4,9 +4,18 @@
                       http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 		 version="4.0">
 
-	<welcome-file-list>
-		<welcome-file>sign_in.jsp</welcome-file>
-	</welcome-file-list>
+	<!--============================================================
+		Controller
+	=============================================================-->
+	<servlet>
+		<servlet-name>FrontController</servlet-name>
+		<servlet-class>com.a_smart_cookie.controller.FrontController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FrontController</servlet-name>
+		<url-pattern>/controller</url-pattern>
+	</servlet-mapping>
 
 	<!--============================================================
 		i18n support
@@ -23,6 +32,40 @@
 		<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
 		<param-value>uk</param-value>
 	</context-param>
+
+	<!--============================================================
+		Security filter.
+		1) admin: admin commands
+		2) subscriber: subscriber commands
+		3) guest: guest commands
+		4) common: commands for all roles
+		Delimiter - space/tab
+	=============================================================-->
+	<filter>
+		<filter-name>CommandAccessFilter</filter-name>
+		<filter-class>com.a_smart_cookie.filter.CommandAccessFilter</filter-class>
+		<init-param>
+			<param-name>admin</param-name>
+			<param-value>catalog</param-value>
+		</init-param>
+		<init-param>
+			<param-name>subscriber</param-name>
+			<param-value>catalog subscribe unsubscribe payment subscriptions</param-value>
+		</init-param>
+		<init-param>
+			<param-name>guest</param-name>
+			<param-value>catalog login registration sign-in sign-up</param-value>
+		</init-param>
+		<init-param>
+			<param-name>common</param-name>
+			<param-value>logout unknown</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>CommandAccessFilter</filter-name>
+		<servlet-name>FrontController</servlet-name>
+	</filter-mapping>
 
 	<!--============================================================
 		Cookie locale setter filter
@@ -64,5 +107,46 @@
 	<listener>
 		<listener-class>com.a_smart_cookie.listener.ContextListener</listener-class>
 	</listener>
+
+	<!--============================================================
+		Session configuration
+	=============================================================-->
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
+
+	<!--============================================================
+		Error handling mechanism
+	=============================================================-->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/jsp/error/not-found.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/jsp/error/forbidden.jsp</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>com.a_smart_cookie.exception.ServiceException</exception-type>
+		<location>/WEB-INF/jsp/error/service-error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>com.a_smart_cookie.exception.NotUpdatedResultsException</exception-type>
+		<location>/WEB-INF/jsp/error/not-updated-results.jsp</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>java.lang.IllegalArgumentException</exception-type>
+		<location>/WEB-INF/jsp/error/illegal-arguments.jsp</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/WEB-INF/jsp/error/general-error.jsp</location>
+	</error-page>
+
 
 </web-app>

@@ -1,0 +1,9 @@
+<%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+
+<h5 class="mt-2">
+	<fmt:message key="error.redirect_to_home.call_to_action" />
+	<a href="${pageContext.request.contextPath}/controller?command=catalog">
+		<fmt:message key="error.redirect_to_home.go_to_catalog" />
+	</a>
+</h5>

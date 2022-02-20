@@ -6,7 +6,7 @@
 	<description>Tag for checking if user has subscription on some publication</description>
 	<tlib-version>2.1</tlib-version>
 	<short-name>subscribe-checker</short-name>
-	<uri>/WEB-INF/has_user_subscription</uri>
+	<uri>/WEB-INF/publication_checker</uri>
 	<function>
 		<name>contains</name>
 		<function-class>com.a_smart_cookie.tag.SubscriptionCheckerTag</function-class>
