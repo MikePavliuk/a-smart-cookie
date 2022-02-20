@@ -131,4 +131,46 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		}
 	}
 
+	@Override
+	public User unsubscribeFromPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException {
+		LOG.debug("Method starts");
+
+		EntityTransaction transaction = new EntityTransaction();
+
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			SubscriptionDao subscriptionDao = DaoFactory.getInstance().getSubscriptionDao();
+
+			transaction.initTransaction(publicationDao, subscriptionDao);
+
+			Optional<Publication> publication = publicationDao.getPublicationWithoutInfoById(publicationId);
+
+			if (publication.isEmpty()) {
+				transaction.rollback();
+				LOG.debug("Finished method with rollback, because didn't find publication by id");
+				throw new ServiceException("Can't find publication");
+			}
+
+			if (!subscriptionDao.removeSubscriptions(user.getId(), publicationId)) {
+				transaction.rollback();
+				LOG.debug("Finished method with rollback, because didn't insert subscription");
+				throw new NotUpdatedResultsException("Didn't insert balance result");
+			}
+
+			List<Subscription> subscriptions = subscriptionDao.getSubscriptionsByUserId(user.getId());
+			transaction.commit();
+			LOG.debug("Finished method with commit");
+			return User.UserBuilder.fromUser(user)
+					.withSubscriptions(subscriptions)
+					.build();
+
+		} catch (DaoException e) {
+			transaction.rollback();
+			LOG.error("Can't perform subscribing", e);
+			throw new ServiceException("Can't perform subscribing", e);
+		} finally {
+			transaction.endTransaction();
+		}
+	}
+
 }

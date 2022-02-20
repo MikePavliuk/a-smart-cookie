@@ -50,7 +50,7 @@
 				</table>
 			</c:when>
 			<c:otherwise>
-				<h4><fmt:message key="info.no_subscriptions"/></h4>
+				<h4 class="text-center"><fmt:message key="info.no_subscriptions"/></h4>
 			</c:otherwise>
 		</c:choose>
 	</div>

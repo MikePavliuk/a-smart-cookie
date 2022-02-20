@@ -50,7 +50,7 @@
 		</init-param>
 		<init-param>
 			<param-name>subscriber</param-name>
-			<param-value>catalog subscribe payment subscriptions</param-value>
+			<param-value>catalog subscribe unsubscribe payment subscriptions</param-value>
 		</init-param>
 		<init-param>
 			<param-name>guest</param-name>

@@ -18,9 +18,14 @@ public final class Query {
 						"WHERE subscription.user_id = ?;"
 		),
 
-		INSERT(
+		INSERT_BY_USER_ID_AND_PUBLICATION_ID(
 				"INSERT INTO a_smart_cookie.subscription(user_id, publication_id) " +
 						"VALUES (?, ?); "
+		),
+
+		REMOVE_BY_USER_ID_AND_PUBLICATION_ID(
+				"DELETE FROM a_smart_cookie.subscription " +
+						"WHERE user_id=? AND publication_id=?;"
 		);
 
 		private final String query;

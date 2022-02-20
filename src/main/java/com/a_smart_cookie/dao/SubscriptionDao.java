@@ -16,7 +16,6 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 *
 	 * @param id Users id.
 	 * @return List of subscriptions.
-	 * @throws DaoException Exception on db layer.
 	 */
 	public abstract List<Subscription> getSubscriptionsByUserId(int id) throws DaoException;
 
@@ -25,8 +24,18 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 *
 	 * @param userId User's id.
 	 * @param publicationId Publication's id.
-	 * @return Optional of subscription if subscription was correctly inserted, otherwise - empty optional.
+	 * @return Whether subscription was correctly inserted.
 	 */
 	public abstract boolean insertSubscription(int userId, int publicationId) throws DaoException;
+
+
+	/**
+	 * Removes subscription from user.
+	 *
+	 * @param userId Id of user.
+	 * @param publicationId Publication's id.
+	 * @return Whether subscription was correctly deleted.
+	 */
+	public abstract boolean removeSubscriptions(int userId, int publicationId) throws DaoException;
 
 }

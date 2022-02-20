@@ -53,7 +53,7 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = connection.prepareStatement(Query.Subscription.INSERT.getQuery());
+			pstmt = connection.prepareStatement(Query.Subscription.INSERT_BY_USER_ID_AND_PUBLICATION_ID.getQuery());
 			pstmt.setInt(1, userId);
 			pstmt.setInt(2, publicationId);
 
@@ -64,6 +64,29 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 		} catch (SQLException e) {
 			LOG.error("Can't insert subscription", e);
 			throw new DaoException("Can't insert subscription", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean removeSubscriptions(int userId, int publicationId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Subscription.REMOVE_BY_USER_ID_AND_PUBLICATION_ID.getQuery());
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, publicationId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't remove subscription", e);
+			throw new DaoException("Can't remove subscription", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
 		}
