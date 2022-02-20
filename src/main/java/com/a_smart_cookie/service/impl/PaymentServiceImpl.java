@@ -6,6 +6,7 @@ import com.a_smart_cookie.entity.Subscription;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.entity.UserDetail;
 import com.a_smart_cookie.exception.DaoException;
+import com.a_smart_cookie.exception.NotUpdatedResultsException;
 import com.a_smart_cookie.exception.PaymentException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PaymentService;
@@ -17,6 +18,7 @@ import com.a_smart_cookie.util.payment.strategies.PayPalPaymentStrategy;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.sql.Savepoint;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private static final Logger LOG = Logger.getLogger(PaymentServiceImpl.class);
 
 	@Override
-	public Optional<BigDecimal> addBalanceToUserById(BigDecimal paymentAmount, PaymentMethod paymentMethod, int userId) throws ServiceException {
+	public User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) throws ServiceException {
 		LOG.debug("Method starts");
 
 		PaymentStrategy paymentStrategy = getPaymentStrategy(paymentMethod);
@@ -43,31 +45,45 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 
 		EntityTransaction transaction = new EntityTransaction();
+		Savepoint savepoint = null;
 
 		try {
 			UserDetailDao userDetailDao = DaoFactory.getInstance().getUserDetailDao();
 			transaction.initTransaction(userDetailDao);
 
-			if (!userDetailDao.addMoneyToBalanceByUserId(paymentAmount, userId)) {
+			if (!userDetailDao.addMoneyToBalanceByUserId(paymentAmount, user.getId())) {
 				transaction.rollback();
 				LOG.debug("Finished method with rollback, because didn't add money");
-				return Optional.empty();
+				throw new NotUpdatedResultsException("Can't add transaction money to user");
 			}
 
-			Optional<BigDecimal> balance = userDetailDao.getBalanceByUserId(userId);
+			savepoint = transaction.setSavepoint();
+			LOG.trace("Commit transaction because added money to user");
 
+			Optional<BigDecimal> balance = userDetailDao.getBalanceByUserId(user.getId());
 			if (balance.isEmpty()) {
-				transaction.rollback();
+				transaction.rollback(savepoint);
 				LOG.debug("Finished method with rollback, because didn't get balance");
-				return Optional.empty();
+				throw new NotUpdatedResultsException("Can't get updated balance of user");
 			}
 
 			transaction.commit();
-			LOG.debug("Finished method with commit value");
-			return balance;
+
+			return User.UserBuilder.fromUser(user)
+					.withUserDetail(new UserDetail(
+							user.getUserDetail().getId(),
+							user.getUserDetail().getFirstName(),
+							user.getUserDetail().getFirstName(),
+							balance.get()
+					))
+					.build();
 
 		} catch (DaoException e) {
-			transaction.rollback();
+			if (savepoint != null) {
+				transaction.rollback(savepoint);
+			} else {
+				transaction.rollback();
+			}
 			LOG.error("Can't add funds to user account", e);
 			throw new ServiceException("Can't add funds to user account", e);
 		} finally {
@@ -77,10 +93,11 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public Optional<User> subscribeToPublication(User user, int publicationId) throws ServiceException {
+	public User subscribeToPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
+		Savepoint savepoint = null;
 
 		try {
 			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
@@ -94,49 +111,56 @@ public class PaymentServiceImpl implements PaymentService {
 			if (publication.isEmpty()) {
 				transaction.rollback();
 				LOG.debug("Finished method with rollback, because didn't find publication by id");
-				return Optional.empty();
+				throw new ServiceException("Can't find publication");
 			}
 
 			if (user.getUserDetail().getBalance().compareTo(publication.get().getPricePerMonth()) < 0) {
 				transaction.rollback();
-				LOG.debug("Finished method with rollback, because didn't debit funds");
-				return Optional.empty();
+				LOG.debug("Finished method with rollback, not enough money to get paid");
+				throw new ServiceException("Can't make transaction because not enough money to pay for subscription");
 			}
 
 			if (!userDetailDao.debitFundsFromBalanceByUserId(publication.get().getPricePerMonth(), user.getId())) {
 				transaction.rollback();
 				LOG.debug("Finished method with rollback, because didn't debit funds");
-				return Optional.empty();
+				throw new ServiceException("Can't debit funds");
 			}
+
+			savepoint = transaction.setSavepoint();
 
 			Optional<BigDecimal> balance = userDetailDao.getBalanceByUserId(user.getId());
 
 			if (balance.isEmpty()) {
-				transaction.rollback();
+				transaction.rollback(savepoint);
 				LOG.debug("Finished method with rollback, because didn't get balance");
-				return Optional.empty();
+				throw new NotUpdatedResultsException("Didn't get updated balance result");
 			}
 
 			if (!subscriptionDao.insertSubscription(user.getId(), publicationId)) {
-				transaction.rollback();
+				transaction.rollback(savepoint);
 				LOG.debug("Finished method with rollback, because didn't insert subscription");
-				return Optional.empty();
+				throw new NotUpdatedResultsException("Didn't insert balance result");
 			}
 
 			List<Subscription> subscriptions = subscriptionDao.getSubscriptionsByUserId(user.getId());
 			transaction.commit();
 			LOG.debug("Finished method with commit");
-			return Optional.of(
-					User.UserBuilder.fromUser(user)
-							.withUserDetail(new UserDetail(user.getUserDetail().getId(),
-											user.getUserDetail().getFirstName(),
-											user.getUserDetail().getLastName(),
-											balance.get()))
-							.withSubscriptions(subscriptions)
-							.build()
-			);
+			return User.UserBuilder.fromUser(user)
+					.withUserDetail(new UserDetail(user.getUserDetail().getId(),
+							user.getUserDetail().getFirstName(),
+							user.getUserDetail().getLastName(),
+							balance.get()))
+					.withSubscriptions(subscriptions)
+					.build();
 
 		} catch (DaoException e) {
+
+			if (savepoint != null) {
+				transaction.rollback(savepoint);
+			} else {
+				transaction.rollback();
+			}
+
 			LOG.error("Can't perform subscribing", e);
 			throw new ServiceException("Can't perform subscribing", e);
 		} finally {

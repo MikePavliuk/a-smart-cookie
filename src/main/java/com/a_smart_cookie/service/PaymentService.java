@@ -1,11 +1,11 @@
 package com.a_smart_cookie.service;
 
 import com.a_smart_cookie.entity.User;
+import com.a_smart_cookie.exception.NotUpdatedResultsException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.util.payment.PaymentMethod;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 /**
  * Interface for creating concrete representation of PaymentService.
@@ -14,22 +14,26 @@ import java.util.Optional;
 public interface PaymentService {
 
 	/**
-	 * Performs payment with depends on paymentMethod.
+	 * Performs payment with depends on paymentMethod and adds balance to user.
 	 *
 	 * @param paymentAmount Requested number of money to be got from wallet.
 	 * @param paymentMethod Method of getting money from wallet.
-	 * @param userId Id of user to add money.
-	 * @return If transaction was correctly performed - returns current balance, otherwise - empty optional.
+	 * @param user User to add money to.
+	 * @return Returns updated user
+	 * @throws ServiceException Occurred on dao layer
+	 * @throws NotUpdatedResultsException Occurred when updated results can be got.
 	 */
-	Optional<BigDecimal> addBalanceToUserById(BigDecimal paymentAmount, PaymentMethod paymentMethod, int userId) throws ServiceException;
+	User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) throws ServiceException, NotUpdatedResultsException;
 
 	/**
 	 * Performs subscribing user to some publication.
 	 *
 	 * @param user User that wants to subscribe.
 	 * @param publicationId Publication's id to subscribe on.
-	 * @return Optional of updated user if subscribe was correctly issued, otherwise - empty one.
+	 * @return Returns updated user.
+	 * @throws ServiceException Occurred on dao layer
+	 * @throws NotUpdatedResultsException Occurred when updated results can be got.
 	 */
-	Optional<User> subscribeToPublication(User user, int publicationId) throws ServiceException;
+	User subscribeToPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException;
 
 }

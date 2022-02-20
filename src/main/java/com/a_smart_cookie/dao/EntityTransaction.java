@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 
 /**
  * Performs transactions and sets connections on AbstractDao.
@@ -105,6 +106,37 @@ public final class EntityTransaction {
         }
     }
 
+	/**
+	 * Rollback transaction changes to savepoint.
+	 *
+	 * @param savepoint Savepoint which rollback to.
+	 */
+	public void rollback(Savepoint savepoint) {
+		LOG.debug("Starts rollback to savepoint");
+		try {
+			connection.rollback(savepoint);
+			LOG.debug("Finished rollback to savepoint");
+		} catch (SQLException e) {
+			LOG.error("Can't make rollback to savepoint", e);
+		}
+	}
+
+	/**
+	 * Sets savepoint to connection.
+	 *
+	 * @return Created savepoint.
+	 * @throws DaoException Throws when can't set savepoint.
+	 */
+	public Savepoint setSavepoint() throws DaoException {
+		LOG.debug("Starts creating savepoint");
+		try {
+			return connection.setSavepoint();
+		} catch (SQLException e) {
+			LOG.error("Can't setSavepoint", e);
+			throw new DaoException("Can't set savepoint");
+		}
+	}
+
 	private void initializeConnection() {
 		LOG.debug("Entity transaction starts initializing connection");
 		if (connection == null) {
@@ -116,5 +148,4 @@ public final class EntityTransaction {
 			}
 		}
 	}
-
 }

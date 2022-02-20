@@ -1,14 +1,13 @@
 package com.a_smart_cookie.controller.command;
 
-import com.a_smart_cookie.dto.catalog.CountRowsParameters;
-import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
+import com.a_smart_cookie.dto.catalog.CountRowsParameters;
+import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
-import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.CookieHandler;
@@ -35,65 +34,59 @@ public class CatalogCommand extends Command {
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
-		try {
-			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
+		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 
-			Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("specificGenre"));
-			String searchedTitle = request.getParameter("search");
-			Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
-			int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
-			int totalNumberOfFoundedPublications = publicationService
-					.getTotalNumberOfRequestedQueryRows(new CountRowsParameters(language, genreRestriction, searchedTitle));
-			int numberOfPages = getNumberOfPages(itemsPerPage, totalNumberOfFoundedPublications);
-			int currentPage = getCurrentPage(request, numberOfPages);
-			SortingParameter activeSortingParam = SortingParameter.safeFromString(request.getParameter("sort"));
-			SortingDirection activeSortingDirection = SortingDirection.safeFromString(request.getParameter("direction"));
+		Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("specificGenre"));
+		String searchedTitle = request.getParameter("search");
+		Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
+		int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
+		SortingParameter activeSortingParam = SortingParameter.safeFromString(request.getParameter("sort"));
+		SortingDirection activeSortingDirection = SortingDirection.safeFromString(request.getParameter("direction"));
 
-			FilterParameters filterParameters = new FilterParameters(
-					itemsPerPage,
-					itemsPerPage * (currentPage-1),
-					language,
-					activeSortingDirection,
-					activeSortingParam,
-					genreRestriction,
-					searchedTitle
-			);
-			LOG.trace("Queried filter parameters --> " + filterParameters);
+		int totalNumberOfFoundedPublications = publicationService
+				.getTotalNumberOfRequestedQueryRows(new CountRowsParameters(language, genreRestriction, searchedTitle));
+		int numberOfPages = getNumberOfPages(itemsPerPage, totalNumberOfFoundedPublications);
+		int currentPage = getCurrentPage(request, numberOfPages);
 
-			PublicationsWithAllUsedGenres publicationsWithAllUsedGenres = publicationService
-					.findPublicationsByFilterParameters(filterParameters);
+		FilterParameters filterParameters = new FilterParameters(
+				itemsPerPage,
+				itemsPerPage * (currentPage-1),
+				language,
+				activeSortingDirection,
+				activeSortingParam,
+				genreRestriction,
+				searchedTitle
+		);
+		LOG.trace("Queried filter parameters --> " + filterParameters);
 
-			List<Publication> publications = publicationsWithAllUsedGenres.getPublications();
-			LOG.trace("Found in DB publications --> " + publications);
-			List<Publication.Genre> usedGenres = publicationsWithAllUsedGenres.getGenres();
-			LOG.trace("Found in DB used genres --> " + usedGenres);
+		PublicationsWithAllUsedGenres publicationsWithAllUsedGenres = publicationService
+				.findPublicationsByFilterParameters(filterParameters);
+
+		List<Publication> publications = publicationsWithAllUsedGenres.getPublications();
+		LOG.trace("Found in DB publications --> " + publications);
+		List<Publication.Genre> usedGenres = publicationsWithAllUsedGenres.getGenres();
 
 
-			if (searchedTitle != null) {
-				request.setAttribute("search", searchedTitle);
-			}
-
-			if (genreRestriction != null) {
-				request.setAttribute("specificGenre", genreRestriction);
-			}
-
-			request.setAttribute("publications", publications);
-			request.setAttribute("genres", usedGenres);
-
-			request.setAttribute("numberOfPages", numberOfPages);
-			request.setAttribute("currentPage", currentPage);
-			request.setAttribute("itemsPerPage", itemsPerPage);
-
-			request.setAttribute("sort", activeSortingParam.getValue().toLowerCase());
-			request.setAttribute("direction", activeSortingDirection.name().toLowerCase());
-
-			LOG.debug("Command finished with success");
-			return new HttpPath(WebPath.Page.CATALOG, HttpHandlerType.FORWARD);
-
-		} catch (ServiceException e) {
-			LOG.debug("Command ended with exception");
-			return new HttpPath(WebPath.Page.ERROR, HttpHandlerType.SEND_REDIRECT);
+		if (searchedTitle != null) {
+			request.setAttribute("search", searchedTitle);
 		}
+
+		if (genreRestriction != null) {
+			request.setAttribute("specificGenre", genreRestriction);
+		}
+
+		request.setAttribute("publications", publications);
+		request.setAttribute("genres", usedGenres);
+
+		request.setAttribute("numberOfPages", numberOfPages);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("itemsPerPage", itemsPerPage);
+
+		request.setAttribute("sort", activeSortingParam.getValue().toLowerCase());
+		request.setAttribute("direction", activeSortingDirection.name().toLowerCase());
+
+		LOG.debug("Command finished with success");
+		return new HttpPath(WebPath.Page.CATALOG, HttpHandlerType.FORWARD);
 	}
 
 	private int getNumberOfPages(int itemsPerPage, int totalNumberOfPublications) {

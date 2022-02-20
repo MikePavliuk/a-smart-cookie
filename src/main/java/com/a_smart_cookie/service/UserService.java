@@ -34,6 +34,6 @@ public interface UserService {
 	 * @param userSignUpDto Dto from view that represents new user info.
 	 * @return Newly inserted User
 	 */
-	Optional<User> createNewUser(UserSignUpDto userSignUpDto) throws ServiceException;
+	User createNewUser(UserSignUpDto userSignUpDto) throws ServiceException;
 
 }

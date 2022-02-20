@@ -27,8 +27,6 @@ public final class CommandContext {
 		commandMap.put("payment", new PaymentCommand());
 		commandMap.put("subscribe", new SubscribeCommand());
 
-		commandMap.put("unknown", new UnknownCommand());
-
 		LOG.debug("Command context was successfully initialized");
 		LOG.trace("Number of commands --> " + commandMap.size());
 	}
@@ -46,7 +44,7 @@ public final class CommandContext {
 			return commandMap.get(commandName);
 		}
 
-		return commandMap.get("unknown");
+		return null;
 	}
 
 }

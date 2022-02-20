@@ -1,6 +1,5 @@
 package com.a_smart_cookie.filter;
 
-import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.entity.Role;
 import com.a_smart_cookie.entity.User;
 import org.apache.log4j.Logger;
@@ -32,15 +31,8 @@ public class CommandAccessFilter implements Filter {
 			LOG.debug("Filter finished");
 			chain.doFilter(request, response);
 		} else {
-			HttpServletRequest req = (HttpServletRequest) request;
-			HttpServletResponse resp = (HttpServletResponse) response;
-
-			String errorMessage = "You do not have permission to access the requested resource";
-
-			request.setAttribute("errorMessage", errorMessage);
-			LOG.trace("Set the request attribute: errorMessage --> " + errorMessage);
-
-			resp.sendRedirect(req.getContextPath() + WebPath.Command.ERROR.getValue());
+			LOG.debug("Filter finished with sending forbidden error");
+			((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
 		}
 	}
 
