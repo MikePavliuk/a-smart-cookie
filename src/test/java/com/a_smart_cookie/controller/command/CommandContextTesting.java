@@ -1,5 +1,6 @@
 package com.a_smart_cookie.controller.command;
 
+import com.a_smart_cookie.controller.command.shared.CatalogCommand;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

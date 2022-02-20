@@ -1,5 +1,6 @@
-package com.a_smart_cookie.controller.command;
+package com.a_smart_cookie.controller.command.subscriber;
 
+import com.a_smart_cookie.controller.command.Command;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
@@ -15,17 +16,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Provides with subscribing ability for user.
+ * Provides with unsubscribing ability for user.
  *
  */
-public class SubscribeCommand extends Command {
+public class UnsubscribeCommand extends Command {
 
-	private static final long serialVersionUID = -2241143544529213807L;
+	private static final long serialVersionUID = 4127843576162580803L;
 
-	private static final Logger LOG = Logger.getLogger(SubscribeCommand.class);
+	private static final Logger LOG = Logger.getLogger(UnsubscribeCommand.class);
 
 	@Override
-	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
+	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, NotUpdatedResultsException {
 		LOG.debug("Command starts");
 
 		String publicationIdParam = request.getParameter("item");
@@ -40,16 +41,15 @@ public class SubscribeCommand extends Command {
 
 		try {
 			SubscriptionService subscriptionService = ServiceFactory.getInstance().getSubscriptionService();
-			User updatedUser = subscriptionService.subscribeToPublication(user, Integer.parseInt(publicationIdParam));
+			User updatedUser = subscriptionService.unsubscribeFromPublication(user, Integer.parseInt(publicationIdParam));
 
 			session.setAttribute("user", updatedUser);
 			LOG.debug("Command finished");
-			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
+			return new HttpPath(WebPath.Command.USER_SUBSCRIPTIONS, HttpHandlerType.SEND_REDIRECT);
 
 		} catch (ServiceException | NotUpdatedResultsException e) {
 			session.invalidate();
 			throw e;
 		}
 	}
-
 }

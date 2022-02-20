@@ -1,5 +1,6 @@
-package com.a_smart_cookie.controller.command;
+package com.a_smart_cookie.controller.command.common;
 
+import com.a_smart_cookie.controller.command.Command;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
