@@ -7,8 +7,6 @@ import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dto.user.SubscriptionWithPublicationInfo;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.User;
-import com.a_smart_cookie.exception.NotUpdatedResultsException;
-import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.SubscriptionService;
 import com.a_smart_cookie.util.CookieHandler;
@@ -29,7 +27,7 @@ public class SubscriptionsCommand extends Command {
 	private static final Logger LOG = Logger.getLogger(SubscriptionsCommand.class);
 
 	@Override
-	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, NotUpdatedResultsException {
+	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command Starts");
 
 		User user = (User) request.getSession().getAttribute("user");

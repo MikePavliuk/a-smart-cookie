@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 	private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
 
 	@Override
-	public boolean isUserAlreadyExistsByEmail(String email) throws ServiceException {
+	public boolean isUserAlreadyExistsByEmail(String email) {
 		LOG.debug("Starts getting checking if user exists");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> getUserByEmail(String email) throws ServiceException {
+	public Optional<User> getUserByEmail(String email) {
 		LOG.debug("Starts getting user");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createNewUser(UserSignUpDto userSignUpDto) throws ServiceException {
+	public User createNewUser(UserSignUpDto userSignUpDto) {
 		LOG.debug("Starts creating user");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserForStatusManagement> getAllSubscribers() throws ServiceException {
+	public List<UserForStatusManagement> getAllSubscribers() {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();

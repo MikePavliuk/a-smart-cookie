@@ -26,7 +26,7 @@ public class UnsubscribeCommand extends Command {
 	private static final Logger LOG = Logger.getLogger(UnsubscribeCommand.class);
 
 	@Override
-	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, NotUpdatedResultsException {
+	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
 		String publicationIdParam = request.getParameter("item");

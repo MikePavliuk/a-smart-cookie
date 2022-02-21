@@ -5,8 +5,6 @@ import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dto.admin.UserForStatusManagement;
-import com.a_smart_cookie.exception.NotUpdatedResultsException;
-import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
 import org.apache.log4j.Logger;
@@ -26,7 +24,7 @@ public class UsersCommand extends Command {
 	private static final Logger LOG = Logger.getLogger(UsersCommand.class);
 
 	@Override
-	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, NotUpdatedResultsException {
+	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
 		UserService userService = ServiceFactory.getInstance().getUserService();

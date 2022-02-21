@@ -28,7 +28,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private static final Logger LOG = Logger.getLogger(PaymentServiceImpl.class);
 
 	@Override
-	public User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) throws ServiceException {
+	public User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) {
 		LOG.debug("Method starts");
 
 		PaymentStrategy paymentStrategy = getPaymentStrategy(paymentMethod);

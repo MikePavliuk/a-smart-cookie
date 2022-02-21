@@ -27,7 +27,7 @@ public class PaymentCommand extends Command {
 	private static final Logger LOG = Logger.getLogger(PaymentCommand.class);
 
 	@Override
-	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, NotUpdatedResultsException {
+	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
 		String paymentAmountParam = request.getParameter("paymentAmount");

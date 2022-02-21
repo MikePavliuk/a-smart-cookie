@@ -21,8 +21,6 @@ public interface SubscriptionService {
 	 * @param user User that wants to subscribe.
 	 * @param publicationId Publication's id to subscribe on.
 	 * @return Returns updated user.
-	 * @throws ServiceException Occurred on dao layer
-	 * @throws NotUpdatedResultsException Occurred when updated results can be got.
 	 */
 	User subscribeToPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException;
 
@@ -40,8 +38,6 @@ public interface SubscriptionService {
 	 *
 	 * @param user User that wants to unsubscribe.
 	 * @param publicationId Publication's id to unsubscribe from.
-	 * @throws ServiceException Occurred on dao layer
-	 * @throws NotUpdatedResultsException Occurred when updated results can be got.
 	 */
 	void unsubscribeFromPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException;
 
