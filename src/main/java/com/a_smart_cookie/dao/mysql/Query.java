@@ -131,6 +131,12 @@ public final class Query {
 				"SELECT EXISTS(SELECT * from a_smart_cookie.user WHERE email=?);"
 		),
 
+		UPDATE_USER_STATUS(
+				"UPDATE a_smart_cookie.user " +
+						"SET user.user_status_id = (SELECT user_status.id from a_smart_cookie.user_status WHERE user_status.name = ?) " +
+						"WHERE user.id = ?;"
+		),
+
 		GET_USER_BY_EMAIL(
 				"SELECT user.id, user.email, user.password, user.salt, " +
 						"user_detail.id as userdetail_id, user_detail.name, user_detail.surname, user_detail.balance, " +
@@ -181,8 +187,8 @@ public final class Query {
 	public enum UserDetail {
 		ADD_BALANCE_TO_USER_BY_ID(
 				"UPDATE a_smart_cookie.user_detail " +
-				"SET user_detail.balance = user_detail.balance + ? " +
-				"WHERE user_detail.user_id = ?;"
+						"SET user_detail.balance = user_detail.balance + ? " +
+						"WHERE user_detail.user_id = ?;"
 		),
 
 		MINUS_BALANCE_FROM_USER_BY_ID(

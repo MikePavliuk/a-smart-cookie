@@ -2,6 +2,7 @@ package com.a_smart_cookie.service;
 
 import com.a_smart_cookie.dto.admin.UserForStatusManagement;
 import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
+import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
 
 import java.util.List;
@@ -44,5 +45,13 @@ public interface UserService {
 	 * @see UserForStatusManagement
 	 */
 	List<UserForStatusManagement> getAllSubscribers();
+
+	/**
+	 * Changes user status.
+	 *
+	 * @param userId Users id.
+	 * @param status New status to be set to user.
+	 */
+	void changeUserStatus(int userId, Status status);
 
 }

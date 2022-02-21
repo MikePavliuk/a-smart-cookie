@@ -114,7 +114,7 @@ public class MysqlUserDao extends UserDao {
 
 	@Override
 	public List<User> getAllSubscribers() throws DaoException {
-		LOG.debug("Starts getting users");
+		LOG.debug("Starts method");
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -132,6 +132,28 @@ public class MysqlUserDao extends UserDao {
 			throw new DaoException("Can't get all subscribers", e);
 		} finally {
 			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean changeUserStatus(int userId, String statusName) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.User.UPDATE_USER_STATUS.getQuery());
+			pstmt.setString(1, statusName);
+			pstmt.setInt(2, userId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't insert user", e);
+			throw new DaoException("Can't insert user", e);
+		} finally {
 			ResourceReleaser.close(pstmt);
 		}
 	}

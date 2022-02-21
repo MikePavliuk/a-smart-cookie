@@ -45,4 +45,13 @@ public abstract class UserDao extends AbstractDao {
 	 */
 	public abstract List<User> getAllSubscribers() throws DaoException;
 
+	/**
+	 * Change user status.
+	 *
+	 * @param userId Users id.
+	 * @param statusName Updated status name.
+	 * @return Whether user status was changes.
+	 */
+	public abstract boolean changeUserStatus(int userId, String statusName) throws DaoException;
+
 }

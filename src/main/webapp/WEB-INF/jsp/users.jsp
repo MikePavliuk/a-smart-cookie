@@ -38,22 +38,27 @@
 							<td>${user.email}</td>
 							<td>${user.numberOfSubscriptions}</td>
 							<td>
-								<c:choose>
-									<c:when test="${user.status == Status.ACTIVE}">
-										<a class="btn btn-danger"
-										   href="${pageContext.request.contextPath}/controller?command=block&item=${user.id}">
-											<fmt:message key="users_jsp.table.button.block"/>
-										</a>
-									</c:when>
+								<form action="${pageContext.request.contextPath}/controller?command=change_user_status"
+									  method="post">
+									<input type="hidden" name="status" value="${user.status.name()}">
+									<input type="hidden" name="userId" value="${user.id}">
+									<c:choose>
 
-									<c:otherwise>
-										<a class="btn btn-success"
-										   href="${pageContext.request.contextPath}/controller?command=unblock&item=${user.id}">
-											<fmt:message key="users_jsp.table.button.unblock"/>
-										</a>
-									</c:otherwise>
+										<c:when test="${user.status == Status.ACTIVE}">
+											<button class="btn btn-danger" type="submit">
+												<fmt:message key="users_jsp.table.button.block"/>
+											</button>
+										</c:when>
 
-								</c:choose>
+										<c:otherwise>
+											<button class="btn btn-success" type="submit">
+												<fmt:message key="users_jsp.table.button.unblock"/>
+											</button>
+										</c:otherwise>
+
+									</c:choose>
+
+								</form>
 							</td>
 						</tr>
 					</c:forEach>

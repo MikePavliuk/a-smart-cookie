@@ -4,6 +4,7 @@ import com.a_smart_cookie.dao.*;
 import com.a_smart_cookie.dto.admin.UserForStatusManagement;
 import com.a_smart_cookie.dto.sign_up.UserMapper;
 import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
+import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.entity.UserDetail;
 import com.a_smart_cookie.exception.DaoException;
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createNewUser(UserSignUpDto userSignUpDto) {
-		LOG.debug("Starts creating user");
+		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
 
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
 			if (userDetail.isPresent()) {
 				user = User.UserBuilder.fromUser(insertedUser.get()).withUserDetail(userDetail.get()).build();
 				transaction.commit();
-				LOG.debug("Finished creating user");
+				LOG.debug("Finished method");
 				return user;
 			}
 
@@ -156,6 +157,32 @@ public class UserServiceImpl implements UserService {
 		} finally {
 			transaction.endTransaction();
 		}
+	}
+
+	@Override
+	public void changeUserStatus(int userId, Status status) {
+		LOG.debug("Starts method");
+
+		Status newStatus = status == Status.ACTIVE ? Status.BLOCKED : Status.ACTIVE;
+
+		EntityTransaction transaction = new EntityTransaction();
+
+		try {
+			UserDao userDao = DaoFactory.getInstance().getUserDao();
+
+			transaction.init(userDao);
+
+			if (!userDao.changeUserStatus(userId, newStatus.name().toLowerCase())) {
+				throw new ServiceException("Can't update status");
+			}
+
+		} catch (DaoException e) {
+			LOG.error("Can't change status for user id = '" + userId + "' to status - " + newStatus, e);
+			throw new ServiceException("Can't change status for user id = '" + userId + "' to status - " + newStatus, e);
+		} finally {
+			transaction.end();
+		}
+
 	}
 
 }
