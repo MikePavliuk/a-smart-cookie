@@ -42,10 +42,12 @@
 							<td>${subscription.publication.pricePerMonth}$</td>
 							<td>${cdtp:daysToPaymentTag(subscription.localDate)}</td>
 							<td>
-								<a class="btn btn-danger"
-								   href="${pageContext.request.contextPath}/controller?command=unsubscribe&item=${subscription.publication.id}">
-									<fmt:message key="user_page_jsp.table.button"/>
-								</a>
+								<form action="${pageContext.request.contextPath}/controller?command=unsubscribe" method="post">
+									<input type="hidden" name="item" value="${subscription.publication.id}">
+									<button class="btn btn-danger" type="submit">
+										<fmt:message key="user_page_jsp.table.button"/>
+									</button>
+								</form>
 							</td>
 						</tr>
 					</c:forEach>

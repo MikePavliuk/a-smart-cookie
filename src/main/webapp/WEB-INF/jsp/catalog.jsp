@@ -169,8 +169,8 @@
 										<c:out value="${publication.description}"/>
 									</p>
 									<p class="card-text">
-										<fmt:message key="publication.price_per_month"/>: <b><c:out
-											value="${publication.pricePerMonth}"/> $</b>
+										<fmt:message key="publication.price_per_month"/>:
+										<b><c:out value="${publication.pricePerMonth}"/> $</b>
 									</p>
 									<c:choose>
 										<c:when test="${empty sessionScope.user}">
@@ -197,11 +197,12 @@
 										</c:when>
 
 										<c:otherwise>
-											<a class="btn btn-success"
-											   href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}"
-											   role="button">
-												<fmt:message key="publication.subscribe"/>
-											</a>
+											<form action="${pageContext.request.contextPath}/controller?command=subscribe" method="post">
+												<input type="hidden" name="item" value="${publication.id}">
+												<button class="btn btn-success" type="submit">
+													<fmt:message key="publication.subscribe"/>
+												</button>
+											</form>
 										</c:otherwise>
 									</c:choose>
 
