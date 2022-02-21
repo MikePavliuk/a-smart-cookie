@@ -41,9 +41,9 @@ public class UnsubscribeCommand extends Command {
 
 		try {
 			SubscriptionService subscriptionService = ServiceFactory.getInstance().getSubscriptionService();
-			User updatedUser = subscriptionService.unsubscribeFromPublication(user, Integer.parseInt(publicationIdParam));
+			subscriptionService.unsubscribeFromPublication(user, Integer.parseInt(publicationIdParam));
 
-			session.setAttribute("user", updatedUser);
+			session.setAttribute("user", user);
 			LOG.debug("Command finished");
 			return new HttpPath(WebPath.Command.USER_SUBSCRIPTIONS, HttpHandlerType.SEND_REDIRECT);
 

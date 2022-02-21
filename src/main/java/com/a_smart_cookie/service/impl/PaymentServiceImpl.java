@@ -18,8 +18,6 @@ import com.a_smart_cookie.util.payment.strategies.PayPalPaymentStrategy;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.Savepoint;
-import java.util.Optional;
 
 
 /**
@@ -44,11 +42,10 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 
 		EntityTransaction transaction = new EntityTransaction();
-		Savepoint savepoint = null;
 
 		try {
 			UserDetailDao userDetailDao = DaoFactory.getInstance().getUserDetailDao();
-			transaction.initTransaction(userDetailDao);
+			transaction.init(userDetailDao);
 
 			if (!userDetailDao.addMoneyToBalanceByUserId(paymentAmount, user.getId())) {
 				transaction.rollback();
@@ -56,37 +53,21 @@ public class PaymentServiceImpl implements PaymentService {
 				throw new NotUpdatedResultsException("Can't add transaction money to user");
 			}
 
-			savepoint = transaction.setSavepoint();
-			LOG.trace("Commit transaction because added money to user");
-
-			Optional<BigDecimal> balance = userDetailDao.getBalanceByUserId(user.getId());
-			if (balance.isEmpty()) {
-				transaction.rollback(savepoint);
-				LOG.debug("Finished method with rollback, because didn't get balance");
-				throw new NotUpdatedResultsException("Can't get updated balance of user");
-			}
-
-			transaction.commit();
-
+			LOG.trace("Method finished correct");
 			return User.UserBuilder.fromUser(user)
 					.withUserDetail(new UserDetail(
 							user.getUserDetail().getId(),
 							user.getUserDetail().getFirstName(),
 							user.getUserDetail().getFirstName(),
-							balance.get()
+							user.getUserDetail().getBalance().add(paymentAmount)
 					))
 					.build();
 
 		} catch (DaoException e) {
-			if (savepoint != null) {
-				transaction.rollback(savepoint);
-			} else {
-				transaction.rollback();
-			}
 			LOG.error("Can't add funds to user account", e);
 			throw new ServiceException("Can't add funds to user account", e);
 		} finally {
-			transaction.endTransaction();
+			transaction.end();
 		}
 
 	}
