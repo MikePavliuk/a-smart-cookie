@@ -14,11 +14,14 @@
 <div class="content">
 	<div class="container">
 		<h1 class="mt-3 text-center"><fmt:message key="user_page_jsp.header"/></h1>
-		<h5 class="mt-3 text-center"><fmt:message key="user_page_jsp.subscriptions_table"/></h5>
-		<p><b><fmt:message key="user_page_jsp.subscriptions_number"/>:</b> ${requestScope.subscriptions.size()}</p>
-		<p><b><fmt:message key="user_page_jsp.payment_amount_per_month"/>:</b> ${ppm:paymentAmountPerMonthTag(requestScope.subscriptions)} $</p>
 		<c:choose>
 			<c:when test="${requestScope.subscriptions.size() gt 0}">
+				<p><b><fmt:message key="user_page_jsp.subscriptions_number"/>:</b> ${requestScope.subscriptions.size()}</p>
+				<p>
+					<b><fmt:message key="user_page_jsp.payment_amount_per_month"/>:</b>
+						${ppm:paymentAmountPerMonthTag(requestScope.subscriptions)}$
+				</p>
+				<h5 class="mt-3 text-center"><fmt:message key="user_page_jsp.subscriptions_table"/></h5>
 				<table class="table">
 					<thead class="thead-light">
 					<tr>
@@ -51,6 +54,11 @@
 			</c:when>
 			<c:otherwise>
 				<h4 class="text-center"><fmt:message key="info.no_subscriptions"/></h4>
+				<h5 class="text-center">
+					<a href="${pageContext.request.contextPath}/controller?command=catalog">
+						<fmt:message key="catalog_jsp.title"/>
+					</a>
+				</h5>
 			</c:otherwise>
 		</c:choose>
 	</div>
