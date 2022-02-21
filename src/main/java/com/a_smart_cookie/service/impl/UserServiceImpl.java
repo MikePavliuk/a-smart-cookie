@@ -1,8 +1,9 @@
 package com.a_smart_cookie.service.impl;
 
 import com.a_smart_cookie.dao.*;
-import com.a_smart_cookie.dto.user.UserMapper;
-import com.a_smart_cookie.dto.user.UserSignUpDto;
+import com.a_smart_cookie.dto.admin.UserForStatusManagement;
+import com.a_smart_cookie.dto.sign_up.UserMapper;
+import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.entity.UserDetail;
 import com.a_smart_cookie.exception.DaoException;
@@ -11,11 +12,12 @@ import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.UserService;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
  * Serves User related entities and uses Daos and EntityTransaction for that purpose.
- *
  */
 public class UserServiceImpl implements UserService {
 
@@ -113,6 +115,44 @@ public class UserServiceImpl implements UserService {
 			transaction.rollback();
 			LOG.error("Can't insert user", e);
 			throw new ServiceException("Can't insert user", e);
+		} finally {
+			transaction.endTransaction();
+		}
+	}
+
+	@Override
+	public List<UserForStatusManagement> getAllSubscribers() throws ServiceException {
+		LOG.debug("Starts method");
+
+		EntityTransaction transaction = new EntityTransaction();
+
+		try {
+			UserDao userDao = DaoFactory.getInstance().getUserDao();
+			SubscriptionDao subscriptionDao = DaoFactory.getInstance().getSubscriptionDao();
+
+			transaction.initTransaction(userDao, subscriptionDao);
+
+			List<User> subscribers = userDao.getAllSubscribers();
+
+			List<UserForStatusManagement> usersForStatusManagement = new ArrayList<>();
+
+			for (User user : subscribers) {
+				usersForStatusManagement.add(new UserForStatusManagement(
+						user.getId(),
+						user.getUserDetail().getFirstName(),
+						user.getUserDetail().getLastName(),
+						user.getEmail(),
+						user.getStatus(),
+						subscriptionDao.getNumberOfSubscriptionsByUserId(user.getId())
+				));
+			}
+
+			return usersForStatusManagement;
+
+		} catch (DaoException e) {
+			transaction.rollback();
+			LOG.error("Can't get all users for status management", e);
+			throw new ServiceException("Can't get all users for status management", e);
 		} finally {
 			transaction.endTransaction();
 		}

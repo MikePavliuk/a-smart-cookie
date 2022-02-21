@@ -112,6 +112,30 @@ public class MysqlUserDao extends UserDao {
 		}
 	}
 
+	@Override
+	public List<User> getAllSubscribers() throws DaoException {
+		LOG.debug("Starts getting users");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.User.GET_ALL_SUBSCRIBERS.getQuery());
+			rs = pstmt.executeQuery();
+
+			LOG.trace(pstmt);
+
+			LOG.trace("Finished getting user with result --> Found user");
+			return extractUsers(rs);
+
+		} catch (SQLException e) {
+			LOG.error("Can't get all subscribers", e);
+			throw new DaoException("Can't get all subscribers", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
 	/**
 	 * Extracts users from ResultSet to list of users.
 	 *

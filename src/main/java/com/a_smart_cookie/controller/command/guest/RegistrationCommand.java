@@ -5,7 +5,7 @@ import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dao.EntityColumn;
-import com.a_smart_cookie.dto.user.UserSignUpDto;
+import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;

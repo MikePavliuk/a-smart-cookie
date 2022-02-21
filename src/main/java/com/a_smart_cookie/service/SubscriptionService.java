@@ -1,6 +1,6 @@
 package com.a_smart_cookie.service;
 
-import com.a_smart_cookie.dto.SubscriptionWithPublicationInfo;
+import com.a_smart_cookie.dto.user.SubscriptionWithPublicationInfo;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.NotUpdatedResultsException;

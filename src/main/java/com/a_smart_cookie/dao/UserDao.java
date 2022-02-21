@@ -3,6 +3,7 @@ package com.a_smart_cookie.dao;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.DaoException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,5 +37,12 @@ public abstract class UserDao extends AbstractDao {
 	 * @return Generated id for inserted user or empty if something went wrong.
 	 */
 	public abstract Optional<User> insertUser(User user) throws DaoException;
+
+	/**
+	 * Gets all subscribers.
+	 *
+	 * @return List of subscribers.
+	 */
+	public abstract List<User> getAllSubscribers() throws DaoException;
 
 }

@@ -1,6 +1,6 @@
 package com.a_smart_cookie.tag;
 
-import com.a_smart_cookie.dto.SubscriptionWithPublicationInfo;
+import com.a_smart_cookie.dto.user.SubscriptionWithPublicationInfo;
 
 import java.math.BigDecimal;
 import java.util.List;

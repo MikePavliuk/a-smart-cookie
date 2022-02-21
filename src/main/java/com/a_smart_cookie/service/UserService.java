@@ -1,9 +1,11 @@
 package com.a_smart_cookie.service;
 
-import com.a_smart_cookie.dto.user.UserSignUpDto;
+import com.a_smart_cookie.dto.admin.UserForStatusManagement;
+import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.ServiceException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,5 +37,13 @@ public interface UserService {
 	 * @return Newly inserted User
 	 */
 	User createNewUser(UserSignUpDto userSignUpDto) throws ServiceException;
+
+	/**
+	 * Gets all dto subscribers for management.
+	 *
+	 * @return Dto UserForStatusManagement
+	 * @see UserForStatusManagement
+	 */
+	List<UserForStatusManagement> getAllSubscribers() throws  ServiceException;
 
 }

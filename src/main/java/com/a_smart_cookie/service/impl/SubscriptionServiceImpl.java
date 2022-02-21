@@ -1,7 +1,7 @@
 package com.a_smart_cookie.service.impl;
 
 import com.a_smart_cookie.dao.*;
-import com.a_smart_cookie.dto.SubscriptionWithPublicationInfo;
+import com.a_smart_cookie.dto.user.SubscriptionWithPublicationInfo;
 import com.a_smart_cookie.entity.*;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.NotUpdatedResultsException;
