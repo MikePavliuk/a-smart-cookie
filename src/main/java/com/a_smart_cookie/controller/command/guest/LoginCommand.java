@@ -13,7 +13,7 @@ import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
 import com.a_smart_cookie.util.hashing.PBKDF2Hash;
-import com.a_smart_cookie.util.validation.UserValidator;
+import com.a_smart_cookie.util.validation.user.UserValidator;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;

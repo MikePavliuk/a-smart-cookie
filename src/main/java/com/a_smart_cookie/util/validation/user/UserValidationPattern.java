@@ -1,4 +1,4 @@
-package com.a_smart_cookie.util.validation;
+package com.a_smart_cookie.util.validation.user;
 
 /**
  * Holds validation patterns.

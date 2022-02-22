@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/locale.jspf" %>
-<%@ page import="com.a_smart_cookie.util.validation.UserValidationPattern" %>
+<%@ page import="com.a_smart_cookie.util.validation.user.UserValidationPattern" %>
 
 <html>
 
