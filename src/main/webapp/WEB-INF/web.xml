@@ -143,6 +143,10 @@
 		<location>/WEB-INF/jsp/error/illegal-arguments.jsp</location>
 	</error-page>
 
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/WEB-INF/jsp/error/general-error.jsp</location>
+	</error-page>
 
 
 
