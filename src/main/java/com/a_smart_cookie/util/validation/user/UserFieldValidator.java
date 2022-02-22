@@ -56,4 +56,7 @@ public final class UserFieldValidator {
 		return validatorMap.get(fieldName);
 	}
 
+	private UserFieldValidator() {
+	}
+
 }
