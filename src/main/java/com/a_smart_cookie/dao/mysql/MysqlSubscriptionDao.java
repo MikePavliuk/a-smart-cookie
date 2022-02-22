@@ -92,6 +92,34 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 		}
 	}
 
+	@Override
+	public int getNumberOfSubscriptionsByUserId(int userId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(Query.Subscription.GET_COUNT_BY_USER_ID.getQuery());
+			pstmt.setInt(1, userId);
+			rs = pstmt.executeQuery();
+
+			LOG.debug("Finished method");
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get number of subscriptions", e);
+			throw new DaoException("Can't get number of subscriptions", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
 	/**
 	 * Extracts subscriptions from ResultSet to List of subscriptions.
 	 *

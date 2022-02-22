@@ -3,6 +3,7 @@ package com.a_smart_cookie.dao;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.DaoException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,4 +38,26 @@ public abstract class UserDao extends AbstractDao {
 	 */
 	public abstract Optional<User> insertUser(User user) throws DaoException;
 
+	/**
+	 * Gets limited number of subscribers.
+	 *
+	 * @return List of subscribers.
+	 */
+	public abstract List<User> getSubscribersWithLimit(int offset, int itemsPerPage) throws DaoException;
+
+	/**
+	 * Change user status.
+	 *
+	 * @param userId Users id.
+	 * @param statusName Updated status name.
+	 * @return Whether user status was changes.
+	 */
+	public abstract boolean changeUserStatus(int userId, String statusName) throws DaoException;
+
+	/**
+	 * Method for getting number of subscribers.
+	 *
+	 * @return Number of founded subscribers.
+	 */
+	public abstract int getTotalNumberOfSubscribers() throws DaoException;
 }

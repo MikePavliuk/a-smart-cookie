@@ -21,7 +21,7 @@ public class PublicationServiceImpl implements PublicationService {
 	private static final Logger LOG = Logger.getLogger(PublicationServiceImpl.class);
 
 	@Override
-	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException {
+	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) {
 		LOG.debug("PublicationServiceImpl starts finding publications by filter parameters");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -49,7 +49,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws ServiceException {
+	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) {
 		LOG.debug("PublicationServiceImpl starts getting total number of requested rows by parameters");
 
 		EntityTransaction transaction = new EntityTransaction();

@@ -1,4 +1,4 @@
-package com.a_smart_cookie.dto.user;
+package com.a_smart_cookie.dto.sign_up;
 
 import com.a_smart_cookie.entity.Role;
 import com.a_smart_cookie.entity.Status;

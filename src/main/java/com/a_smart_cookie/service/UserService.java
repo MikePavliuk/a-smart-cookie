@@ -1,9 +1,11 @@
 package com.a_smart_cookie.service;
 
-import com.a_smart_cookie.dto.user.UserSignUpDto;
+import com.a_smart_cookie.dto.admin.UserForStatusManagement;
+import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
+import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
-import com.a_smart_cookie.exception.ServiceException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,7 +20,7 @@ public interface UserService {
 	 * @param email Email value to search by.
 	 * @return Boolean value whether user already exist.
 	 */
-	boolean isUserAlreadyExistsByEmail(String email) throws ServiceException;
+	boolean isUserAlreadyExistsByEmail(String email);
 
 	/**
 	 * Returns Optional of user if he was found by email.
@@ -26,7 +28,7 @@ public interface UserService {
 	 * @param email Email which user should be found by.
 	 * @return Optional of user if he exists, otherwise - empty optional.
 	 */
-	Optional<User> getUserByEmail(String email) throws ServiceException;
+	Optional<User> getUserByEmail(String email);
 
 	/**
 	 * Returns Optional of inserted user with generated id.
@@ -34,6 +36,31 @@ public interface UserService {
 	 * @param userSignUpDto Dto from view that represents new user info.
 	 * @return Newly inserted User
 	 */
-	User createNewUser(UserSignUpDto userSignUpDto) throws ServiceException;
+	User createNewUser(UserSignUpDto userSignUpDto);
+
+	/**
+	 * Gets all limited number of subscribers for management.
+	 *
+	 * @return Dto UserForStatusManagement
+	 * @see UserForStatusManagement
+	 * @param requestedPage Page to be got.
+	 * @param itemsPerPage Items per page.
+	 */
+	List<UserForStatusManagement> getPaginatedSubscribers(int requestedPage, int itemsPerPage);
+
+	/**
+	 * Method for getting number of subscribers.
+	 *
+	 * @return Number of founded subscribers.
+	 */
+	int getTotalNumberOfSubscribers();
+
+	/**
+	 * Changes user status.
+	 *
+	 * @param userId Users id.
+	 * @param status New status to be set to user.
+	 */
+	void changeUserStatus(int userId, Status status);
 
 }

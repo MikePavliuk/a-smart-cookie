@@ -169,8 +169,8 @@
 										<c:out value="${publication.description}"/>
 									</p>
 									<p class="card-text">
-										<fmt:message key="publication.price_per_month"/>: <b><c:out
-											value="${publication.pricePerMonth}"/> $</b>
+										<fmt:message key="publication.price_per_month"/>:
+										<b><c:out value="${publication.pricePerMonth}"/> $</b>
 									</p>
 									<c:choose>
 										<c:when test="${empty sessionScope.user}">
@@ -197,11 +197,12 @@
 										</c:when>
 
 										<c:otherwise>
-											<a class="btn btn-success"
-											   href="${pageContext.request.contextPath}/controller?command=subscribe&item=${publication.id}"
-											   role="button">
-												<fmt:message key="publication.subscribe"/>
-											</a>
+											<form action="${pageContext.request.contextPath}/controller?command=subscribe" method="post">
+												<input type="hidden" name="item" value="${publication.id}">
+												<button class="btn btn-success" type="submit">
+													<fmt:message key="publication.subscribe"/>
+												</button>
+											</form>
 										</c:otherwise>
 									</c:choose>
 
@@ -212,50 +213,7 @@
 
 				</div>
 
-				<div class="row justify-content-center">
-					<nav aria-label="Pagination for publications">
-						<ul class="pagination">
-							<c:if test="${requestScope.currentPage != 1}">
-								<li class="page-item">
-									<a class="page-link"
-									   href="<p:replaceParam name='page' value='${requestScope.currentPage-1}' />">
-										<fmt:message key="pagination.previous"/>
-									</a>
-								</li>
-							</c:if>
-
-							<c:forEach begin="1" end="${requestScope.numberOfPages}" var="i">
-								<c:choose>
-									<c:when test="${requestScope.currentPage eq i}">
-										<li class="page-item active">
-											<a class="page-link">
-													${i} <span class="sr-only">(current)</span>
-											</a>
-										</li>
-									</c:when>
-									<c:otherwise>
-										<li class="page-item">
-											<a class="page-link"
-											   href="<p:replaceParam name='page' value='${i}' />">
-													${i}
-											</a>
-										</li>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-
-							<c:if test="${requestScope.currentPage lt requestScope.numberOfPages}">
-								<li class="page-item">
-									<a class="page-link"
-									   href="<p:replaceParam name='page' value='${requestScope.currentPage+1}' />">
-										<fmt:message key="pagination.next"/>
-									</a>
-								</li>
-							</c:if>
-						</ul>
-					</nav>
-
-				</div>
+				<%@ include file="/WEB-INF/jspf/pagination.jspf" %>
 			</c:when>
 			<c:otherwise>
 				<div class="row justify-content-center mt-5">

@@ -1,7 +1,7 @@
 package com.a_smart_cookie.util.validation;
 
 import com.a_smart_cookie.dao.EntityColumn;
-import com.a_smart_cookie.dto.user.UserSignUpDto;
+import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 
 import java.util.HashMap;
 import java.util.Map;

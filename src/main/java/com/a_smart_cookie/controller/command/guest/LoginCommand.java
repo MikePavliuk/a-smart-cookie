@@ -5,6 +5,7 @@ import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dao.EntityColumn;
+import com.a_smart_cookie.entity.Role;
 import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.exception.HashingException;
@@ -77,6 +78,11 @@ public class LoginCommand extends Command {
 			LOG.trace("user --> " + user);
 
 			LOG.debug("Command finished with signed in user");
+			
+			if (user.get().getRole() == Role.ADMIN) {
+				return new HttpPath(WebPath.Command.ADMIN_USERS, HttpHandlerType.SEND_REDIRECT);
+			}
+
 			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 
 		} catch (ServiceException | HashingException e) {

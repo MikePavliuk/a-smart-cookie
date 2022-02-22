@@ -1,4 +1,4 @@
-package com.a_smart_cookie.dto;
+package com.a_smart_cookie.dto.user;
 
 import com.a_smart_cookie.entity.Publication;
 

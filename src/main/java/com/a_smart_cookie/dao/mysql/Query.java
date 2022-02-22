@@ -18,6 +18,12 @@ public final class Query {
 						"WHERE subscription.user_id = ?;"
 		),
 
+		GET_COUNT_BY_USER_ID(
+				"SELECT count(subscription.user_id) as count " +
+						"FROM a_smart_cookie.subscription " +
+						"WHERE subscription.user_id = ?;"
+		),
+
 		INSERT_BY_USER_ID_AND_PUBLICATION_ID(
 				"INSERT INTO a_smart_cookie.subscription(user_id, publication_id) " +
 						"VALUES (?, ?); "
@@ -125,6 +131,12 @@ public final class Query {
 				"SELECT EXISTS(SELECT * from a_smart_cookie.user WHERE email=?);"
 		),
 
+		UPDATE_USER_STATUS(
+				"UPDATE a_smart_cookie.user " +
+						"SET user.user_status_id = (SELECT user_status.id from a_smart_cookie.user_status WHERE user_status.name = ?) " +
+						"WHERE user.id = ?;"
+		),
+
 		GET_USER_BY_EMAIL(
 				"SELECT user.id, user.email, user.password, user.salt, " +
 						"user_detail.id as userdetail_id, user_detail.name, user_detail.surname, user_detail.balance, " +
@@ -137,6 +149,27 @@ public final class Query {
 						"JOIN a_smart_cookie.role " +
 						"ON user.role_id = role.id " +
 						"WHERE user.email=?;"
+		),
+
+		GET_SUBSCRIBERS_WITH_OFFSET_AND_ITEMS_PER_PAGE (
+				"SELECT user.id, user.email, user.password, user.salt, " +
+						"user_detail.id as userdetail_id, user_detail.name, user_detail.surname, user_detail.balance, " +
+						"user_status.name as userstatus_name, role.name as role_name " +
+						"FROM a_smart_cookie.user " +
+						"JOIN a_smart_cookie.user_detail " +
+						"ON user.id = user_detail.user_id " +
+						"JOIN a_smart_cookie.user_status " +
+						"ON user.user_status_id = user_status.id " +
+						"JOIN a_smart_cookie.role " +
+						"ON user.role_id = role.id " +
+						"WHERE user.role_id = (SELECT role.id from a_smart_cookie.role where role.name = 'subscriber') " +
+						"LIMIT ?, ?;"
+		),
+
+		GET_NUMBER_OF_SUBSCRIBERS(
+				"SELECT count(*) as count " +
+						"FROM a_smart_cookie.user " +
+						"WHERE user.role_id = (SELECT role.id from a_smart_cookie.role WHERE role.name = 'subscriber');"
 		),
 
 		INSERT_USER(
@@ -161,8 +194,8 @@ public final class Query {
 	public enum UserDetail {
 		ADD_BALANCE_TO_USER_BY_ID(
 				"UPDATE a_smart_cookie.user_detail " +
-				"SET user_detail.balance = user_detail.balance + ? " +
-				"WHERE user_detail.user_id = ?;"
+						"SET user_detail.balance = user_detail.balance + ? " +
+						"WHERE user_detail.user_id = ?;"
 		),
 
 		MINUS_BALANCE_FROM_USER_BY_ID(

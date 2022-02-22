@@ -1,7 +1,7 @@
 package com.a_smart_cookie.service.impl;
 
 import com.a_smart_cookie.dao.*;
-import com.a_smart_cookie.dto.SubscriptionWithPublicationInfo;
+import com.a_smart_cookie.dto.user.SubscriptionWithPublicationInfo;
 import com.a_smart_cookie.entity.*;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.NotUpdatedResultsException;
@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import java.math.BigDecimal;
 import java.sql.Savepoint;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	private static final Logger LOG = Logger.getLogger(SubscriptionServiceImpl.class);
 
 	@Override
-	public User subscribeToPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException {
+	public User subscribeToPublication(User user, int publicationId) {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -132,7 +133,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	}
 
 	@Override
-	public User unsubscribeFromPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException {
+	public void unsubscribeFromPublication(User user, int publicationId) {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -157,12 +158,19 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 				throw new NotUpdatedResultsException("Didn't insert balance result");
 			}
 
-			List<Subscription> subscriptions = subscriptionDao.getSubscriptionsByUserId(user.getId());
+			Iterator<Subscription> iterator = user.getSubscriptions().iterator();
+
+			while (iterator.hasNext()) {
+				Subscription subscription = iterator.next();
+
+				if (subscription.getPublicationId().equals(publicationId)) {
+					iterator.remove();
+					break;
+				}
+			}
+
 			transaction.commit();
 			LOG.debug("Finished method with commit");
-			return User.UserBuilder.fromUser(user)
-					.withSubscriptions(subscriptions)
-					.build();
 
 		} catch (DaoException e) {
 			transaction.rollback();

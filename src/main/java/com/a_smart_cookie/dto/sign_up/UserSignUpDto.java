@@ -1,4 +1,4 @@
-package com.a_smart_cookie.dto.user;
+package com.a_smart_cookie.dto.sign_up;
 
 /**
  * Data transfer object that used as holder of values from registration form for user.

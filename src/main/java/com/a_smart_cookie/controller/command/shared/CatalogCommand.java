@@ -13,6 +13,7 @@ import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.CookieHandler;
 import com.a_smart_cookie.util.pagination.ItemsPerPage;
+import com.a_smart_cookie.util.pagination.PaginationHandler;
 import com.a_smart_cookie.util.sorting.SortingDirection;
 import com.a_smart_cookie.util.sorting.SortingParameter;
 import org.apache.log4j.Logger;
@@ -40,14 +41,14 @@ public class CatalogCommand extends Command {
 		Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("specificGenre"));
 		String searchedTitle = request.getParameter("search");
 		Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
-		int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
 		SortingParameter activeSortingParam = SortingParameter.safeFromString(request.getParameter("sort"));
 		SortingDirection activeSortingDirection = SortingDirection.safeFromString(request.getParameter("direction"));
 
+		int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
 		int totalNumberOfFoundedPublications = publicationService
 				.getTotalNumberOfRequestedQueryRows(new CountRowsParameters(language, genreRestriction, searchedTitle));
-		int numberOfPages = getNumberOfPages(itemsPerPage, totalNumberOfFoundedPublications);
-		int currentPage = getCurrentPage(request, numberOfPages);
+		int numberOfPages = PaginationHandler.getRequestedNumberOfPages(itemsPerPage, totalNumberOfFoundedPublications);
+		int currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
 
 		FilterParameters filterParameters = new FilterParameters(
 				itemsPerPage,
@@ -79,34 +80,13 @@ public class CatalogCommand extends Command {
 		request.setAttribute("publications", publications);
 		request.setAttribute("genres", usedGenres);
 
-		request.setAttribute("numberOfPages", numberOfPages);
-		request.setAttribute("currentPage", currentPage);
-		request.setAttribute("itemsPerPage", itemsPerPage);
+		PaginationHandler.setPaginationAttributes(request, numberOfPages, currentPage, itemsPerPage);
 
 		request.setAttribute("sort", activeSortingParam.getValue().toLowerCase());
 		request.setAttribute("direction", activeSortingDirection.name().toLowerCase());
 
 		LOG.debug("Command finished with success");
 		return new HttpPath(WebPath.Page.CATALOG, HttpHandlerType.FORWARD);
-	}
-
-	private int getNumberOfPages(int itemsPerPage, int totalNumberOfPublications) {
-		int numberOfPages = totalNumberOfPublications / itemsPerPage;
-		if (totalNumberOfPublications % itemsPerPage > 0) {
-			++numberOfPages;
-		}
-		LOG.trace("Total number of requested pages -->" + numberOfPages);
-		return numberOfPages;
-	}
-
-	private int getCurrentPage(HttpServletRequest request, int numberOfPages) {
-		int currentPage = 1;
-		String pageNumberParameter = request.getParameter("page");
-		if (pageNumberParameter != null && (Integer.parseInt(pageNumberParameter) >= currentPage) && (Integer.parseInt(pageNumberParameter) <= numberOfPages)) {
-			currentPage = Integer.parseInt(pageNumberParameter);
-		}
-		LOG.trace("Current page number -->" + currentPage);
-		return currentPage;
 	}
 
 }

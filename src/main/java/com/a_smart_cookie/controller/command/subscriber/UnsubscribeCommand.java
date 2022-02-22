@@ -26,7 +26,7 @@ public class UnsubscribeCommand extends Command {
 	private static final Logger LOG = Logger.getLogger(UnsubscribeCommand.class);
 
 	@Override
-	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException, NotUpdatedResultsException {
+	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
 		String publicationIdParam = request.getParameter("item");
@@ -41,9 +41,9 @@ public class UnsubscribeCommand extends Command {
 
 		try {
 			SubscriptionService subscriptionService = ServiceFactory.getInstance().getSubscriptionService();
-			User updatedUser = subscriptionService.unsubscribeFromPublication(user, Integer.parseInt(publicationIdParam));
+			subscriptionService.unsubscribeFromPublication(user, Integer.parseInt(publicationIdParam));
 
-			session.setAttribute("user", updatedUser);
+			session.setAttribute("user", user);
 			LOG.debug("Command finished");
 			return new HttpPath(WebPath.Command.USER_SUBSCRIPTIONS, HttpHandlerType.SEND_REDIRECT);
 

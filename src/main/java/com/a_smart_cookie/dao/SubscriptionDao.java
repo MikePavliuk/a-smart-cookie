@@ -38,4 +38,12 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 */
 	public abstract boolean removeSubscriptions(int userId, int publicationId) throws DaoException;
 
+	/**
+	 * Gets number of active subscriptions of user by his id.
+	 *
+	 * @param userId Users id.
+	 * @return Number of subscriptions.
+	 */
+	public abstract int getNumberOfSubscriptionsByUserId(int userId) throws DaoException;
+
 }

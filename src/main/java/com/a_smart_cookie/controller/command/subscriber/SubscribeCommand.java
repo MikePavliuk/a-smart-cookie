@@ -45,7 +45,7 @@ public class SubscribeCommand extends Command {
 
 			session.setAttribute("user", updatedUser);
 			LOG.debug("Command finished");
-			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
+			return new HttpPath(WebPath.Command.USER_SUBSCRIPTIONS, HttpHandlerType.SEND_REDIRECT);
 
 		} catch (ServiceException | NotUpdatedResultsException e) {
 			session.invalidate();

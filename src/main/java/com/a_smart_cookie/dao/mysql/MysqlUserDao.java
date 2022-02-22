@@ -112,6 +112,82 @@ public class MysqlUserDao extends UserDao {
 		}
 	}
 
+	@Override
+	public List<User> getSubscribersWithLimit(int offset, int itemsPerPage) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.User.GET_SUBSCRIBERS_WITH_OFFSET_AND_ITEMS_PER_PAGE.getQuery());
+			pstmt.setInt(1, offset);
+			pstmt.setInt(2, itemsPerPage);
+
+			rs = pstmt.executeQuery();
+
+			LOG.trace(pstmt);
+
+			LOG.trace("Finished with found users");
+			return extractUsers(rs);
+
+		} catch (SQLException e) {
+			LOG.error("Can't get subscribers", e);
+			throw new DaoException("Can't get subscribers", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean changeUserStatus(int userId, String statusName) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.User.UPDATE_USER_STATUS.getQuery());
+			pstmt.setString(1, statusName);
+			pstmt.setInt(2, userId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't insert user", e);
+			throw new DaoException("Can't insert user", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int getTotalNumberOfSubscribers() throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(Query.User.GET_NUMBER_OF_SUBSCRIBERS.getQuery());
+			rs = pstmt.executeQuery();
+
+			LOG.debug("Finished method");
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get number of subscriptions", e);
+			throw new DaoException("Can't get number of subscriptions", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
 	/**
 	 * Extracts users from ResultSet to list of users.
 	 *

@@ -23,6 +23,6 @@ public interface PaymentService {
 	 * @throws ServiceException Occurred on dao layer
 	 * @throws NotUpdatedResultsException Occurred when updated results can be got.
 	 */
-	User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) throws ServiceException, NotUpdatedResultsException;
+	User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user);
 
 }

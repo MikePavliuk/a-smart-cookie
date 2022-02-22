@@ -15,7 +15,9 @@
 	<div class="container text-center">
 		<h2 class="mt-2">404</h2>
 		<h4 class="mt-3"><fmt:message key="error.not_found.message" /></h4>
-		<%@ include file="/WEB-INF/jspf/redirect-to-home.jspf" %>
+		<c:if test="${sessionScope.user.role ne Role.ADMIN}">
+			<%@ include file="/WEB-INF/jspf/redirect-to-home.jspf" %>
+		</c:if>
 	</div>
 </div>
 

@@ -3,7 +3,6 @@ package com.a_smart_cookie.service;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
-import com.a_smart_cookie.exception.ServiceException;
 
 /**
  * Interface for creating concrete representation of PublicationService.
@@ -17,7 +16,7 @@ public interface PublicationService {
 	 * @param filterParameters Parameters of searched publications
 	 * @return List of publications and list of used genres.
 	 */
-	PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException;
+	PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters);
 
 	/**
 	 * Method for getting number of requested rows by countRowsParameters.
@@ -25,6 +24,6 @@ public interface PublicationService {
 	 * @param countRowsParameters Parameters of searched publications
 	 * @return Number of founded rows.
 	 */
-	int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws ServiceException;
+	int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters);
 
 }
