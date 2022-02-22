@@ -8,7 +8,6 @@ import java.util.Map;
 
 /**
  * Util method that returns validation results publication entity.
- *
  */
 public final class PublicationValidator {
 
@@ -24,16 +23,16 @@ public final class PublicationValidator {
 		validationResult.put(EntityColumn.PublicationInfo.TITLE.getName(),
 				PublicationFieldValidator.getValidatorByFieldName(EntityColumn.PublicationInfo.TITLE.getName())
 						.isValid(publication.getTitle())
-				);
+		);
 
 		validationResult.put(EntityColumn.PublicationInfo.DESCRIPTION.getName(),
 				PublicationFieldValidator.getValidatorByFieldName(EntityColumn.PublicationInfo.DESCRIPTION.getName())
-				.isValid(publication.getDescription())
+						.isValid(publication.getDescription())
 		);
 
 		validationResult.put(EntityColumn.Publication.PRICE_PER_MONTH.getName(),
 				PublicationFieldValidator.getValidatorByFieldName(EntityColumn.Publication.PRICE_PER_MONTH.getName())
-				.isValid(publication.getPricePerMonth().toString())
+						.isValid(publication.getPricePerMonth().toString())
 		);
 
 		return validationResult;
