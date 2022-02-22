@@ -38,13 +38,10 @@
 							<td>${publication.genre.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}</td>
 							<td>${publication.pricePerMonth}$</td>
 							<td>
-								<form action="${pageContext.request.contextPath}/controller?command=publication_edit"
-									  method="post">
-									<input type="hidden" name="publicationId" value="${publication.id}">
-									<button class="btn btn-warning" type="submit">
-										<fmt:message key="publications_jsp.table.button.edit"/>
-									</button>
-								</form>
+								<a class="btn btn-warning"
+								href="${pageContext.request.contextPath}/controller?command=publication_edit_view&item=${publication.id}">
+									<fmt:message key="publications_jsp.table.button.edit"/>
+								</a>
 							</td>
 							<td>
 								<form action="${pageContext.request.contextPath}/controller?command=publication_delete"

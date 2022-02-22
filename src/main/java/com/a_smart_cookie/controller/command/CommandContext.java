@@ -1,9 +1,6 @@
 package com.a_smart_cookie.controller.command;
 
-import com.a_smart_cookie.controller.command.admin.ChangeUserStatusCommand;
-import com.a_smart_cookie.controller.command.admin.PublicationDeleteCommand;
-import com.a_smart_cookie.controller.command.admin.PublicationsManagementCommand;
-import com.a_smart_cookie.controller.command.admin.UsersCommand;
+import com.a_smart_cookie.controller.command.admin.*;
 import com.a_smart_cookie.controller.command.common.LogoutCommand;
 import com.a_smart_cookie.controller.command.guest.LoginCommand;
 import com.a_smart_cookie.controller.command.guest.RegistrationCommand;
@@ -47,6 +44,7 @@ public final class CommandContext {
 		commandMap.put("change_user_status", new ChangeUserStatusCommand());
 		commandMap.put("publications", new PublicationsManagementCommand());
 		commandMap.put("publication_delete", new PublicationDeleteCommand());
+		commandMap.put("publication_edit_view", new PublicationEditViewCommand());
 
 		LOG.debug("Command context was successfully initialized");
 		LOG.trace("Number of commands --> " + commandMap.size());
