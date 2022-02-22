@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/locale.jspf" %>
-<%@ page import="com.a_smart_cookie.util.validation.ValidationPattern" %>
+<%@ page import="com.a_smart_cookie.util.validation.UserValidationPattern" %>
 
 <html>
 
@@ -28,7 +28,7 @@
 							name="email"
 							id="email"
 							required
-							pattern="${ValidationPattern.EMAIL.pattern}"
+							pattern="${UserValidationPattern.EMAIL.pattern}"
 							title="<fmt:message key="validation.email" />"
 							<c:choose>
 
@@ -56,7 +56,7 @@
 							name="password"
 							id="password"
 							required
-							pattern="${ValidationPattern.PASSWORD.pattern}"
+							pattern="${UserValidationPattern.PASSWORD.pattern}"
 							title="<fmt:message key="validation.password" />"
 					>
 					<c:if test="${sessionScope.isValidPassword != null && !sessionScope.isValidPassword}">

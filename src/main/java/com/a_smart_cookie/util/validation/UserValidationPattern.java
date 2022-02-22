@@ -4,7 +4,7 @@ package com.a_smart_cookie.util.validation;
  * Holds validation patterns.
  *
  */
-public enum ValidationPattern {
+public enum UserValidationPattern {
 
 	NAME("[A-Z][a-z]{1,49}"),
 	SURNAME("[A-Z][a-z]{1,49}"),
@@ -13,7 +13,7 @@ public enum ValidationPattern {
 
 	private final String pattern;
 
-	ValidationPattern(String pattern) {
+	UserValidationPattern(String pattern) {
 		this.pattern = pattern;
 	}
 
