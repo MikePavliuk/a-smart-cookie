@@ -84,6 +84,8 @@ public class MysqlPublicationDao extends PublicationDao {
 		}
 	}
 
+
+
 	@Override
 	public Optional<Publication> getPublicationWithoutInfoById(int id) throws DaoException {
 		LOG.debug("Method starts");
@@ -139,6 +141,61 @@ public class MysqlPublicationDao extends PublicationDao {
 		} catch (SQLException e) {
 			LOG.error("Can't get publication by id " + publicationId + " in " + language, e);
 			throw new DaoException("Can't get publication by id " + publicationId + " in " + language, e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public List<Publication> getPublicationsWithLimitByLanguage(int offset, int numberOfItems, Language language) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.GET_PUBLICATIONS_WITH_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE.getQuery());
+			pstmt.setString(1, language.name().toLowerCase());
+			pstmt.setInt(2, offset);
+			pstmt.setInt(3, numberOfItems);
+
+			rs = pstmt.executeQuery();
+
+			LOG.trace(pstmt);
+
+			LOG.trace("Finished with found publications");
+			return extractPublications(rs);
+
+		} catch (SQLException e) {
+			LOG.error("Can't get publications", e);
+			throw new DaoException("Can't get publications", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int getTotalNumberOfPublications() throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.GET_TOTAL_NUMBER_OF_PUBLICATIONS.getQuery());
+			rs = pstmt.executeQuery();
+
+			LOG.debug("Finished method");
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get number of publications", e);
+			throw new DaoException("Can't get number of publications", e);
 		} finally {
 			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);

@@ -7,14 +7,17 @@ import com.a_smart_cookie.dao.PublicationDao;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
+import com.a_smart_cookie.entity.Language;
+import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
 /**
  * Serves publication related entities and uses Daos and EntityTransaction for that purpose.
- *
  */
 public class PublicationServiceImpl implements PublicationService {
 
@@ -22,7 +25,7 @@ public class PublicationServiceImpl implements PublicationService {
 
 	@Override
 	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) {
-		LOG.debug("PublicationServiceImpl starts finding publications by filter parameters");
+		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
 		PublicationsWithAllUsedGenres publicationsAndGenres = new PublicationsWithAllUsedGenres();
@@ -37,7 +40,7 @@ public class PublicationServiceImpl implements PublicationService {
 			publicationsAndGenres.setGenres(genreDao.findAllUsedInPublicationsGenres());
 
 			transaction.commit();
-			LOG.debug("PublicationServiceImpl finished finding publications by filter parameters");
+			LOG.debug("Method finished");
 			return publicationsAndGenres;
 		} catch (DaoException e) {
 			transaction.rollback();
@@ -50,18 +53,62 @@ public class PublicationServiceImpl implements PublicationService {
 
 	@Override
 	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) {
-		LOG.debug("PublicationServiceImpl starts getting total number of requested rows by parameters");
+		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
 		try {
 			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
 			transaction.init(publicationDao);
 
-			LOG.debug("PublicationServiceImpl finished getting total number of requested rows by parameters");
+			LOG.debug("Method finished");
 			return publicationDao.getTotalNumberOfRequestedQueryRows(countRowsParameters);
 		} catch (DaoException e) {
 			LOG.error("Can't get number requested publications with " + countRowsParameters, e);
 			throw new ServiceException("Can't get number requested publications with " + countRowsParameters, e);
+		} finally {
+			transaction.end();
+		}
+	}
+
+	@Override
+	public List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language) {
+		LOG.debug("Starts method");
+
+		EntityTransaction transaction = new EntityTransaction();
+
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+
+			transaction.init(publicationDao);
+
+			return publicationDao.getPublicationsWithLimitByLanguage(
+					itemsPerPage * (requestedPage - 1),
+					itemsPerPage,
+					language
+			);
+
+		} catch (DaoException e) {
+			LOG.error("Can't get publications", e);
+			throw new ServiceException("Can't get publications", e);
+		} finally {
+			transaction.end();
+		}
+	}
+
+	@Override
+	public int getTotalNumberOfPublications() {
+		LOG.debug("Method starts");
+
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+
+			LOG.debug("Method finished");
+			return publicationDao.getTotalNumberOfPublications();
+		} catch (DaoException e) {
+			LOG.error("Can't get number of publications", e);
+			throw new ServiceException("Can't get number of publications", e);
 		} finally {
 			transaction.end();
 		}

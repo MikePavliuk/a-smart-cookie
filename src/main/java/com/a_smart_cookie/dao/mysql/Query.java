@@ -56,6 +56,23 @@ public final class Query {
 						"WHERE publication.id = ?;"
 		),
 
+		GET_TOTAL_NUMBER_OF_PUBLICATIONS(
+				"SELECT count(*) as count " +
+						"FROM a_smart_cookie.publication;"
+		),
+
+		GET_PUBLICATIONS_WITH_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE(
+				"SELECT publication.id, genre.name, publication.price_per_month, " +
+						"publication_info.title, publication_info.description " +
+						"FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"JOIN a_smart_cookie.genre " +
+						"ON publication.genre_id = genre.id " +
+						"WHERE publication_info.language_id = (SELECT id FROM a_smart_cookie.language WHERE name = ?) " +
+						"LIMIT ?, ?;"
+		),
+
 		GET_PUBLICATION_WITH_INFO_BY_ID_AND_LANGUAGE(
 				"SELECT publication.id, genre.name, publication.price_per_month, " +
 						"publication_info.title, publication_info.description " +

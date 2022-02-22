@@ -48,4 +48,21 @@ public abstract class PublicationDao extends AbstractDao {
 	 */
 	public abstract Optional<Publication> getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException;
 
+	/**
+	 * Gets limited number of publications without info.
+	 *
+	 * @param offset Offset number.
+	 * @param numberOfItems Requested number of publications.
+	 * @param language Requested translate.
+	 * @return List of subscribers.
+	 */
+	public abstract List<Publication> getPublicationsWithLimitByLanguage(int offset, int numberOfItems, Language language) throws DaoException;
+
+	/**
+	 * Method for getting number of publications.
+	 *
+	 * @return Number of founded publications.
+	 */
+	public abstract int getTotalNumberOfPublications() throws DaoException;
+
 }
