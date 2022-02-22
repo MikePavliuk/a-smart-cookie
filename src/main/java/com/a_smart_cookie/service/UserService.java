@@ -39,12 +39,21 @@ public interface UserService {
 	User createNewUser(UserSignUpDto userSignUpDto);
 
 	/**
-	 * Gets all dto subscribers for management.
+	 * Gets all limited number of subscribers for management.
 	 *
 	 * @return Dto UserForStatusManagement
 	 * @see UserForStatusManagement
+	 * @param requestedPage Page to be got.
+	 * @param itemsPerPage Items per page.
 	 */
-	List<UserForStatusManagement> getAllSubscribers();
+	List<UserForStatusManagement> getPaginatedSubscribers(int requestedPage, int itemsPerPage);
+
+	/**
+	 * Method for getting number of subscribers.
+	 *
+	 * @return Number of founded subscribers.
+	 */
+	int getTotalNumberOfSubscribers();
 
 	/**
 	 * Changes user status.

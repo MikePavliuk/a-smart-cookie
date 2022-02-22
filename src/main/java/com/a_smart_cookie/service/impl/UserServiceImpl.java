@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserForStatusManagement> getAllSubscribers() {
+	public List<UserForStatusManagement> getPaginatedSubscribers(int requestedPage, int itemsPerPage) {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
 
 			transaction.initTransaction(userDao, subscriptionDao);
 
-			List<User> subscribers = userDao.getAllSubscribers();
+			List<User> subscribers = userDao.getSubscribersWithLimit(itemsPerPage * (requestedPage-1), itemsPerPage);
 
 			List<UserForStatusManagement> usersForStatusManagement = new ArrayList<>();
 
@@ -156,6 +156,25 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException("Can't get all users for status management", e);
 		} finally {
 			transaction.endTransaction();
+		}
+	}
+
+	@Override
+	public int getTotalNumberOfSubscribers() {
+		LOG.debug("Method starts");
+
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			UserDao userDao = DaoFactory.getInstance().getUserDao();
+			transaction.init(userDao);
+
+			LOG.debug("Finished method");
+			return userDao.getTotalNumberOfSubscribers();
+		} catch (DaoException e) {
+			LOG.error("Can't get number of subscribers", e);
+			throw new ServiceException("Can't get number of subscribers", e);
+		} finally {
+			transaction.end();
 		}
 	}
 

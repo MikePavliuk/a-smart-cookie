@@ -7,6 +7,7 @@ import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dto.admin.UserForStatusManagement;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
+import com.a_smart_cookie.util.pagination.PaginationHandler;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,18 +24,27 @@ public class UsersCommand extends Command {
 
 	private static final Logger LOG = Logger.getLogger(UsersCommand.class);
 
+	private static final int ITEMS_PER_PAGE = 15;
+
 	@Override
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
 		UserService userService = ServiceFactory.getInstance().getUserService();
 
-		List<UserForStatusManagement> usersForManagement = userService.getAllSubscribers();
+		int totalNumberOfSubscribers = userService.getTotalNumberOfSubscribers();
+		int numberOfPages = PaginationHandler.getRequestedNumberOfPages(ITEMS_PER_PAGE, totalNumberOfSubscribers);
+		int currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
+
+		List<UserForStatusManagement> usersForManagement = userService.getPaginatedSubscribers(currentPage, ITEMS_PER_PAGE);
 		LOG.trace("usersForManagement --> " + usersForManagement);
 
 		request.setAttribute("usersForManagement", usersForManagement);
 
+		PaginationHandler.setPaginationAttributes(request, numberOfPages, currentPage, ITEMS_PER_PAGE);
+
 		LOG.debug("Command finished");
 		return new HttpPath(WebPath.Page.ADMIN_USERS, HttpHandlerType.FORWARD);
 	}
+
 }

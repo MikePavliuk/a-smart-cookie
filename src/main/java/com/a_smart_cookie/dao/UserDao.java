@@ -39,11 +39,11 @@ public abstract class UserDao extends AbstractDao {
 	public abstract Optional<User> insertUser(User user) throws DaoException;
 
 	/**
-	 * Gets all subscribers.
+	 * Gets limited number of subscribers.
 	 *
 	 * @return List of subscribers.
 	 */
-	public abstract List<User> getAllSubscribers() throws DaoException;
+	public abstract List<User> getSubscribersWithLimit(int offset, int itemsPerPage) throws DaoException;
 
 	/**
 	 * Change user status.
@@ -54,4 +54,10 @@ public abstract class UserDao extends AbstractDao {
 	 */
 	public abstract boolean changeUserStatus(int userId, String statusName) throws DaoException;
 
+	/**
+	 * Method for getting number of subscribers.
+	 *
+	 * @return Number of founded subscribers.
+	 */
+	public abstract int getTotalNumberOfSubscribers() throws DaoException;
 }

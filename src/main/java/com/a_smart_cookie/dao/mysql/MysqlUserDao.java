@@ -113,23 +113,26 @@ public class MysqlUserDao extends UserDao {
 	}
 
 	@Override
-	public List<User> getAllSubscribers() throws DaoException {
+	public List<User> getSubscribersWithLimit(int offset, int itemsPerPage) throws DaoException {
 		LOG.debug("Starts method");
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = connection.prepareStatement(Query.User.GET_ALL_SUBSCRIBERS.getQuery());
+			pstmt = connection.prepareStatement(Query.User.GET_SUBSCRIBERS_WITH_OFFSET_AND_ITEMS_PER_PAGE.getQuery());
+			pstmt.setInt(1, offset);
+			pstmt.setInt(2, itemsPerPage);
+
 			rs = pstmt.executeQuery();
 
 			LOG.trace(pstmt);
 
-			LOG.trace("Finished getting user with result --> Found user");
+			LOG.trace("Finished with found users");
 			return extractUsers(rs);
 
 		} catch (SQLException e) {
-			LOG.error("Can't get all subscribers", e);
-			throw new DaoException("Can't get all subscribers", e);
+			LOG.error("Can't get subscribers", e);
+			throw new DaoException("Can't get subscribers", e);
 		} finally {
 			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);
@@ -154,6 +157,33 @@ public class MysqlUserDao extends UserDao {
 			LOG.error("Can't insert user", e);
 			throw new DaoException("Can't insert user", e);
 		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int getTotalNumberOfSubscribers() throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(Query.User.GET_NUMBER_OF_SUBSCRIBERS.getQuery());
+			rs = pstmt.executeQuery();
+
+			LOG.debug("Finished method");
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get number of subscriptions", e);
+			throw new DaoException("Can't get number of subscriptions", e);
+		} finally {
+			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);
 		}
 	}

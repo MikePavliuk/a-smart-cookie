@@ -64,6 +64,9 @@
 					</c:forEach>
 					</tbody>
 				</table>
+
+				<%@ include file="/WEB-INF/jspf/pagination.jspf" %>
+
 			</c:when>
 			<c:otherwise>
 				<h4 class="text-center">
