@@ -117,7 +117,7 @@ public class MysqlPublicationDao extends PublicationDao {
 	}
 
 	@Override
-	public Optional<Publication> getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException {
+	public Publication getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException {
 		LOG.debug("Method starts");
 
 		PreparedStatement pstmt = null;
@@ -131,12 +131,11 @@ public class MysqlPublicationDao extends PublicationDao {
 			LOG.trace(pstmt);
 
 			if (rs.next()) {
-				LOG.trace("Finished --> Found publication");
-				return Optional.of(extractPublicationWithFullInfo(rs));
+				return extractPublicationWithFullInfo(rs);
 			}
 
-			LOG.trace("Finished --> Didn't find publication");
-			return Optional.empty();
+			LOG.error("Finished --> Didn't find publication");
+			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
 			LOG.error("Can't get publication by id " + publicationId + " in " + language, e);
