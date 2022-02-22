@@ -111,14 +111,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 			List<SubscriptionWithPublicationInfo> result = new ArrayList<>();
 
-			Optional<Publication> publication;
 			for (Subscription subscription : user.getSubscriptions()) {
-				publication = publicationDao.getPublicationWithInfoByIdAndLanguage(subscription.getPublicationId(), language);
-
-				publication.ifPresent(value -> result.add(new SubscriptionWithPublicationInfo(
-						value,
+				result.add(new SubscriptionWithPublicationInfo(
+						publicationDao.getPublicationWithInfoByIdAndLanguage(subscription.getPublicationId(), language),
 						subscription.getStartDate()
-				)));
+				));
 			}
 
 			LOG.debug("Method finished");
