@@ -56,12 +56,17 @@ public final class Query {
 						"WHERE publication.id = ?;"
 		),
 
+		DELETE_BY_ID(
+				"DELETE FROM a_smart_cookie.publication " +
+						"WHERE publication.id=?;"
+		),
+
 		GET_TOTAL_NUMBER_OF_PUBLICATIONS(
 				"SELECT count(*) as count " +
 						"FROM a_smart_cookie.publication;"
 		),
 
-		GET_PUBLICATIONS_WITH_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE(
+		GET_PUBLICATIONS_WITH_INFO_AND_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE(
 				"SELECT publication.id, genre.name, publication.price_per_month, " +
 						"publication_info.title, publication_info.description " +
 						"FROM a_smart_cookie.publication " +

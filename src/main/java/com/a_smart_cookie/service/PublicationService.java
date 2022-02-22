@@ -47,4 +47,11 @@ public interface PublicationService {
 	 */
 	int getTotalNumberOfPublications();
 
+	/**
+	 * Deletes publication by id.
+	 *
+	 * @param publicationId Id of publication.
+	 */
+	void deletePublication(int publicationId);
+
 }

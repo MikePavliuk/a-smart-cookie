@@ -154,7 +154,7 @@ public class MysqlPublicationDao extends PublicationDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = connection.prepareStatement(Query.Publication.GET_PUBLICATIONS_WITH_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE.getQuery());
+			pstmt = connection.prepareStatement(Query.Publication.GET_PUBLICATIONS_WITH_INFO_AND_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE.getQuery());
 			pstmt.setString(1, language.name().toLowerCase());
 			pstmt.setInt(2, offset);
 			pstmt.setInt(3, numberOfItems);
@@ -198,6 +198,27 @@ public class MysqlPublicationDao extends PublicationDao {
 			throw new DaoException("Can't get number of publications", e);
 		} finally {
 			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean deletePublicationById(int publicationId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.DELETE_BY_ID.getQuery());
+			pstmt.setInt(1, publicationId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't delete publication", e);
+			throw new DaoException("Can't delete publication", e);
+		} finally {
 			ResourceReleaser.close(pstmt);
 		}
 	}

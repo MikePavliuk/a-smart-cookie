@@ -65,4 +65,12 @@ public abstract class PublicationDao extends AbstractDao {
 	 */
 	public abstract int getTotalNumberOfPublications() throws DaoException;
 
+	/**
+	 * Deletes publication by its id.
+	 *
+	 * @param publicationId Id of publication.
+	 * @return Whether operation was correctly performed.
+	 */
+	public abstract boolean deletePublicationById(int publicationId) throws DaoException;
+
 }

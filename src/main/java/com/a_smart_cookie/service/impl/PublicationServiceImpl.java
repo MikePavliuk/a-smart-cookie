@@ -113,4 +113,27 @@ public class PublicationServiceImpl implements PublicationService {
 			transaction.end();
 		}
 	}
+
+	@Override
+	public void deletePublication(int publicationId) {
+		LOG.debug("Method starts");
+
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+
+			LOG.debug("Method finished");
+
+			if (!publicationDao.deletePublicationById(publicationId)) {
+				throw new ServiceException("Result set is empty");
+			}
+
+		} catch (DaoException e) {
+			LOG.error("Can't delete publication by id '" + publicationId + "'", e);
+			throw new ServiceException("Can't delete publication by id '" + publicationId + "'", e);
+		} finally {
+			transaction.end();
+		}
+	}
 }
