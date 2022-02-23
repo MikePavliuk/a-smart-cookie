@@ -11,6 +11,7 @@ import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -218,6 +219,53 @@ public class MysqlPublicationDao extends PublicationDao {
 		} catch (SQLException e) {
 			LOG.error("Can't delete publication", e);
 			throw new DaoException("Can't delete publication", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean updatePublicationGenreAndPricePerMonthById(Genre genre, BigDecimal pricePerMonth, int publicationId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.UPDATE_PUBLICATION_GENRE_AND_PRICE_PER_MONTH_BY_ID.getQuery());
+			pstmt.setString(1, genre.name().toLowerCase());
+			pstmt.setBigDecimal(2, pricePerMonth);
+			pstmt.setInt(3, publicationId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't update publication", e);
+			throw new DaoException("Can't update publication", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean updatePublicationInfoByLanguage(String title, String description, int publicationId, Language language) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.UPDATE_PUBLICATION_INFO_BY_ID_AND_LANGUAGE.getQuery());
+			pstmt.setString(1, title);
+			pstmt.setString(2,description);
+			pstmt.setInt(3, publicationId);
+			pstmt.setString(4, language.name().toLowerCase());
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't update publication info", e);
+			throw new DaoException("Can't update publication info", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
 		}

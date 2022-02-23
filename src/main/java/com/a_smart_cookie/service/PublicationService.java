@@ -1,5 +1,6 @@
 package com.a_smart_cookie.service;
 
+import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
@@ -62,5 +63,12 @@ public interface PublicationService {
 	 * @return Map with language key and publication translated value.
 	 */
 	Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId);
+
+	/**
+	 * Saving updates on publication.
+	 *
+	 * @param publicationDto All needed info for updating publication.
+	 */
+	void editPublicationWithInfo(PublicationDto publicationDto);
 
 }

@@ -4,6 +4,7 @@ import com.a_smart_cookie.dao.DaoFactory;
 import com.a_smart_cookie.dao.EntityTransaction;
 import com.a_smart_cookie.dao.GenreDao;
 import com.a_smart_cookie.dao.PublicationDao;
+import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
@@ -143,25 +144,64 @@ public class PublicationServiceImpl implements PublicationService {
 	public Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) {
 		LOG.debug("Method starts");
 
+			EntityTransaction transaction = new EntityTransaction();
+			try {
+				PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+				transaction.init(publicationDao);
+
+				Map<Language, Publication> publicationMap = new HashMap<>();
+
+				for (Language language : Language.values()) {
+					publicationMap.put(language, publicationDao.getPublicationWithInfoByIdAndLanguage(publicationId, language));
+					LOG.trace("language --> " + language.getAbbr() + ", publication -->" + publicationMap.get(language));
+				}
+				LOG.debug("Method finished");
+				return publicationMap;
+
+			} catch (DaoException e) {
+				LOG.error("Can't get publication by id '" + publicationId + "'", e);
+				throw new ServiceException("Can't get publication by id '" + publicationId + "'", e);
+			} finally {
+				transaction.end();
+		}
+	}
+
+	@Override
+	public void editPublicationWithInfo(PublicationDto publicationDto) {
+		LOG.debug("Method starts");
+
 		EntityTransaction transaction = new EntityTransaction();
+
 		try {
 			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
-			transaction.init(publicationDao);
 
-			Map<Language, Publication> publicationMap = new HashMap<>();
+			transaction.initTransaction(publicationDao);
+
+			publicationDao.updatePublicationGenreAndPricePerMonthById(
+					publicationDto.getGenre(),
+					publicationDto.getPricePerMonth(),
+					publicationDto.getId()
+			);
 
 			for (Language language : Language.values()) {
-				publicationMap.put(language, publicationDao.getPublicationWithInfoByIdAndLanguage(publicationId, language));
-				LOG.trace("language --> " + language.getAbbr() + ", publication -->" + publicationMap.get(language));
+				publicationDao.updatePublicationInfoByLanguage(
+						publicationDto.getTitles().get(language),
+						publicationDto.getDescriptions().get(language),
+						publicationDto.getId(),
+						language
+				);
 			}
+
+			transaction.commit();
+
 			LOG.debug("Method finished");
-			return publicationMap;
 
 		} catch (DaoException e) {
-			LOG.error("Can't get publication by id '" + publicationId + "'", e);
-			throw new ServiceException("Can't get publication by id '" + publicationId + "'", e);
+			transaction.rollback();
+			LOG.error("Can't edit publication", e);
+			throw new ServiceException("Can't edit publication", e);
 		} finally {
-			transaction.end();
+			transaction.endTransaction();
 		}
 	}
 

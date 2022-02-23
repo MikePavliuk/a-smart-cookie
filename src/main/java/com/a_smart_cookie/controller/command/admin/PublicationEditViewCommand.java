@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -43,8 +42,6 @@ public class PublicationEditViewCommand extends Command {
 		request.setAttribute("genre", publicationMap.entrySet().iterator().next().getValue().getGenre());
 		request.setAttribute("pricePerMonth", publicationMap.entrySet().iterator().next().getValue().getPricePerMonth());
 		request.setAttribute("id", publicationMap.entrySet().iterator().next().getValue().getId());
-
-		HttpSession session = request.getSession();
 
 		LOG.debug("Command finished");
 		return new HttpPath(WebPath.Page.ADMIN_PUBLICATION_EDIT, HttpHandlerType.FORWARD);

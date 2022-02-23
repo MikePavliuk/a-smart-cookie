@@ -2,10 +2,12 @@ package com.a_smart_cookie.dao;
 
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,5 +74,28 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @return Whether operation was correctly performed.
 	 */
 	public abstract boolean deletePublicationById(int publicationId) throws DaoException;
+
+	/**
+	 * Updates publication entity record (genre and price per month).
+	 *
+	 * @param genre Updated genre.
+	 * @param pricePerMonth Updated price per month.
+	 * @param publicationId Id of publication.
+	 * @return Whether updating was performed.
+	 * @throws DaoException When exception occurred on jdbc.
+	 */
+	public abstract boolean updatePublicationGenreAndPricePerMonthById(Genre genre, BigDecimal pricePerMonth, int publicationId) throws DaoException;
+
+
+	/**
+	 * Updated publication info by language.
+	 *
+	 * @param title Updated title.
+	 * @param description Updated description.
+	 * @param publicationId Id of publication to be updated.
+	 * @param language Translation of publication to be updated.
+	 * @return Whether updating was performed.
+	 */
+	public abstract boolean updatePublicationInfoByLanguage(String title, String description, int publicationId, Language language) throws DaoException;
 
 }

@@ -8,6 +8,8 @@ import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
+import com.a_smart_cookie.service.PublicationService;
+import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.validation.publication.PublicationValidator;
 import org.apache.log4j.Logger;
 
@@ -64,6 +66,9 @@ public class SaveEditPublicationChangesCommand extends Command {
 		if (notValidHttpPath != null) return notValidHttpPath;
 
 		LOG.trace("Publication is valid");
+
+		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
+		publicationService.editPublicationWithInfo(publicationDto);
 
 		LOG.debug("Command finished");
 		return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.FORWARD);
