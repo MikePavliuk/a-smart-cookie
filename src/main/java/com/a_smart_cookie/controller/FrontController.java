@@ -42,7 +42,7 @@ public class FrontController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		LOG.debug("Front controller doPost starts");
 		HttpPath httpPath = processRequest(req, resp);
 		LOG.debug("Front controller doPost finished, now sendRedirect to --> " + httpPath.getPath());
