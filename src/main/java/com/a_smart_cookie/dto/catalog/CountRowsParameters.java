@@ -1,7 +1,7 @@
 package com.a_smart_cookie.dto.catalog;
 
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
-import com.a_smart_cookie.entity.Publication;
 
 /**
  * Data transfer object that used as holder of filter params to get count of requested rows by that params.
@@ -9,10 +9,10 @@ import com.a_smart_cookie.entity.Publication;
  */
 public class CountRowsParameters {
 	private final Language language;
-	private final Publication.Genre genre;
+	private final Genre genre;
 	private final String searchedTitle;
 
-	public CountRowsParameters(Language language, Publication.Genre genre, String searchedTitle) {
+	public CountRowsParameters(Language language, Genre genre, String searchedTitle) {
 		this.language = language;
 		this.genre = genre;
 		this.searchedTitle = searchedTitle;
@@ -22,7 +22,7 @@ public class CountRowsParameters {
 		return language;
 	}
 
-	public Publication.Genre getGenre() {
+	public Genre getGenre() {
 		return genre;
 	}
 

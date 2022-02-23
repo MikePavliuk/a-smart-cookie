@@ -99,7 +99,7 @@ public class LoginCommand extends Command {
 			session.setAttribute("isValidPassword", validationResult.get(EntityColumn.User.PASSWORD.getName()));
 
 			LOG.debug("Command finished with not valid user");
-			return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 		}
 		return null;
 	}

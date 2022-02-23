@@ -45,6 +45,7 @@ public final class CommandContext {
 		commandMap.put("publications", new PublicationsManagementCommand());
 		commandMap.put("publication_delete", new PublicationDeleteCommand());
 		commandMap.put("publication_edit_view", new PublicationEditViewCommand());
+		commandMap.put("save_edit_publication_changes", new SaveEditPublicationChangesCommand());
 
 		LOG.debug("Command context was successfully initialized");
 		LOG.trace("Number of commands --> " + commandMap.size());

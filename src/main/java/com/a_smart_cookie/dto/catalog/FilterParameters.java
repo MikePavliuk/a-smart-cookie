@@ -1,7 +1,7 @@
 package com.a_smart_cookie.dto.catalog;
 
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
-import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.util.sorting.SortingDirection;
 import com.a_smart_cookie.util.sorting.SortingParameter;
 
@@ -15,7 +15,7 @@ public class FilterParameters {
 	private final Language language;
 	private final SortingDirection sortingDirection;
 	private final SortingParameter sortingParameter;
-	private final Publication.Genre specificGenre;
+	private final Genre specificGenre;
 	private final String searchedTitle;
 
 	public FilterParameters(Integer itemsPerPage,
@@ -23,7 +23,7 @@ public class FilterParameters {
 							Language language,
 							SortingDirection sortingDirection,
 							SortingParameter sortingParameter,
-							Publication.Genre specificGenre,
+							Genre specificGenre,
 							String searchedTitle) {
 		this.itemsPerPage = itemsPerPage;
 		this.paginationOffset = paginationOffset;
@@ -54,7 +54,7 @@ public class FilterParameters {
 		return sortingParameter;
 	}
 
-	public Publication.Genre getSpecificGenre() {
+	public Genre getSpecificGenre() {
 		return specificGenre;
 	}
 

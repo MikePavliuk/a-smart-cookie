@@ -3,7 +3,7 @@ package com.a_smart_cookie.dao.mysql;
 import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dao.GenreDao;
 import com.a_smart_cookie.dao.ResourceReleaser;
-import com.a_smart_cookie.entity.Publication;
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.exception.DaoException;
 import org.apache.log4j.Logger;
 
@@ -22,7 +22,7 @@ public class MysqlGenreDao extends GenreDao {
 	private static final Logger LOG = Logger.getLogger(MysqlGenreDao.class);
 
 	@Override
-	public List<Publication.Genre> findAllUsedInPublicationsGenres() throws DaoException {
+	public List<Genre> findAllUsedInPublicationsGenres() throws DaoException {
 		LOG.debug("MysqlGenreDao starts finding all used in publications genres");
 
 		PreparedStatement pstmt = null;
@@ -49,8 +49,8 @@ public class MysqlGenreDao extends GenreDao {
 	 * @param rs External ResultSet
 	 * @return List of genres
 	 */
-	private List<Publication.Genre> extractGenres(ResultSet rs) throws SQLException {
-		List<Publication.Genre> genres = new ArrayList<>();
+	private List<Genre> extractGenres(ResultSet rs) throws SQLException {
+		List<Genre> genres = new ArrayList<>();
 
 		while (rs.next()) {
 			genres.add(extractGenre(rs));
@@ -64,8 +64,8 @@ public class MysqlGenreDao extends GenreDao {
 	 * @param rs External ResultSet
 	 * @return Genre enum value
 	 */
-	private Publication.Genre extractGenre(ResultSet rs) throws SQLException {
-		return Publication.Genre.fromString(rs.getString(EntityColumn.Genre.NAME.getName()));
+	private Genre extractGenre(ResultSet rs) throws SQLException {
+		return Genre.fromString(rs.getString(EntityColumn.Genre.NAME.getName()));
 	}
 
 }

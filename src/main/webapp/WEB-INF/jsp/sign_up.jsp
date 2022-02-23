@@ -29,14 +29,14 @@
 							id="firstName"
 							required
 							pattern="${UserValidationPattern.NAME.pattern}"
-							title="<fmt:message key="validation.first_name" />"
+							title="<fmt:message key="validation.user.first_name" />"
 					<c:if test="${sessionScope.oldFirstName != null}">
 							value="${sessionScope.oldFirstName}"
 					</c:if>
 					>
 					<c:if test="${sessionScope.isValidName != null && !sessionScope.isValidName}">
 					<span class="error text-danger">
-						<fmt:message key="validation.first_name"/>
+						<fmt:message key="validation.user.first_name"/>
 					</span>
 					</c:if>
 				</div>
@@ -49,14 +49,14 @@
 							id="lastName"
 							required
 							pattern="${UserValidationPattern.SURNAME.pattern}"
-							title="<fmt:message key="validation.last_name" />"
+							title="<fmt:message key="validation.user.last_name" />"
 					<c:if test="${sessionScope.oldLastName != null}">
 							value="${sessionScope.oldLastName}"
 					</c:if>
 					>
 					<c:if test="${sessionScope.isValidSurname != null && !sessionScope.isValidSurname}">
 					<span class="error text-danger">
-						<fmt:message key="validation.last_name"/>
+						<fmt:message key="validation.user.last_name"/>
 					</span>
 					</c:if>
 				</div>
@@ -69,19 +69,19 @@
 							id="email"
 							required
 							pattern="${UserValidationPattern.EMAIL.pattern}"
-							title="<fmt:message key="validation.email" />"
+							title="<fmt:message key="validation.user.email" />"
 					<c:if test="${sessionScope.oldSignUpEmail != null}">
 							value="${sessionScope.oldSignUpEmail}"
 					</c:if>
 					>
 					<c:if test="${sessionScope.isValidEmail != null && !sessionScope.isValidEmail}">
 					<span class="error text-danger">
-						<fmt:message key="validation.email"/>
+						<fmt:message key="validation.user.email"/>
 					</span>
 					</c:if>
 					<c:if test="${sessionScope.emailAlreadyExists != null && sessionScope.emailAlreadyExists}">
 					<span class="error text-danger">
-						<fmt:message key="validation.emailAlreadyExists"/>
+						<fmt:message key="validation.user.emailAlreadyExists"/>
 					</span>
 					</c:if>
 				</div>
@@ -94,11 +94,11 @@
 							id="password"
 							required
 							pattern="${UserValidationPattern.PASSWORD.pattern}"
-							title="<fmt:message key="validation.password" />"
+							title="<fmt:message key="validation.user.password" />"
 					>
 					<c:if test="${sessionScope.isValidPassword != null && !sessionScope.isValidPassword}">
 					<span class="error text-danger">
-						<fmt:message key="validation.password"/>
+						<fmt:message key="validation.user.password"/>
 					</span>
 					</c:if>
 				</div>

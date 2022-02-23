@@ -78,7 +78,7 @@ public class RegistrationCommand extends Command {
 			addOldFieldValuesToSession(request, session);
 
 			LOG.debug("Command finished with not valid user");
-			return new HttpPath(WebPath.Page.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
+			return new HttpPath(WebPath.Command.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
 		}
 		return null;
 	}

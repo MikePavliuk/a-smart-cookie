@@ -14,7 +14,9 @@ import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Serves publication related entities and uses Daos and EntityTransaction for that purpose.
@@ -136,4 +138,31 @@ public class PublicationServiceImpl implements PublicationService {
 			transaction.end();
 		}
 	}
+
+	@Override
+	public Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) {
+		LOG.debug("Method starts");
+
+		EntityTransaction transaction = new EntityTransaction();
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			transaction.init(publicationDao);
+
+			Map<Language, Publication> publicationMap = new HashMap<>();
+
+			for (Language language : Language.values()) {
+				publicationMap.put(language, publicationDao.getPublicationWithInfoByIdAndLanguage(publicationId, language));
+				LOG.trace("language --> " + language.getAbbr() + ", publication -->" + publicationMap.get(language));
+			}
+			LOG.debug("Method finished");
+			return publicationMap;
+
+		} catch (DaoException e) {
+			LOG.error("Can't get publication by id '" + publicationId + "'", e);
+			throw new ServiceException("Can't get publication by id '" + publicationId + "'", e);
+		} finally {
+			transaction.end();
+		}
+	}
+
 }

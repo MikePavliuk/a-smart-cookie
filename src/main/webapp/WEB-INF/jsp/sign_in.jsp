@@ -29,7 +29,7 @@
 							id="email"
 							required
 							pattern="${UserValidationPattern.EMAIL.pattern}"
-							title="<fmt:message key="validation.email" />"
+							title="<fmt:message key="validation.user.email" />"
 							<c:choose>
 
 								<c:when test="${sessionScope.oldLoginEmail != null}">
@@ -44,7 +44,7 @@
 					>
 					<c:if test="${sessionScope.isValidEmail != null && !sessionScope.isValidEmail}">
 					<span class="error text-danger">
-						<fmt:message key="validation.email"/>
+						<fmt:message key="validation.user.email"/>
 					</span>
 					</c:if>
 				</div>
@@ -57,11 +57,11 @@
 							id="password"
 							required
 							pattern="${UserValidationPattern.PASSWORD.pattern}"
-							title="<fmt:message key="validation.password" />"
+							title="<fmt:message key="validation.user.password" />"
 					>
 					<c:if test="${sessionScope.isValidPassword != null && !sessionScope.isValidPassword}">
 					<span class="error text-danger">
-						<fmt:message key="validation.password"/>
+						<fmt:message key="validation.user.password"/>
 					</span>
 					</c:if>
 				</div>

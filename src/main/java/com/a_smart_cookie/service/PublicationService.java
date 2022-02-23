@@ -7,6 +7,7 @@ import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for creating concrete representation of PublicationService.
@@ -53,5 +54,13 @@ public interface PublicationService {
 	 * @param publicationId Id of publication.
 	 */
 	void deletePublication(int publicationId);
+
+	/**
+	 * Gets publication by id translated into all languages.
+	 *
+	 * @param publicationId Id of publication.
+	 * @return Map with language key and publication translated value.
+	 */
+	Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId);
 
 }

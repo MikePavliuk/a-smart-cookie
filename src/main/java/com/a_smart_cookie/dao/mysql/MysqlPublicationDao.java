@@ -5,6 +5,7 @@ import com.a_smart_cookie.dao.PublicationDao;
 import com.a_smart_cookie.dao.ResourceReleaser;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
@@ -311,7 +312,7 @@ public class MysqlPublicationDao extends PublicationDao {
 	private Publication extractPublicationWithFullInfo(ResultSet rs) throws SQLException {
 		return new Publication.PublicationBuilder()
 				.withId(rs.getInt(EntityColumn.Publication.ID.getName()))
-				.withGenre(Publication.Genre.safeFromString(rs.getString(EntityColumn.Genre.NAME.getName())))
+				.withGenre(Genre.safeFromString(rs.getString(EntityColumn.Genre.NAME.getName())))
 				.withTitle(rs.getString(EntityColumn.PublicationInfo.TITLE.getName()))
 				.withDescription(rs.getString(EntityColumn.PublicationInfo.DESCRIPTION.getName()))
 				.withPricePerMonth(rs.getBigDecimal(EntityColumn.Publication.PRICE_PER_MONTH.getName()))

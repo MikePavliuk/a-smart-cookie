@@ -46,7 +46,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @param language Requested publication info language.
 	 * @return Optional of publication if publication was found, otherwise - of empty.
 	 */
-	public abstract Optional<Publication> getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException;
+	public abstract Publication getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException;
 
 	/**
 	 * Gets limited number of publications without info.
