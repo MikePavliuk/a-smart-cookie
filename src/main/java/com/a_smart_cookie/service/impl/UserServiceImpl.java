@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 			transaction.initTransaction(userDao, userDetailDao);
 
 			User user = UserMapper.convertFromDtoToEntity(userSignUpDto);
-			Optional<User> insertedUser = userDao.insertUser(user);
+			Optional<User> insertedUser = userDao.createUser(user);
 
 			if (insertedUser.isEmpty()) {
 				transaction.rollback();
