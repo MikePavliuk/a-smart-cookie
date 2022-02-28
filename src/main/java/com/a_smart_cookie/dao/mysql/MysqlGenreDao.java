@@ -23,7 +23,7 @@ public class MysqlGenreDao extends GenreDao {
 
 	@Override
 	public List<Genre> findAllUsedInPublicationsGenres() throws DaoException {
-		LOG.debug("MysqlGenreDao starts finding all used in publications genres");
+		LOG.debug("Method starts");
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -31,12 +31,42 @@ public class MysqlGenreDao extends GenreDao {
 			pstmt = connection.prepareStatement(Query.Genre.GET_ALL_DISTINCT_USED_IN_PUBLICATION_TABLE.getQuery());
 			rs = pstmt.executeQuery();
 
-			LOG.debug("MysqlGenreDao finished finding all used in publications genres");
+			LOG.debug("Method finished");
 			return extractGenres(rs);
 
 		} catch (SQLException e) {
 			LOG.error("Can't find used in publications genres", e);
 			throw new DaoException("Can't find used in publications genres", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int getGenreIdByName(String name) throws DaoException {
+		LOG.debug("Method starts");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Genre.GET_ID_BY_NAME.getQuery());
+			pstmt.setString(1, name);
+			rs = pstmt.executeQuery();
+
+			LOG.trace(pstmt);
+
+			if (rs.next()) {
+				LOG.debug("Method finished");
+				return rs.getInt(EntityColumn.Genre.ID.getName());
+			}
+
+			LOG.error("Result set is empty");
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get genre id", e);
+			throw new DaoException("Can't get genre id", e);
 		} finally {
 			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);

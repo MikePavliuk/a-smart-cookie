@@ -15,8 +15,10 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -266,6 +268,67 @@ public class MysqlPublicationDao extends PublicationDao {
 		} catch (SQLException e) {
 			LOG.error("Can't update publication info", e);
 			throw new DaoException("Can't update publication info", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int createPublication(int genre_id, BigDecimal pricePerMonth) throws DaoException {
+		LOG.debug("Method starts");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.CREATE_PUBLICATION.getQuery(), Statement.RETURN_GENERATED_KEYS);
+			pstmt.setInt(1, genre_id);
+			pstmt.setBigDecimal(2, pricePerMonth);
+
+			LOG.trace(pstmt);
+
+			if (pstmt.executeUpdate() > 0) {
+				rs = pstmt.getGeneratedKeys();
+				if (rs.next()) {
+					LOG.debug("Method finished");
+					return rs.getInt(1);
+				}
+			}
+			LOG.error("Result set is empty");
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't insert publication", e);
+			throw new DaoException("Can't insert publication", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean createPublicationInfos(int publicationId, Map<Integer, String> titles, Map<Integer, String> descriptions) throws DaoException {
+		LOG.debug("Method starts");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.CREATE_PUBLICATION_INFO.getQuery());
+
+			for (Map.Entry<Integer, String> entry : titles.entrySet()) {
+				pstmt.setInt(1, publicationId);
+				pstmt.setInt(2, entry.getKey());
+				pstmt.setString(3, entry.getValue());
+				pstmt.setString(4, descriptions.get(entry.getKey()));
+				pstmt.addBatch();
+			}
+
+			LOG.trace(pstmt);
+
+			LOG.debug("Method finished");
+			return pstmt.executeBatch().length == Language.values().length;
+
+		} catch (SQLException e) {
+			LOG.error("Can't insert publication info", e);
+			throw new DaoException("Can't insert publication info", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
 		}

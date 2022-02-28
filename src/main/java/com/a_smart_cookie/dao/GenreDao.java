@@ -18,4 +18,12 @@ public abstract class GenreDao extends AbstractDao {
 	 */
 	public abstract List<Genre> findAllUsedInPublicationsGenres() throws DaoException;
 
+	/**
+	 * Gets id of genre by name.
+	 *
+	 * @param name Name of genre to search.
+	 * @return Id of genre.
+	 */
+	public abstract int getGenreIdByName(String name) throws DaoException;
+
 }

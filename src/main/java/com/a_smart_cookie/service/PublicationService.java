@@ -71,4 +71,11 @@ public interface PublicationService {
 	 */
 	void editPublicationWithInfo(PublicationDto publicationDto);
 
+	/**
+	 * Creates publication.
+	 *
+	 * @param publicationDto All needed info for creating new publication.
+	 */
+	void createPublicationWithInfo(PublicationDto publicationDto);
+
 }

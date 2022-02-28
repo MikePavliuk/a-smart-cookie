@@ -17,6 +17,13 @@
 		<c:choose>
 			<c:when test="${requestScope.publications.size() gt 0}">
 				<h5 class="mt-3 text-center"><fmt:message key="publications_jsp.table_header"/></h5>
+				<div class="d-flex justify-content-end mt-2 mb-2">
+					<a type="button"
+					   class="btn btn-success"
+					   href="${pageContext.request.contextPath}/controller?command=publication_create_view">
+						<fmt:message key="button.create"/>
+					</a>
+				</div>
 				<table class="table">
 					<thead class="thead-light">
 					<tr>
@@ -39,7 +46,7 @@
 							<td>${publication.pricePerMonth}$</td>
 							<td>
 								<a class="btn btn-warning"
-								href="${pageContext.request.contextPath}/controller?command=publication_edit_view&item=${publication.id}">
+								   href="${pageContext.request.contextPath}/controller?command=publication_edit_view&item=${publication.id}">
 									<fmt:message key="publications_jsp.table.button.edit"/>
 								</a>
 							</td>

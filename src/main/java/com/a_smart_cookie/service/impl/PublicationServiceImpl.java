@@ -1,9 +1,6 @@
 package com.a_smart_cookie.service.impl;
 
-import com.a_smart_cookie.dao.DaoFactory;
-import com.a_smart_cookie.dao.EntityTransaction;
-import com.a_smart_cookie.dao.GenreDao;
-import com.a_smart_cookie.dao.PublicationDao;
+import com.a_smart_cookie.dao.*;
 import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
@@ -200,6 +197,52 @@ public class PublicationServiceImpl implements PublicationService {
 			transaction.rollback();
 			LOG.error("Can't edit publication", e);
 			throw new ServiceException("Can't edit publication", e);
+		} finally {
+			transaction.endTransaction();
+		}
+	}
+
+	@Override
+	public void createPublicationWithInfo(PublicationDto publicationDto) throws ServiceException {
+		LOG.debug("Method starts");
+
+		EntityTransaction transaction = new EntityTransaction();
+
+		try {
+			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
+			GenreDao genreDao = DaoFactory.getInstance().getGenreDao();
+			LanguageDao languageDao = DaoFactory.getInstance().getLanguageDao();
+
+			transaction.initTransaction(publicationDao, genreDao, languageDao);
+
+			int genreId = genreDao.getGenreIdByName(publicationDto.getGenre().name().toLowerCase());
+			int publicationId = publicationDao.createPublication(genreId, publicationDto.getPricePerMonth());
+
+			Map<Integer, String> titles = new HashMap<>();
+			Map<Integer, String> descriptions = new HashMap<>();
+
+			for (Map.Entry<Language, String> languageTitleEntry : publicationDto.getTitles().entrySet()) {
+				titles.put(languageDao.getLanguageIdByName(languageTitleEntry.getKey().name().toLowerCase()), languageTitleEntry.getValue());
+			}
+
+			for (Map.Entry<Language, String> languageDescriptionEntry : publicationDto.getDescriptions().entrySet()) {
+				descriptions.put(languageDao.getLanguageIdByName(languageDescriptionEntry.getKey().name().toLowerCase()), languageDescriptionEntry.getValue());
+			}
+
+			publicationDao.createPublicationInfos(
+					publicationId,
+					titles,
+					descriptions
+			);
+
+			transaction.commit();
+
+			LOG.debug("Method finished");
+
+		} catch (DaoException e) {
+			transaction.rollback();
+			LOG.error("Can't insert publication with translations", e);
+			throw new ServiceException("Can't insert publication with translations", e);
 		} finally {
 			transaction.endTransaction();
 		}

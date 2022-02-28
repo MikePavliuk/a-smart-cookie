@@ -8,7 +8,7 @@
 
 <html>
 
-<fmt:message key="publication_edit_jsp.title" var="title"/>
+<fmt:message key="publications_create_jsp.title" var="title"/>
 <c:set var="title" value="${title}" scope="page"/>
 <%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
@@ -16,11 +16,10 @@
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 <div class="content admin">
 	<div class="container publications">
-		<h1 class="mt-3 text-center mb-3"><fmt:message key="publication_edit_jsp.header"/></h1>
+		<h1 class="mt-3 text-center mb-3"><fmt:message key="publications_create_jsp.header"/></h1>
 
-		<form action="${pageContext.request.contextPath}/controller?command=edit_publication"
+		<form action="${pageContext.request.contextPath}/controller?command=create_publication"
 			  method="post">
-			<input type="hidden" name="publicationId" value="${requestScope.id}">
 			<div class="form-group row">
 				<label for="genre" class="col-sm-2 label-center">
 					<fmt:message key="publication.genre"/>
@@ -28,14 +27,9 @@
 				<select class="form-control col-sm-3" id="genre" name="genre" required>
 					<c:forEach var="genre" items="${Genre.values()}">
 						<option value="${genre.name()}"
-								<c:choose>
-									<c:when test="${sessionScope.oldGenre != null}">
-										selected
-									</c:when>
-									<c:otherwise>
-										<c:if test="${requestScope.genre eq genre}">selected</c:if>
-									</c:otherwise>
-								</c:choose>
+								<c:if test="${sessionScope.oldGenre != null}">
+									selected
+								</c:if>
 						>
 								${genre.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}
 						</option>
@@ -57,14 +51,9 @@
 						   step="any"
 						   title="<fmt:message key="validation.publication.price_per_month" />"
 						   required
-					<c:choose>
-					<c:when test="${sessionScope.oldPricePerMonth eq null}">
-						   value="${requestScope.pricePerMonth}"
-					</c:when>
-					<c:otherwise>
-						   value="${sessionScope.oldPricePerMonth}"
-					</c:otherwise>
-					</c:choose>
+						<c:if test="${sessionScope.oldPricePerMonth ne null}">
+							   value="${sessionScope.oldPricePerMonth}"
+						</c:if>
 					>
 					<span class="input-group-text">$</span>
 				</div>
@@ -77,50 +66,46 @@
 			</div>
 
 			<div class="accordion" id="accordionTranslations">
-				<c:forEach var="publication" items="${requestScope.publicationMap}">
+				<c:forEach var="language" items="${Language.values()}">
 
 					<div class="card">
-						<div class="card-header" id="${publication.key.name()}">
+						<div class="card-header" id="${language.name()}">
 							<h2 class="mb-0">
 								<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-										data-target="#${publication.key.abbr}" aria-expanded="true"
-										aria-controls="${publication.key.abbr}">
-									<fmt:message
-											key="language"/>: ${publication.key.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}
+										data-target="#${language.abbr}" aria-expanded="true"
+										aria-controls="${language.abbr}">
+									<fmt:message key="language"/>: ${language.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}
 								</button>
 							</h2>
 						</div>
 
-						<div id="${publication.key.abbr}" class="collapse show"
-							 aria-labelledby="${publication.key.name()}" data-parent="#accordionTranslations">
+						<div id="${language.abbr}" class="collapse show"
+							 aria-labelledby="${language.name()}" data-parent="#accordionTranslations">
 							<div class="card-body">
 
 								<div class="form-group">
-									<label for="title_${publication.key.abbr}">
+									<label for="title_${language.abbr}">
 										<fmt:message key="publication.title"/>
 										<span class="text-danger">*</span></label>
 									<input type="text"
 										   class="form-control"
-										   name="title_${publication.key.abbr}"
-										   id="title_${publication.key.abbr}"
+										   name="title_${language.abbr}"
+										   id="title_${language.abbr}"
 										   required
 										   pattern="${PublicationValidationPattern.TITLE.pattern}"
 										   title="<fmt:message key="validation.publication.title" />"
 
 									<c:choose>
-										<c:when test="${publication.key == Language.UKRAINIAN && sessionScope.oldTitle_uk !=null && !sessionScope.oldTitle_uk}">
+										<c:when test="${language == Language.UKRAINIAN && sessionScope.oldTitle_uk !=null && !sessionScope.oldTitle_uk}">
 											   value="${sessionScope.oldTitle_uk}"
 										</c:when>
-										<c:when test="${publication.key == Language.ENGLISH && sessionScope.oldTitle_en !=null && !sessionScope.oldTitle_en}">
+										<c:when test="${language == Language.ENGLISH && sessionScope.oldTitle_en !=null && !sessionScope.oldTitle_en}">
 											   value="${sessionScope.oldTitle_en}"
 										</c:when>
-										<c:otherwise>
-											   value="${publication.value.title}"
-										</c:otherwise>
 									</c:choose>
 									>
 									<c:choose>
-										<c:when test="${publication.key == Language.UKRAINIAN}">
+										<c:when test="${language == Language.UKRAINIAN}">
 											<c:if test="${sessionScope.isValidTitle_uk != null && sessionScope.isValidTitle_uk !=null && !sessionScope.isValidTitle_uk}">
 												<span class="error text-danger">
 													<fmt:message key="validation.publication.title"/>
@@ -138,31 +123,28 @@
 								</div>
 
 								<div class="form-group">
-									<label for="description_${publication.key.abbr}">
+									<label for="description_${language.abbr}">
 										<fmt:message key="publication.description"/>
 										<span class="text-danger">*</span></label>
 									<input type="text"
 										   class="form-control"
-										   name="description_${publication.key.abbr}"
-										   id="description_${publication.key.abbr}"
+										   name="description_${language.abbr}"
+										   id="description_${language.abbr}"
 										   required
 										   pattern="${PublicationValidationPattern.DESCRIPTION.pattern}"
 										   title="<fmt:message key="validation.publication.description" />"
 
 									<c:choose>
-									<c:when test="${publication.key == Language.UKRAINIAN && sessionScope.oldDescription_uk !=null && !sessionScope.oldDescription_uk}">
-										   value="${sessionScope.oldDescription_uk}"
-									</c:when>
-									<c:when test="${publication.key == Language.ENGLISH && sessionScope.oldDescription_en !=null && !sessionScope.oldDescription_en}">
-										   value="${sessionScope.oldDescription_en}"
-									</c:when>
-									<c:otherwise>
-										   value="${publication.value.description}"
-									</c:otherwise>
+										<c:when test="${language == Language.UKRAINIAN && sessionScope.oldDescription_uk !=null && !sessionScope.oldDescription_uk}">
+											   value="${sessionScope.oldDescription_uk}"
+										</c:when>
+										<c:when test="${language == Language.ENGLISH && sessionScope.oldDescription_en !=null && !sessionScope.oldDescription_en}">
+											   value="${sessionScope.oldDescription_en}"
+										</c:when>
 									</c:choose>
 									>
 									<c:choose>
-										<c:when test="${publication.key == Language.UKRAINIAN}">
+										<c:when test="${language == Language.UKRAINIAN}">
 											<c:if test="${sessionScope.isValidDescription_uk != null && sessionScope.isValidDescription_uk !=null && !sessionScope.isValidDescription_uk}">
 												<span class="error text-danger">
 													<fmt:message key="validation.publication.description"/>
@@ -188,7 +170,7 @@
 
 			<div class="col text-center mt-3">
 				<button type="submit" class="btn btn-primary">
-					<fmt:message key="button.save"/>
+					<fmt:message key="button.create"/>
 				</button>
 			</div>
 

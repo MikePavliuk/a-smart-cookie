@@ -9,6 +9,7 @@ import com.a_smart_cookie.exception.DaoException;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -97,5 +98,24 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @return Whether updating was performed.
 	 */
 	public abstract boolean updatePublicationInfoByLanguage(String title, String description, int publicationId, Language language) throws DaoException;
+
+	/**
+	 * Creates publication record.
+	 *
+	 * @param genre_id If of genre of newly created publication.
+	 * @param pricePerMonth Price per month of newly created publication.
+	 * @return Id of newly created publication.
+	 */
+	public abstract int createPublication(int genre_id, BigDecimal pricePerMonth) throws DaoException;
+
+	/**
+	 * Creates publication infos for all languages.
+	 *
+	 * @param publicationId Id of publication.
+	 * @param titles Map of Id of languages as key and titles as values.
+	 * @param descriptions Map of Id of languages as key and descriptions as values.
+	 * @return Whether transaction was correctly created.
+	 */
+	public abstract boolean createPublicationInfos(int publicationId, Map<Integer, String> titles, Map<Integer, String> descriptions) throws DaoException;
 
 }

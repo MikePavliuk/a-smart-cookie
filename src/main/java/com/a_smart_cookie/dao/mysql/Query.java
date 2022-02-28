@@ -56,6 +56,16 @@ public final class Query {
 						"WHERE publication.id = ?;"
 		),
 
+		CREATE_PUBLICATION(
+				"INSERT INTO a_smart_cookie.publication(genre_id, price_per_month) " +
+				"VALUES (?, ?);"
+		),
+
+		CREATE_PUBLICATION_INFO(
+				"INSERT INTO a_smart_cookie.publication_info(publication_id, language_id, title, description) " +
+				"VALUES (?, ?, ?, ?);"
+		),
+
 		DELETE_BY_ID(
 				"DELETE FROM a_smart_cookie.publication " +
 						"WHERE publication.id=?;"
@@ -148,11 +158,38 @@ public final class Query {
 						"FROM a_smart_cookie.genre " +
 						"JOIN a_smart_cookie.publication " +
 						"ON genre.id = publication.genre_id;"
+		),
+
+		GET_ID_BY_NAME(
+				"SELECT genre.id " +
+						"FROM a_smart_cookie.genre " +
+						"WHERE genre.name = ?;"
 		);
 
 		private final String query;
 
 		Genre(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
+
+	/**
+	 * Represents queries holder for obtaining languages.
+	 */
+	public enum Language {
+		GET_ID_BY_NAME(
+				"SELECT language.id " +
+						"FROM a_smart_cookie.language " +
+						"WHERE language.name = ?;"
+		);
+
+		private final String query;
+
+		Language(String query) {
 			this.query = query;
 		}
 

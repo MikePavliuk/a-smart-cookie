@@ -21,14 +21,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Provides with saving edit publication changes.
+ * Provides with creating publication.
  *
  */
-public class SaveEditPublicationChangesCommand extends Command {
+public class CreatePublicationCommand extends Command {
 
-	private static final long serialVersionUID = -8654492442706757097L;
+	private static final long serialVersionUID = -7596867861960586132L;
 
-	private static final Logger LOG = Logger.getLogger(SaveEditPublicationChangesCommand.class);
+	private static final Logger LOG = Logger.getLogger(CreatePublicationCommand.class);
 
 	@Override
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
@@ -36,9 +36,6 @@ public class SaveEditPublicationChangesCommand extends Command {
 
 		String newPricePerMonth = request.getParameter("price_per_month");
 		LOG.trace("newPricePerMonth --> " + newPricePerMonth);
-
-		String publicationId = request.getParameter("publicationId");
-		LOG.trace("publicationId --> " + publicationId);
 
 		String newGenre = request.getParameter("genre");
 		LOG.trace("newGenre --> " + newGenre);
@@ -53,7 +50,7 @@ public class SaveEditPublicationChangesCommand extends Command {
 		}
 
 		PublicationDto publicationDto = new PublicationDto(
-				Integer.parseInt(publicationId),
+				null,
 				Genre.safeFromString(newGenre),
 				new BigDecimal(newPricePerMonth),
 				titles,
@@ -68,7 +65,7 @@ public class SaveEditPublicationChangesCommand extends Command {
 		LOG.trace("Publication is valid");
 
 		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
-		publicationService.editPublicationWithInfo(publicationDto);
+		publicationService.createPublicationWithInfo(publicationDto);
 
 		LOG.debug("Command finished");
 		return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.FORWARD);
