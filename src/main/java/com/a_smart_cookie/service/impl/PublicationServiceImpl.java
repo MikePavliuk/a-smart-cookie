@@ -1,5 +1,8 @@
 package com.a_smart_cookie.service.impl;
 
+import com.a_smart_cookie.controller.route.HttpHandlerType;
+import com.a_smart_cookie.controller.route.HttpPath;
+import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dao.*;
 import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
@@ -10,8 +13,10 @@ import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
+import com.a_smart_cookie.util.validation.publication.PublicationValidator;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -245,6 +250,41 @@ public class PublicationServiceImpl implements PublicationService {
 			throw new ServiceException("Can't insert publication with translations", e);
 		} finally {
 			transaction.endTransaction();
+		}
+	}
+
+	@Override
+	public HttpPath performValidationMechanism(HttpSession session, PublicationDto publicationDto) {
+		Map<String, Boolean> validationResult = PublicationValidator.getValidationResults(publicationDto);
+
+		if (validationResult.containsValue(false)) {
+			session.setAttribute("isValidPricePerMonth", validationResult.get(EntityColumn.Publication.PRICE_PER_MONTH.getName()));
+
+			for (Language language: Language.values()) {
+
+				session.setAttribute("isValidTitle_" + language.getAbbr(),
+						validationResult.get(EntityColumn.PublicationInfo.TITLE.getName() + "_" + language.getAbbr()));
+
+				session.setAttribute("isValidDescription_" + language.getAbbr(),
+						validationResult.get(EntityColumn.PublicationInfo.DESCRIPTION.getName() + "_" + language.getAbbr()));
+			}
+
+			addOldFieldValuesToSession(session, publicationDto);
+
+			LOG.debug("Command finished with not valid user");
+			return new HttpPath(WebPath.Command.ADMIN_PUBLICATION_EDIT.getValue() + "&item=" + publicationDto.getId(), HttpHandlerType.SEND_REDIRECT);
+		}
+
+		return null;
+	}
+
+	private void addOldFieldValuesToSession(HttpSession session, PublicationDto publicationDto) {
+		session.setAttribute("oldPricePerMonth", publicationDto.getPricePerMonth());
+		session.setAttribute("oldGenre", publicationDto.getGenre());
+
+		for (Language language: Language.values()) {
+			session.setAttribute("oldTitle_" + language.getAbbr(), publicationDto.getTitles().get(language));
+			session.setAttribute("oldDescription_" + language.getAbbr(), publicationDto.getDescriptions().get(language));
 		}
 	}
 

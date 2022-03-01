@@ -1,5 +1,6 @@
 package com.a_smart_cookie.service;
 
+import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
@@ -7,6 +8,7 @@ import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -77,5 +79,14 @@ public interface PublicationService {
 	 * @param publicationDto All needed info for creating new publication.
 	 */
 	void createPublicationWithInfo(PublicationDto publicationDto);
+
+	/**
+	 * Performs validation of publication by its dto and sets result in session if needed.
+	 *
+	 * @param session Session for setting parameters.
+	 * @param publicationDto Input publication dto.
+	 * @return Null if validation is correct and HttpPath - if validation fails.
+	 */
+	HttpPath performValidationMechanism(HttpSession session, PublicationDto publicationDto);
 
 }

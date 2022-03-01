@@ -4,13 +4,11 @@ import com.a_smart_cookie.controller.command.Command;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
-import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
-import com.a_smart_cookie.util.validation.publication.PublicationValidator;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,52 +55,17 @@ public class CreatePublicationCommand extends Command {
 				descriptions
 		);
 
+		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 		HttpSession session = request.getSession();
 
-		HttpPath notValidHttpPath = performValidationMechanism(session, publicationDto);
+		HttpPath notValidHttpPath = publicationService.performValidationMechanism(session, publicationDto);
 		if (notValidHttpPath != null) return notValidHttpPath;
 
 		LOG.trace("Publication is valid");
-
-		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 		publicationService.createPublicationWithInfo(publicationDto);
 
 		LOG.debug("Command finished");
 		return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.FORWARD);
-	}
-
-	private HttpPath performValidationMechanism(HttpSession session, PublicationDto publicationDto) {
-		Map<String, Boolean> validationResult = PublicationValidator.getValidationResults(publicationDto);
-
-		if (validationResult.containsValue(false)) {
-			session.setAttribute("isValidPricePerMonth", validationResult.get(EntityColumn.Publication.PRICE_PER_MONTH.getName()));
-
-			for (Language language: Language.values()) {
-
-				session.setAttribute("isValidTitle_" + language.getAbbr(),
-						validationResult.get(EntityColumn.PublicationInfo.TITLE.getName() + "_" + language.getAbbr()));
-
-				session.setAttribute("isValidDescription_" + language.getAbbr(),
-						validationResult.get(EntityColumn.PublicationInfo.DESCRIPTION.getName() + "_" + language.getAbbr()));
-			}
-
-			addOldFieldValuesToSession(session, publicationDto);
-
-			LOG.debug("Command finished with not valid user");
-			return new HttpPath(WebPath.Command.ADMIN_PUBLICATION_EDIT.getValue() + "&item=" + publicationDto.getId(), HttpHandlerType.SEND_REDIRECT);
-		}
-
-		return null;
-	}
-
-	private void addOldFieldValuesToSession(HttpSession session, PublicationDto publicationDto) {
-		session.setAttribute("oldPricePerMonth", publicationDto.getPricePerMonth());
-		session.setAttribute("oldGenre", publicationDto.getGenre());
-
-		for (Language language: Language.values()) {
-			session.setAttribute("oldTitle_" + language.getAbbr(), publicationDto.getTitles().get(language));
-			session.setAttribute("oldDescription_" + language.getAbbr(), publicationDto.getDescriptions().get(language));
-		}
 	}
 
 }
