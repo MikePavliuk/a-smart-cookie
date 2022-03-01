@@ -31,30 +31,30 @@ public class FrontController extends HttpServlet {
 
 		switch (httpPath.getHttpHandlerType()) {
 			case FORWARD:
-				RequestDispatcher disp = req.getRequestDispatcher(httpPath.getPath().getValue());
+				RequestDispatcher disp = req.getRequestDispatcher(httpPath.getPath());
 				disp.forward(req, resp);
 				break;
 
 			case SEND_REDIRECT:
-				resp.sendRedirect(req.getContextPath() + httpPath.getPath().getValue());
+				resp.sendRedirect(req.getContextPath() + httpPath.getPath());
 				break;
 		}
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		LOG.debug("Front controller doPost starts");
 		HttpPath httpPath = processRequest(req, resp);
 		LOG.debug("Front controller doPost finished, now sendRedirect to --> " + httpPath.getPath());
 
-		resp.sendRedirect(req.getContextPath() + httpPath.getPath().getValue());
+		resp.sendRedirect(req.getContextPath() + httpPath.getPath());
     }
 
 	/**
 	 * Main method of this controller, that process all: Get and Post, - requests.
 	 *
 	 */
-	private HttpPath processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+	private HttpPath processRequest(HttpServletRequest req, HttpServletResponse resp) {
 		// extract command name from the request
 		String commandName = req.getParameter("command");
 		LOG.trace("Request parameter: command --> " + commandName);

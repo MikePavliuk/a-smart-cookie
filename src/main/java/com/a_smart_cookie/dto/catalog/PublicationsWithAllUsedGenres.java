@@ -1,5 +1,6 @@
 package com.a_smart_cookie.dto.catalog;
 
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Publication;
 
 import java.util.List;
@@ -9,22 +10,22 @@ import java.util.List;
  *
  */
 public class PublicationsWithAllUsedGenres {
-	private List<Publication.Genre> genres;
+	private List<Genre> genres;
 	private List<Publication> publications;
 
 	public PublicationsWithAllUsedGenres() {
 	}
 
-	public PublicationsWithAllUsedGenres(List<Publication.Genre> genres, List<Publication> publications) {
+	public PublicationsWithAllUsedGenres(List<Genre> genres, List<Publication> publications) {
 		this.genres = genres;
 		this.publications = publications;
 	}
 
-	public List<Publication.Genre> getGenres() {
+	public List<Genre> getGenres() {
 		return genres;
 	}
 
-	public void setGenres(List<Publication.Genre> genres) {
+	public void setGenres(List<Genre> genres) {
 		this.genres = genres;
 	}
 

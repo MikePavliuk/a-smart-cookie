@@ -15,7 +15,10 @@ public final class WebPath {
 		SIGN_IN("/WEB-INF/jsp/sign_in.jsp"),
 		SIGN_UP("/WEB-INF/jsp/sign_up.jsp"),
 		USER_SUBSCRIPTIONS("/WEB-INF/jsp/user_subscriptions.jsp"),
-		ADMIN_USERS("/WEB-INF/jsp/users.jsp");
+		ADMIN_USERS("/WEB-INF/jsp/users.jsp"),
+		ADMIN_PUBLICATIONS("/WEB-INF/jsp/publications.jsp"),
+		ADMIN_PUBLICATION_EDIT("/WEB-INF/jsp/publication_edit.jsp"),
+		ADMIN_PUBLICATION_CREATE("/WEB-INF/jsp/publication_create.jsp");
 
 		private final String value;
 
@@ -38,7 +41,10 @@ public final class WebPath {
 		SIGN_UP("/controller?command=sign-up"),
 		ERROR("/controller?command=error"),
 		USER_SUBSCRIPTIONS("/controller?command=subscriptions"),
-		ADMIN_USERS("/controller?command=users");
+		ADMIN_USERS("/controller?command=users"),
+		ADMIN_PUBLICATIONS_MANAGEMENT("/controller?command=publications"),
+		ADMIN_PUBLICATION_EDIT("/controller?command=publication_edit_view"),
+		ADMIN_PUBLICATION_CREATE("/controller?command=publication_create_view");
 
 		private final String value;
 

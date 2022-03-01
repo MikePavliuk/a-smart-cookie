@@ -9,7 +9,7 @@ import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.User;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
-import com.a_smart_cookie.util.validation.UserValidator;
+import com.a_smart_cookie.util.validation.user.UserValidator;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,7 +78,7 @@ public class RegistrationCommand extends Command {
 			addOldFieldValuesToSession(request, session);
 
 			LOG.debug("Command finished with not valid user");
-			return new HttpPath(WebPath.Page.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
+			return new HttpPath(WebPath.Command.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
 		}
 		return null;
 	}

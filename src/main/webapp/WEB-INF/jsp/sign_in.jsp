@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/locale.jspf" %>
-<%@ page import="com.a_smart_cookie.util.validation.ValidationPattern" %>
+<%@ page import="com.a_smart_cookie.util.validation.user.UserValidationPattern" %>
 
 <html>
 
@@ -28,8 +28,8 @@
 							name="email"
 							id="email"
 							required
-							pattern="${ValidationPattern.EMAIL.pattern}"
-							title="<fmt:message key="validation.email" />"
+							pattern="${UserValidationPattern.EMAIL.pattern}"
+							title="<fmt:message key="validation.user.email" />"
 							<c:choose>
 
 								<c:when test="${sessionScope.oldLoginEmail != null}">
@@ -44,7 +44,7 @@
 					>
 					<c:if test="${sessionScope.isValidEmail != null && !sessionScope.isValidEmail}">
 					<span class="error text-danger">
-						<fmt:message key="validation.email"/>
+						<fmt:message key="validation.user.email"/>
 					</span>
 					</c:if>
 				</div>
@@ -56,12 +56,12 @@
 							name="password"
 							id="password"
 							required
-							pattern="${ValidationPattern.PASSWORD.pattern}"
-							title="<fmt:message key="validation.password" />"
+							pattern="${UserValidationPattern.PASSWORD.pattern}"
+							title="<fmt:message key="validation.user.password" />"
 					>
 					<c:if test="${sessionScope.isValidPassword != null && !sessionScope.isValidPassword}">
 					<span class="error text-danger">
-						<fmt:message key="validation.password"/>
+						<fmt:message key="validation.user.password"/>
 					</span>
 					</c:if>
 				</div>

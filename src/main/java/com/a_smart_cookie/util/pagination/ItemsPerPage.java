@@ -7,9 +7,8 @@ import java.util.Arrays;
  *
  */
 public enum ItemsPerPage {
-	ONE(1),
 	TWO(2),
-	FIVE(5),
+	SIX(6),
 	TEN(10),
 	TWENTY(20);
 

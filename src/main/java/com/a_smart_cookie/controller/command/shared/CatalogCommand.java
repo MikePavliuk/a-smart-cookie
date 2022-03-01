@@ -7,6 +7,7 @@ import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.service.PublicationService;
@@ -38,7 +39,7 @@ public class CatalogCommand extends Command {
 
 		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 
-		Publication.Genre genreRestriction = Publication.Genre.fromString(request.getParameter("specificGenre"));
+		Genre genreRestriction = Genre.fromString(request.getParameter("specificGenre"));
 		String searchedTitle = request.getParameter("search");
 		Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
 		SortingParameter activeSortingParam = SortingParameter.safeFromString(request.getParameter("sort"));
@@ -66,7 +67,7 @@ public class CatalogCommand extends Command {
 
 		List<Publication> publications = publicationsWithAllUsedGenres.getPublications();
 		LOG.trace("Found in DB publications --> " + publications);
-		List<Publication.Genre> usedGenres = publicationsWithAllUsedGenres.getGenres();
+		List<Genre> usedGenres = publicationsWithAllUsedGenres.getGenres();
 
 
 		if (searchedTitle != null) {

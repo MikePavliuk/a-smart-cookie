@@ -5,15 +5,20 @@ package com.a_smart_cookie.controller.route;
  *
  */
 public class HttpPath {
-	private final Routable path;
+	private final String path;
 	private final HttpHandlerType httpHandlerType;
 
-	public HttpPath(Routable path, HttpHandlerType httpHandlerType) {
+	public HttpPath(String path, HttpHandlerType httpHandlerType) {
 		this.path = path;
 		this.httpHandlerType = httpHandlerType;
 	}
 
-	public Routable getPath() {
+	public HttpPath(Routable routable, HttpHandlerType httpHandlerType) {
+		this.path = routable.getValue();
+		this.httpHandlerType = httpHandlerType;
+	}
+
+	public String getPath() {
 		return path;
 	}
 

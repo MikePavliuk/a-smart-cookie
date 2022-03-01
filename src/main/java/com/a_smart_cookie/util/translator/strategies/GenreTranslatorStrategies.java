@@ -1,7 +1,7 @@
 package com.a_smart_cookie.util.translator.strategies;
 
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
-import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.util.translator.Translator;
 
 /**
@@ -16,7 +16,7 @@ public final class GenreTranslatorStrategies {
 	 *
 	 * @return Translator for Genre in English
 	 */
-	private static Translator<Publication.Genre> getEnglishGenreTranslator() {
+	private static Translator<Genre> getEnglishGenreTranslator() {
 		return element -> {
 			switch (element) {
 				case NOVEL:
@@ -50,7 +50,7 @@ public final class GenreTranslatorStrategies {
 	 *
 	 * @return Translator for Genre in Ukrainian
 	 */
-	private static Translator<Publication.Genre> getUkrainianGenreTranslator() {
+	private static Translator<Genre> getUkrainianGenreTranslator() {
 		return element -> {
 			switch (element) {
 				case NOVEL:
@@ -85,7 +85,7 @@ public final class GenreTranslatorStrategies {
 	 * @param language Language to be translated into.
 	 * @return Specific Translator in the desired language.
 	 */
-	public static Translator<Publication.Genre> getTranslatorByLanguage(Language language) {
+	public static Translator<Genre> getTranslatorByLanguage(Language language) {
 		switch (language) {
 			case ENGLISH:
 				return getEnglishGenreTranslator();

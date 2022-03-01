@@ -93,4 +93,11 @@ public abstract class DaoFactory {
 	 */
 	public abstract SubscriptionDao getSubscriptionDao();
 
+	/**
+	 * Method for getting instance of LanguageDao.
+	 *
+	 * @return Instance of requested implementation of LanguageDao.
+	 */
+	public abstract LanguageDao getLanguageDao();
+
 }

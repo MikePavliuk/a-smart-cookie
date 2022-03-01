@@ -32,7 +32,7 @@
 					<tbody>
 					<c:forEach var="user" items="${requestScope.usersForManagement}" varStatus="loop">
 						<tr>
-							<th scope="row">${loop.count}</th>
+							<th scope="row">${(requestScope.itemsPerPage * (requestScope.currentPage-1)) + loop.count}</th>
 							<td>${user.firstName}</td>
 							<td>${user.lastName}</td>
 							<td>${user.email}</td>

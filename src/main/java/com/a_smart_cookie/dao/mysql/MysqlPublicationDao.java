@@ -5,16 +5,20 @@ import com.a_smart_cookie.dao.PublicationDao;
 import com.a_smart_cookie.dao.ResourceReleaser;
 import com.a_smart_cookie.dto.catalog.CountRowsParameters;
 import com.a_smart_cookie.dto.catalog.FilterParameters;
+import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.exception.DaoException;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -84,6 +88,8 @@ public class MysqlPublicationDao extends PublicationDao {
 		}
 	}
 
+
+
 	@Override
 	public Optional<Publication> getPublicationWithoutInfoById(int id) throws DaoException {
 		LOG.debug("Method starts");
@@ -115,7 +121,7 @@ public class MysqlPublicationDao extends PublicationDao {
 	}
 
 	@Override
-	public Optional<Publication> getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException {
+	public Publication getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException {
 		LOG.debug("Method starts");
 
 		PreparedStatement pstmt = null;
@@ -129,18 +135,201 @@ public class MysqlPublicationDao extends PublicationDao {
 			LOG.trace(pstmt);
 
 			if (rs.next()) {
-				LOG.trace("Finished --> Found publication");
-				return Optional.of(extractPublicationWithFullInfo(rs));
+				return extractPublicationWithFullInfo(rs);
 			}
 
-			LOG.trace("Finished --> Didn't find publication");
-			return Optional.empty();
+			LOG.error("Finished --> Didn't find publication");
+			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
 			LOG.error("Can't get publication by id " + publicationId + " in " + language, e);
 			throw new DaoException("Can't get publication by id " + publicationId + " in " + language, e);
 		} finally {
 			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public List<Publication> getPublicationsWithLimitByLanguage(int offset, int numberOfItems, Language language) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.GET_PUBLICATIONS_WITH_INFO_AND_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE.getQuery());
+			pstmt.setString(1, language.name().toLowerCase());
+			pstmt.setInt(2, offset);
+			pstmt.setInt(3, numberOfItems);
+
+			rs = pstmt.executeQuery();
+
+			LOG.trace(pstmt);
+
+			LOG.trace("Finished with found publications");
+			return extractPublications(rs);
+
+		} catch (SQLException e) {
+			LOG.error("Can't get publications", e);
+			throw new DaoException("Can't get publications", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int getTotalNumberOfPublications() throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.GET_TOTAL_NUMBER_OF_PUBLICATIONS.getQuery());
+			rs = pstmt.executeQuery();
+
+			LOG.debug("Finished method");
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get number of publications", e);
+			throw new DaoException("Can't get number of publications", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean deletePublicationById(int publicationId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.DELETE_BY_ID.getQuery());
+			pstmt.setInt(1, publicationId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't delete publication", e);
+			throw new DaoException("Can't delete publication", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean updatePublicationGenreAndPricePerMonthById(Genre genre, BigDecimal pricePerMonth, int publicationId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.UPDATE_PUBLICATION_GENRE_AND_PRICE_PER_MONTH_BY_ID.getQuery());
+			pstmt.setString(1, genre.name().toLowerCase());
+			pstmt.setBigDecimal(2, pricePerMonth);
+			pstmt.setInt(3, publicationId);
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't update publication", e);
+			throw new DaoException("Can't update publication", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean updatePublicationInfoByLanguage(String title, String description, int publicationId, Language language) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.UPDATE_PUBLICATION_INFO_BY_ID_AND_LANGUAGE.getQuery());
+			pstmt.setString(1, title);
+			pstmt.setString(2,description);
+			pstmt.setInt(3, publicationId);
+			pstmt.setString(4, language.name().toLowerCase());
+
+			LOG.trace(pstmt);
+
+			return pstmt.executeUpdate() > 0;
+
+		} catch (SQLException e) {
+			LOG.error("Can't update publication info", e);
+			throw new DaoException("Can't update publication info", e);
+		} finally {
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int createPublication(int genre_id, BigDecimal pricePerMonth) throws DaoException {
+		LOG.debug("Method starts");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.CREATE_PUBLICATION.getQuery(), Statement.RETURN_GENERATED_KEYS);
+			pstmt.setInt(1, genre_id);
+			pstmt.setBigDecimal(2, pricePerMonth);
+
+			LOG.trace(pstmt);
+
+			if (pstmt.executeUpdate() > 0) {
+				rs = pstmt.getGeneratedKeys();
+				if (rs.next()) {
+					LOG.debug("Method finished");
+					return rs.getInt(1);
+				}
+			}
+			LOG.error("Result set is empty");
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't insert publication", e);
+			throw new DaoException("Can't insert publication", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public boolean createPublicationInfos(int publicationId, Map<Integer, String> titles, Map<Integer, String> descriptions) throws DaoException {
+		LOG.debug("Method starts");
+
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(Query.Publication.CREATE_PUBLICATION_INFO.getQuery());
+
+			for (Map.Entry<Integer, String> entry : titles.entrySet()) {
+				pstmt.setInt(1, publicationId);
+				pstmt.setInt(2, entry.getKey());
+				pstmt.setString(3, entry.getValue());
+				pstmt.setString(4, descriptions.get(entry.getKey()));
+				pstmt.addBatch();
+			}
+
+			LOG.trace(pstmt);
+
+			LOG.debug("Method finished");
+			return pstmt.executeBatch().length == Language.values().length;
+
+		} catch (SQLException e) {
+			LOG.error("Can't insert publication info", e);
+			throw new DaoException("Can't insert publication info", e);
+		} finally {
 			ResourceReleaser.close(pstmt);
 		}
 	}
@@ -234,7 +423,7 @@ public class MysqlPublicationDao extends PublicationDao {
 	private Publication extractPublicationWithFullInfo(ResultSet rs) throws SQLException {
 		return new Publication.PublicationBuilder()
 				.withId(rs.getInt(EntityColumn.Publication.ID.getName()))
-				.withGenre(Publication.Genre.safeFromString(rs.getString(EntityColumn.Genre.NAME.getName())))
+				.withGenre(Genre.safeFromString(rs.getString(EntityColumn.Genre.NAME.getName())))
 				.withTitle(rs.getString(EntityColumn.PublicationInfo.TITLE.getName()))
 				.withDescription(rs.getString(EntityColumn.PublicationInfo.DESCRIPTION.getName()))
 				.withPricePerMonth(rs.getBigDecimal(EntityColumn.Publication.PRICE_PER_MONTH.getName()))

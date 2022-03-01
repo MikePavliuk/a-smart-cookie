@@ -61,3 +61,11 @@ Catalog Style
 	margin: 0 10px;
 }
 
+/***************************************************************
+Admin publications Style
+***************************************************************/
+.admin .publications .label-center {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0;
+}

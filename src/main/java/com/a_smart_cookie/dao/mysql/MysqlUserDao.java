@@ -80,7 +80,7 @@ public class MysqlUserDao extends UserDao {
 	}
 
 	@Override
-	public Optional<User> insertUser(User user) throws DaoException {
+	public Optional<User> createUser(User user) throws DaoException {
 		LOG.debug("Starts inserting user");
 
 		PreparedStatement pstmt = null;

@@ -13,7 +13,7 @@ import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
 import com.a_smart_cookie.util.hashing.PBKDF2Hash;
-import com.a_smart_cookie.util.validation.UserValidator;
+import com.a_smart_cookie.util.validation.user.UserValidator;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,7 +99,7 @@ public class LoginCommand extends Command {
 			session.setAttribute("isValidPassword", validationResult.get(EntityColumn.User.PASSWORD.getName()));
 
 			LOG.debug("Command finished with not valid user");
-			return new HttpPath(WebPath.Page.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 		}
 		return null;
 	}

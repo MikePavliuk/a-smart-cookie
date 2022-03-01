@@ -34,6 +34,23 @@
 	</context-param>
 
 	<!--============================================================
+		Encoding support filter
+	=============================================================-->
+	<filter>
+		<filter-name>EncodingFilter</filter-name>
+		<filter-class>com.a_smart_cookie.filter.EncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>EncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--============================================================
 		Security filter.
 		1) admin: admin commands
 		2) subscriber: subscriber commands
@@ -46,7 +63,7 @@
 		<filter-class>com.a_smart_cookie.filter.CommandAccessFilter</filter-class>
 		<init-param>
 			<param-name>admin</param-name>
-			<param-value>users change_user_status</param-value>
+			<param-value>users change_user_status publications publication_delete publication_edit_view edit_publication publication_create_view create_publication</param-value>
 		</init-param>
 		<init-param>
 			<param-name>subscriber</param-name>
@@ -81,23 +98,6 @@
 
 	<filter-mapping>
 		<filter-name>LocaleFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-	<!--============================================================
-		Encoding support filter
-	=============================================================-->
-	<filter>
-		<filter-name>EncodingFilter</filter-name>
-		<filter-class>com.a_smart_cookie.filter.EncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF-8</param-value>
-		</init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>EncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
@@ -143,10 +143,10 @@
 		<location>/WEB-INF/jsp/error/illegal-arguments.jsp</location>
 	</error-page>
 
-	<error-page>
-		<exception-type>java.lang.Throwable</exception-type>
-		<location>/WEB-INF/jsp/error/general-error.jsp</location>
-	</error-page>
+<!--	<error-page>-->
+<!--		<exception-type>java.lang.Throwable</exception-type>-->
+<!--		<location>/WEB-INF/jsp/error/general-error.jsp</location>-->
+<!--	</error-page>-->
 
 
 

@@ -33,5 +33,10 @@ public class MysqlDaoFactory extends DaoFactory {
 		return new MysqlSubscriptionDao();
 	}
 
+	@Override
+	public LanguageDao getLanguageDao() {
+		return new MysqlLanguageDao();
+	}
+
 
 }
