@@ -34,12 +34,4 @@ public interface SubscriptionService {
 	 */
 	List<SubscriptionWithPublicationInfo> getSubscriptionsWithFullInfoByUserAndLanguage(User user, Language language);
 
-	/**
-	 * Performs unsubscribing user from publication.
-	 *
-	 * @param user User that wants to unsubscribe.
-	 * @param publicationId Publication's id to unsubscribe from.
-	 */
-	void unsubscribeFromPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException;
-
 }

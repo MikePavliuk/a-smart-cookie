@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import java.math.BigDecimal;
 import java.sql.Savepoint;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,55 +129,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 			throw new ServiceException("Can't get subscriptions", e);
 		} finally {
 			transaction.end();
-		}
-	}
-
-	@Override
-	public void unsubscribeFromPublication(User user, int publicationId) {
-		LOG.debug("Method starts");
-
-		EntityTransaction transaction = new EntityTransaction();
-
-		try {
-			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
-			SubscriptionDao subscriptionDao = DaoFactory.getInstance().getSubscriptionDao();
-
-			transaction.initTransaction(publicationDao, subscriptionDao);
-
-			Optional<Publication> publication = publicationDao.getPublicationWithoutInfoById(publicationId);
-
-			if (publication.isEmpty()) {
-				transaction.rollback();
-				LOG.debug("Finished method with rollback, because didn't find publication by id");
-				throw new ServiceException("Can't find publication");
-			}
-
-			if (!subscriptionDao.removeSubscriptions(user.getId(), publicationId)) {
-				transaction.rollback();
-				LOG.debug("Finished method with rollback, because didn't insert subscription");
-				throw new NotUpdatedResultsException("Didn't insert balance result");
-			}
-
-			Iterator<Subscription> iterator = user.getSubscriptions().iterator();
-
-			while (iterator.hasNext()) {
-				Subscription subscription = iterator.next();
-
-				if (subscription.getPublicationId().equals(publicationId)) {
-					iterator.remove();
-					break;
-				}
-			}
-
-			transaction.commit();
-			LOG.debug("Finished method with commit");
-
-		} catch (DaoException e) {
-			transaction.rollback();
-			LOG.error("Can't perform subscribing", e);
-			throw new ServiceException("Can't perform subscribing", e);
-		} finally {
-			transaction.endTransaction();
 		}
 	}
 

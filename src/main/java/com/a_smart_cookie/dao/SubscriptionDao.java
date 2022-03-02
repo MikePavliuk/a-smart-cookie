@@ -31,15 +31,6 @@ public abstract class SubscriptionDao extends AbstractDao {
 
 
 	/**
-	 * Removes subscription from user.
-	 *
-	 * @param userId Id of user.
-	 * @param publicationId Publication's id.
-	 * @return Whether subscription was correctly deleted.
-	 */
-	public abstract boolean removeSubscriptions(int userId, int publicationId) throws DaoException;
-
-	/**
 	 * Gets number of active subscriptions of user by his id.
 	 *
 	 * @param userId Users id.

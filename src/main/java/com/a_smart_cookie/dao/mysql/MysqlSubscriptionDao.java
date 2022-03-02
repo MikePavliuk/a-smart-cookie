@@ -70,29 +70,6 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 	}
 
 	@Override
-	public boolean removeSubscriptions(int userId, int publicationId) throws DaoException {
-		LOG.debug("Starts method");
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			pstmt = connection.prepareStatement(Query.Subscription.REMOVE_BY_USER_ID_AND_PUBLICATION_ID.getQuery());
-			pstmt.setInt(1, userId);
-			pstmt.setInt(2, publicationId);
-
-			LOG.trace(pstmt);
-
-			return pstmt.executeUpdate() > 0;
-
-		} catch (SQLException e) {
-			LOG.error("Can't remove subscription", e);
-			throw new DaoException("Can't remove subscription", e);
-		} finally {
-			ResourceReleaser.close(pstmt);
-		}
-	}
-
-	@Override
 	public int getNumberOfSubscriptionsByUserId(int userId) throws DaoException {
 		LOG.debug("Starts method");
 

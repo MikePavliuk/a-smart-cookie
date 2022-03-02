@@ -27,11 +27,6 @@ public final class Query {
 		CREATE_SUBSCRIPTION(
 				"INSERT INTO a_smart_cookie.subscription(user_id, publication_id, period) " +
 						"VALUES (?, ?, ?); "
-		),
-
-		REMOVE_BY_USER_ID_AND_PUBLICATION_ID(
-				"DELETE FROM a_smart_cookie.subscription " +
-						"WHERE user_id=? AND publication_id=?;"
 		);
 
 		private final String query;

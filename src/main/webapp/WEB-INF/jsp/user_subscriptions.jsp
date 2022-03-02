@@ -30,7 +30,6 @@
 						<th scope="col"><fmt:message key="user_page_jsp.table.genre"/></th>
 						<th scope="col"><fmt:message key="user_page_jsp.table.price_per_month"/></th>
 						<th scope="col"><fmt:message key="user_page_jsp.table.days_to_payment"/></th>
-						<th scope="col"><fmt:message key="user_page_jsp.table.action"/></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -41,14 +40,6 @@
 							<td>${subscription.publication.genre.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}</td>
 							<td>${subscription.publication.pricePerMonth}$</td>
 							<td>${cdtp:daysToPaymentTag(subscription.localDate)}</td>
-							<td>
-								<form action="${pageContext.request.contextPath}/controller?command=unsubscribe" method="post">
-									<input type="hidden" name="item" value="${subscription.publication.id}">
-									<button class="btn btn-danger" type="submit">
-										<fmt:message key="user_page_jsp.table.button"/>
-									</button>
-								</form>
-							</td>
 						</tr>
 					</c:forEach>
 					</tbody>
