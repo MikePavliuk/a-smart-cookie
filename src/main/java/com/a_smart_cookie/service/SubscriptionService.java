@@ -20,9 +20,10 @@ public interface SubscriptionService {
 	 *
 	 * @param user User that wants to subscribe.
 	 * @param publicationId Publication's id to subscribe on.
+	 * @param periodInMonths Period for subscription to be active.
 	 * @return Returns updated user.
 	 */
-	User subscribeToPublication(User user, int publicationId) throws ServiceException, NotUpdatedResultsException;
+	User subscribeToPublication(User user, int publicationId, int periodInMonths) throws ServiceException, NotUpdatedResultsException;
 
 	/**
 	 * Gets subscriptions of user.

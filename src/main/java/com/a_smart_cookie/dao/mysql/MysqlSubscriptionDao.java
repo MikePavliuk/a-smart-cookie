@@ -47,15 +47,15 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 	}
 
 	@Override
-	public boolean insertSubscription(int userId, int publicationId) throws DaoException {
+	public boolean insertSubscription(int userId, int publicationId, int periodInMonths) throws DaoException {
 		LOG.debug("Starts method");
 
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		try {
-			pstmt = connection.prepareStatement(Query.Subscription.INSERT_BY_USER_ID_AND_PUBLICATION_ID.getQuery());
+			pstmt = connection.prepareStatement(Query.Subscription.CREATE_SUBSCRIPTION.getQuery());
 			pstmt.setInt(1, userId);
 			pstmt.setInt(2, publicationId);
+			pstmt.setInt(3, periodInMonths);
 
 			LOG.trace(pstmt);
 
@@ -145,7 +145,8 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 	private Subscription extractSubscription(ResultSet rs) throws SQLException {
 		return new Subscription(
 				rs.getInt(EntityColumn.Subscription.PUBLICATION_ID.getName()),
-				rs.getDate(EntityColumn.Subscription.START_DATE.getName())
+				rs.getDate(EntityColumn.Subscription.START_DATE.getName()),
+				rs.getInt(EntityColumn.Subscription.PERIOD.getName())
 		);
 	}
 

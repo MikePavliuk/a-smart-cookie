@@ -30,10 +30,25 @@ public class SubscribeCommand extends Command {
 		LOG.debug("Command starts");
 
 		String publicationIdParam = request.getParameter("item");
+		String periodParam = request.getParameter("period");
 
 		if (publicationIdParam == null) {
 			LOG.trace("No publication id in request");
 			throw new IllegalArgumentException("Publication id param can't be null");
+		}
+		LOG.trace("Publication id --> " + publicationIdParam);
+
+		if (periodParam == null) {
+			LOG.trace("No period in request");
+			throw new IllegalArgumentException("Period param can't be null");
+		}
+
+		int periodInMonths = Integer.parseInt(periodParam);
+		LOG.trace("Period in months --> " + periodInMonths);
+
+		if (periodInMonths <= 0 || periodInMonths > 12) {
+			LOG.trace("Period is not valid.");
+			throw new IllegalArgumentException("Period is not valid");
 		}
 
 		HttpSession session = request.getSession(false);
@@ -41,7 +56,7 @@ public class SubscribeCommand extends Command {
 
 		try {
 			SubscriptionService subscriptionService = ServiceFactory.getInstance().getSubscriptionService();
-			User updatedUser = subscriptionService.subscribeToPublication(user, Integer.parseInt(publicationIdParam));
+			User updatedUser = subscriptionService.subscribeToPublication(user, Integer.parseInt(publicationIdParam), periodInMonths);
 
 			session.setAttribute("user", updatedUser);
 			LOG.debug("Command finished");

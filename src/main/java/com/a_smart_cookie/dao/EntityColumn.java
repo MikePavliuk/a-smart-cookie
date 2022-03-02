@@ -112,7 +112,8 @@ public final class EntityColumn {
 	public enum Subscription {
 		USER_ID("user_id"),
 		PUBLICATION_ID("publication_id"),
-		START_DATE("start_date");
+		START_DATE("start_date"),
+		PERIOD("period");
 
 		private final String name;
 

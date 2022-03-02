@@ -24,9 +24,10 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 *
 	 * @param userId User's id.
 	 * @param publicationId Publication's id.
+	 * @param periodInMonths Period for subscription being active.
 	 * @return Whether subscription was correctly inserted.
 	 */
-	public abstract boolean insertSubscription(int userId, int publicationId) throws DaoException;
+	public abstract boolean insertSubscription(int userId, int publicationId, int periodInMonths) throws DaoException;
 
 
 	/**

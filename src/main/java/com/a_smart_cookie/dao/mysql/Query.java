@@ -13,7 +13,7 @@ public final class Query {
 	 */
 	public enum Subscription {
 		GET_ALL_BY_USER_ID(
-				"SELECT subscription.publication_id, subscription.start_date " +
+				"SELECT subscription.publication_id, subscription.start_date, subscription.period " +
 						"FROM a_smart_cookie.subscription " +
 						"WHERE subscription.user_id = ?;"
 		),
@@ -24,9 +24,9 @@ public final class Query {
 						"WHERE subscription.user_id = ?;"
 		),
 
-		INSERT_BY_USER_ID_AND_PUBLICATION_ID(
-				"INSERT INTO a_smart_cookie.subscription(user_id, publication_id) " +
-						"VALUES (?, ?); "
+		CREATE_SUBSCRIPTION(
+				"INSERT INTO a_smart_cookie.subscription(user_id, publication_id, period) " +
+						"VALUES (?, ?, ?); "
 		),
 
 		REMOVE_BY_USER_ID_AND_PUBLICATION_ID(

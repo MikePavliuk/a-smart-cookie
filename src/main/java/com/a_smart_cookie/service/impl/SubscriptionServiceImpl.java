@@ -24,7 +24,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	private static final Logger LOG = Logger.getLogger(SubscriptionServiceImpl.class);
 
 	@Override
-	public User subscribeToPublication(User user, int publicationId) {
+	public User subscribeToPublication(User user, int publicationId, int periodInMonths) {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -45,13 +45,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 				throw new ServiceException("Can't find publication");
 			}
 
-			if (user.getUserDetail().getBalance().compareTo(publication.get().getPricePerMonth()) < 0) {
+			BigDecimal subscriptionPrice = publication.get().getPricePerMonth().multiply(BigDecimal.valueOf(periodInMonths));
+			LOG.trace("subscription total price --> " + subscriptionPrice);
+			LOG.trace("user balance --> " + user.getUserDetail().getBalance());
+
+			if (user.getUserDetail().getBalance().compareTo(subscriptionPrice) < 0) {
 				transaction.rollback();
 				LOG.debug("Finished method with rollback, not enough money to get paid");
 				throw new ServiceException("Can't make transaction because not enough money to pay for subscription");
 			}
 
-			if (!userDetailDao.debitFundsFromBalanceByUserId(publication.get().getPricePerMonth(), user.getId())) {
+			if (!userDetailDao.debitFundsFromBalanceByUserId(subscriptionPrice, user.getId())) {
 				transaction.rollback();
 				LOG.debug("Finished method with rollback, because didn't debit funds");
 				throw new ServiceException("Can't debit funds");
@@ -67,7 +71,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 				throw new NotUpdatedResultsException("Didn't get updated balance result");
 			}
 
-			if (!subscriptionDao.insertSubscription(user.getId(), publicationId)) {
+			if (!subscriptionDao.insertSubscription(user.getId(), publicationId, periodInMonths)) {
 				transaction.rollback(savepoint);
 				LOG.debug("Finished method with rollback, because didn't insert subscription");
 				throw new NotUpdatedResultsException("Didn't insert balance result");

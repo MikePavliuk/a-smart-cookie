@@ -62,9 +62,9 @@ Catalog Style
 }
 
 /***************************************************************
-Admin publications Style
+Helper
 ***************************************************************/
-.admin .publications .label-center {
+.label-center {
 	display: flex;
 	align-items: center;
 	margin-bottom: 0;
