@@ -24,11 +24,6 @@ Custom JSTL tag ligrary for checking whether publication is in subscrption list
 <%@ taglib uri="/WEB-INF/publication_checker.tld" prefix="cfn" %>
 
 <%--===========================================================================
-Custom JSTL tag ligrary for calculating days to payment for subscriber
+Custom JSTL tag ligrary for converting local date into localized display one
 ===========================================================================--%>
-<%@ taglib uri="/WEB-INF/calculate_days_to_payment" prefix="cdtp" %>
-
-<%--===========================================================================
-Custom JSTL tag ligrary for calculating payment amount per month
-===========================================================================--%>
-<%@ taglib uri="/WEB-INF/get_payment_amount_per_month" prefix="ppm" %>
+<%@ taglib uri="/WEB-INF/localized_date" prefix="ld" %>

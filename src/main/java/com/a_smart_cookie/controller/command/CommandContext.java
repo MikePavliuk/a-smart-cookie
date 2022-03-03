@@ -10,7 +10,6 @@ import com.a_smart_cookie.controller.command.shared.CatalogCommand;
 import com.a_smart_cookie.controller.command.subscriber.PaymentCommand;
 import com.a_smart_cookie.controller.command.subscriber.SubscribeCommand;
 import com.a_smart_cookie.controller.command.subscriber.SubscriptionsCommand;
-import com.a_smart_cookie.controller.command.subscriber.UnsubscribeCommand;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -37,7 +36,6 @@ public final class CommandContext {
 		commandMap.put("catalog", new CatalogCommand());
 		commandMap.put("payment", new PaymentCommand());
 		commandMap.put("subscribe", new SubscribeCommand());
-		commandMap.put("unsubscribe", new UnsubscribeCommand());
 		commandMap.put("subscriptions", new SubscriptionsCommand());
 		
 		commandMap.put("users", new UsersCommand());

@@ -7,6 +7,7 @@ import com.a_smart_cookie.entity.Subscription;
 import com.a_smart_cookie.exception.DaoException;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,14 +23,14 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 	private static final Logger LOG = Logger.getLogger(MysqlSubscriptionDao.class);
 
 	@Override
-	public List<Subscription> getSubscriptionsByUserId(int id) throws DaoException {
+	public List<Subscription> getActiveSubscriptionsByUserId(int id) throws DaoException {
 		LOG.debug("Starts method");
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		try {
-			pstmt = connection.prepareStatement(Query.Subscription.GET_ALL_BY_USER_ID.getQuery());
+			pstmt = connection.prepareStatement(Query.Subscription.GET_ALL_ACTIVE_BY_USER_ID.getQuery());
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 
@@ -47,15 +48,15 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 	}
 
 	@Override
-	public boolean insertSubscription(int userId, int publicationId) throws DaoException {
+	public boolean insertSubscription(int userId, int publicationId, int periodInMonths) throws DaoException {
 		LOG.debug("Starts method");
 
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		try {
-			pstmt = connection.prepareStatement(Query.Subscription.INSERT_BY_USER_ID_AND_PUBLICATION_ID.getQuery());
+			pstmt = connection.prepareStatement(Query.Subscription.CREATE_SUBSCRIPTION.getQuery());
 			pstmt.setInt(1, userId);
 			pstmt.setInt(2, publicationId);
+			pstmt.setInt(3, periodInMonths);
 
 			LOG.trace(pstmt);
 
@@ -70,37 +71,14 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 	}
 
 	@Override
-	public boolean removeSubscriptions(int userId, int publicationId) throws DaoException {
-		LOG.debug("Starts method");
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			pstmt = connection.prepareStatement(Query.Subscription.REMOVE_BY_USER_ID_AND_PUBLICATION_ID.getQuery());
-			pstmt.setInt(1, userId);
-			pstmt.setInt(2, publicationId);
-
-			LOG.trace(pstmt);
-
-			return pstmt.executeUpdate() > 0;
-
-		} catch (SQLException e) {
-			LOG.error("Can't remove subscription", e);
-			throw new DaoException("Can't remove subscription", e);
-		} finally {
-			ResourceReleaser.close(pstmt);
-		}
-	}
-
-	@Override
-	public int getNumberOfSubscriptionsByUserId(int userId) throws DaoException {
+	public int getNumberOfInactiveSubscriptionsByUserId(int userId) throws DaoException {
 		LOG.debug("Starts method");
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		try {
-			pstmt = connection.prepareStatement(Query.Subscription.GET_COUNT_BY_USER_ID.getQuery());
+			pstmt = connection.prepareStatement(Query.Subscription.GET_INACTIVE_COUNT_BY_USER_ID.getQuery());
 			pstmt.setInt(1, userId);
 			rs = pstmt.executeQuery();
 
@@ -112,8 +90,64 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get number of subscriptions", e);
-			throw new DaoException("Can't get number of subscriptions", e);
+			LOG.error("Can't get number of all subscriptions", e);
+			throw new DaoException("Can't get number of all subscriptions", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public int getNumberOfActiveSubscriptionsByUserId(int userId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(Query.Subscription.GET_ACTIVE_COUNT_BY_USER_ID.getQuery());
+			pstmt.setInt(1, userId);
+			rs = pstmt.executeQuery();
+
+			LOG.debug("Finished method");
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get number of active subscriptions", e);
+			throw new DaoException("Can't get number of active subscriptions", e);
+		} finally {
+			ResourceReleaser.close(rs);
+			ResourceReleaser.close(pstmt);
+		}
+	}
+
+	@Override
+	public BigDecimal getTotalAmountOfSpentMoneyByUserId(int userId) throws DaoException {
+		LOG.debug("Starts method");
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = connection.prepareStatement(Query.Subscription.GET_TOTAL_SPENT_MONEY_BY_USER_ID.getQuery());
+			pstmt.setInt(1, userId);
+			rs = pstmt.executeQuery();
+
+			LOG.debug("Finished method");
+			if (rs.next()) {
+				return rs.getBigDecimal(1);
+			}
+
+			throw new DaoException("Result set is empty");
+
+		} catch (SQLException e) {
+			LOG.error("Can't get total spent money value by user id = " + userId, e);
+			throw new DaoException("Can't get total spent money value by user id = " + userId, e);
 		} finally {
 			ResourceReleaser.close(rs);
 			ResourceReleaser.close(pstmt);
@@ -145,7 +179,8 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 	private Subscription extractSubscription(ResultSet rs) throws SQLException {
 		return new Subscription(
 				rs.getInt(EntityColumn.Subscription.PUBLICATION_ID.getName()),
-				rs.getDate(EntityColumn.Subscription.START_DATE.getName())
+				rs.getDate(EntityColumn.Subscription.START_DATE.getName()),
+				rs.getInt(EntityColumn.Subscription.PERIOD.getName())
 		);
 	}
 

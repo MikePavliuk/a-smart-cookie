@@ -155,7 +155,7 @@
 
 				<div class="row justify-content-around">
 
-					<c:forEach var="publication" items="${requestScope.publications}">
+					<c:forEach var="publication" items="${requestScope.publications}" varStatus="loop">
 						<div class="col-6" style="display: flex">
 							<div class="card publication-item">
 								<div class="card-body">
@@ -187,21 +187,44 @@
 											</a>
 										</c:when>
 
-										<c:when test="${not empty sessionScope.user and sessionScope.user.userDetail.balance < publication.pricePerMonth}">
-											<a class="btn btn-warning"
-											   data-toggle="modal"
-											   data-target="#addFundsModal"
-											   role="button">
-												<fmt:message key="publication.subscribe"/>
-											</a>
-										</c:when>
+<%--										<c:when test="${not empty sessionScope.user and sessionScope.user.userDetail.balance < publication.pricePerMonth}">--%>
+<%--											<a class="btn btn-warning"--%>
+<%--											   data-toggle="modal"--%>
+<%--											   data-target="#addFundsModal"--%>
+<%--											   role="button">--%>
+<%--												<fmt:message key="publication.subscribe"/>--%>
+<%--											</a>--%>
+<%--										</c:when>--%>
 
 										<c:otherwise>
-											<form action="${pageContext.request.contextPath}/controller?command=subscribe" method="post">
+											<form action="${pageContext.request.contextPath}/controller?command=subscribe" method="post" id="subscriptionForm">
 												<input type="hidden" name="item" value="${publication.id}">
-												<button class="btn btn-success" type="submit">
-													<fmt:message key="publication.subscribe"/>
-												</button>
+												<div class="form-group row">
+													<label for="period-${loop.index}" class="col-sm-4 label-center">
+														<fmt:message key="publication.period"/>
+													</label>
+													<div class="col-sm-2">
+														<input type="number"
+															   class="form-control"
+															   id="period-${loop.index}"
+															   min="1"
+															   max="12"
+															   value="1"
+															   name="period"
+															   step="1"
+															   required>
+													</div>
+												</div>
+												<div>
+													<button class="btn btn-success btn-submit"
+															type="submit"
+															onclick="subscribe(
+																${publication.pricePerMonth.doubleValue()},
+																${sessionScope.user.userDetail.balance.doubleValue()},
+																${loop.index})">
+														<fmt:message key="publication.subscribe"/>
+													</button>
+												</div>
 											</form>
 										</c:otherwise>
 									</c:choose>
@@ -225,6 +248,17 @@
 	</div>
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
+<script type="text/javascript">
+    function subscribe(price, balance, index) {
+        let userBalance = parseFloat(balance);
+		let totalPrice = parseInt($("#period-" + index).val()) * parseFloat(price);
+
+        if (totalPrice > userBalance) {
+            event.preventDefault();
+            $("#addFundsModal").modal('show');
+        }
+    }
+</script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/catalog.js"></script>
 
 </body>

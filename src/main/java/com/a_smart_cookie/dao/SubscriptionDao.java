@@ -3,6 +3,7 @@ package com.a_smart_cookie.dao;
 import com.a_smart_cookie.entity.Subscription;
 import com.a_smart_cookie.exception.DaoException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,38 +13,46 @@ import java.util.List;
 public abstract class SubscriptionDao extends AbstractDao {
 
 	/**
-	 * Gets subscriptions by user id.
+	 * Gets active subscriptions by user id.
 	 *
 	 * @param id Users id.
 	 * @return List of subscriptions.
 	 */
-	public abstract List<Subscription> getSubscriptionsByUserId(int id) throws DaoException;
+	public abstract List<Subscription> getActiveSubscriptionsByUserId(int id) throws DaoException;
 
 	/**
 	 * Insert subscription.
 	 *
 	 * @param userId User's id.
 	 * @param publicationId Publication's id.
+	 * @param periodInMonths Period for subscription being active.
 	 * @return Whether subscription was correctly inserted.
 	 */
-	public abstract boolean insertSubscription(int userId, int publicationId) throws DaoException;
+	public abstract boolean insertSubscription(int userId, int publicationId, int periodInMonths) throws DaoException;
 
 
 	/**
-	 * Removes subscription from user.
-	 *
-	 * @param userId Id of user.
-	 * @param publicationId Publication's id.
-	 * @return Whether subscription was correctly deleted.
-	 */
-	public abstract boolean removeSubscriptions(int userId, int publicationId) throws DaoException;
-
-	/**
-	 * Gets number of active subscriptions of user by his id.
+	 * Gets number of all inactive subscriptions of user by his id.
 	 *
 	 * @param userId Users id.
 	 * @return Number of subscriptions.
 	 */
-	public abstract int getNumberOfSubscriptionsByUserId(int userId) throws DaoException;
+	public abstract int getNumberOfInactiveSubscriptionsByUserId(int userId) throws DaoException;
+
+	/**
+	 * Gets number of all active subscriptions of user by his id.
+	 *
+	 * @param userId Users id.
+	 * @return Number of subscriptions.
+	 */
+	public abstract int getNumberOfActiveSubscriptionsByUserId(int userId) throws DaoException;
+
+	/**
+	 * Gets total amount of spend money by user id in the service.
+	 *
+	 * @param userId User's id.
+	 * @return Spent money value.
+	 */
+	public abstract BigDecimal getTotalAmountOfSpentMoneyByUserId(int userId) throws DaoException;
 
 }
