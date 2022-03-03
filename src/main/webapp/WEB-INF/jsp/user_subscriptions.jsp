@@ -41,8 +41,8 @@
 							<td>${subscription.publication.title}</td>
 							<td>${subscription.publication.genre.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}</td>
 							<td>${subscription.publication.pricePerMonth}$</td>
-							<td>${subscription.startDate}</td>
-							<td>${subscription.startDate.plusMonths(subscription.periodInMonths)}</td>
+							<td>${ld:localizedDate(subscription.startDate, Language.safeFromString(cookie['lang'].value))}</td>
+							<td>${ld:localizedDate(subscription.startDate.plusMonths(subscription.periodInMonths), Language.safeFromString(cookie['lang'].value))}</td>
 						</tr>
 					</c:forEach>
 					</tbody>
