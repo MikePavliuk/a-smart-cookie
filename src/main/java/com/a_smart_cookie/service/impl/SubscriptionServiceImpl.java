@@ -1,6 +1,7 @@
 package com.a_smart_cookie.service.impl;
 
 import com.a_smart_cookie.dao.*;
+import com.a_smart_cookie.dto.user.SubscriptionStatistics;
 import com.a_smart_cookie.dto.user.SubscriptionWithPublicationInfo;
 import com.a_smart_cookie.entity.*;
 import com.a_smart_cookie.exception.DaoException;
@@ -76,7 +77,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 				throw new NotUpdatedResultsException("Didn't insert balance result");
 			}
 
-			List<Subscription> subscriptions = subscriptionDao.getSubscriptionsByUserId(user.getId());
+			List<Subscription> subscriptions = subscriptionDao.getActiveSubscriptionsByUserId(user.getId());
 			transaction.commit();
 			LOG.debug("Finished method with commit");
 			return User.UserBuilder.fromUser(user)
@@ -103,32 +104,39 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	}
 
 	@Override
-	public List<SubscriptionWithPublicationInfo> getSubscriptionsWithFullInfoByUserAndLanguage(User user, Language language) {
+	public SubscriptionStatistics getSubscriptionsStatistics(User user, Language language) {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
 
 		try {
 			PublicationDao publicationDao = DaoFactory.getInstance().getPublicationDao();
-			transaction.init(publicationDao);
+			SubscriptionDao subscriptionDao = DaoFactory.getInstance().getSubscriptionDao();
 
-			List<SubscriptionWithPublicationInfo> result = new ArrayList<>();
+			transaction.initTransaction(publicationDao, subscriptionDao);
+
+			List<SubscriptionWithPublicationInfo> activeSubscriptions = new ArrayList<>();
 
 			for (Subscription subscription : user.getSubscriptions()) {
-				result.add(new SubscriptionWithPublicationInfo(
+				activeSubscriptions.add(new SubscriptionWithPublicationInfo(
 						publicationDao.getPublicationWithInfoByIdAndLanguage(subscription.getPublicationId(), language),
-						subscription.getStartDate()
-				));
+						subscription.getStartDate(),
+						subscription.getPeriodInMonths()));
 			}
 
+			int numberOfInactiveSubscriptions = subscriptionDao.getNumberOfInactiveSubscriptionsByUserId(user.getId());
+			BigDecimal spentMoney = subscriptionDao.getTotalAmountOfSpentMoneyByUserId(user.getId());
+
 			LOG.debug("Method finished");
-			return result;
+			transaction.commit();
+			return new SubscriptionStatistics(activeSubscriptions, numberOfInactiveSubscriptions, spentMoney);
 
 		} catch (DaoException e) {
-			LOG.error("Can't get subscriptions", e);
-			throw new ServiceException("Can't get subscriptions", e);
+			transaction.rollback();
+			LOG.error("Can't get subscription statistics with '" + user + "' and '" + language + "'", e);
+			throw new ServiceException("Can't get subscription statistics with '" + user + "' and '" + language + "'", e);
 		} finally {
-			transaction.end();
+			transaction.endTransaction();
 		}
 	}
 

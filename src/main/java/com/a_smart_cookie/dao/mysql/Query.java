@@ -12,16 +12,33 @@ public final class Query {
 	 * Represents queries holder for obtaining publications.
 	 */
 	public enum Subscription {
-		GET_ALL_BY_USER_ID(
+		GET_ALL_ACTIVE_BY_USER_ID(
 				"SELECT subscription.publication_id, subscription.start_date, subscription.period " +
 						"FROM a_smart_cookie.subscription " +
+						"WHERE subscription.user_id = ? " +
+						"AND TIMESTAMPDIFF(MONTH, subscription.start_date, CURRENT_TIMESTAMP()) < subscription.period;"
+		),
+
+		GET_INACTIVE_COUNT_BY_USER_ID(
+				"SELECT count(subscription.user_id) as count " +
+						"FROM a_smart_cookie.subscription " +
+						"WHERE subscription.user_id = ? " +
+						"AND TIMESTAMPDIFF(MONTH, subscription.start_date, CURRENT_TIMESTAMP()) >= subscription.period;"
+		),
+
+		GET_TOTAL_SPENT_MONEY_BY_USER_ID(
+				"SELECT sum(publication.price_per_month * subscription.period) as total " +
+						"FROM a_smart_cookie.subscription " +
+						"JOIN a_smart_cookie.publication " +
+						"ON subscription.publication_id = publication.id " +
 						"WHERE subscription.user_id = ?;"
 		),
 
-		GET_COUNT_BY_USER_ID(
+		GET_ACTIVE_COUNT_BY_USER_ID(
 				"SELECT count(subscription.user_id) as count " +
 						"FROM a_smart_cookie.subscription " +
-						"WHERE subscription.user_id = ?;"
+						"WHERE subscription.user_id = ? " +
+						"AND TIMESTAMPDIFF(MONTH, subscription.start_date, CURRENT_TIMESTAMP()) < subscription.period;"
 		),
 
 		CREATE_SUBSCRIPTION(
@@ -53,12 +70,12 @@ public final class Query {
 
 		CREATE_PUBLICATION(
 				"INSERT INTO a_smart_cookie.publication(genre_id, price_per_month) " +
-				"VALUES (?, ?);"
+						"VALUES (?, ?);"
 		),
 
 		CREATE_PUBLICATION_INFO(
 				"INSERT INTO a_smart_cookie.publication_info(publication_id, language_id, title, description) " +
-				"VALUES (?, ?, ?, ?);"
+						"VALUES (?, ?, ?, ?);"
 		),
 
 		DELETE_BY_ID(
@@ -67,69 +84,69 @@ public final class Query {
 		),
 
 		UPDATE_PUBLICATION_GENRE_AND_PRICE_PER_MONTH_BY_ID(
-			"UPDATE a_smart_cookie.publication "+
-					"SET publication.genre_id = (SELECT genre.id from a_smart_cookie.genre WHERE genre.name = ?), " +
-					"publication.price_per_month = ? " +
-					"WHERE publication.id = ?;"
+				"UPDATE a_smart_cookie.publication " +
+						"SET publication.genre_id = (SELECT genre.id from a_smart_cookie.genre WHERE genre.name = ?), " +
+						"publication.price_per_month = ? " +
+						"WHERE publication.id = ?;"
 		),
 
 		UPDATE_PUBLICATION_INFO_BY_ID_AND_LANGUAGE(
-			"UPDATE a_smart_cookie.publication_info "+
-					"SET publication_info.title = ?, " +
-					"publication_info.description = ? " +
-					"WHERE publication_info.publication_id = ? " +
-					"AND publication_info.language_id = " +
+				"UPDATE a_smart_cookie.publication_info " +
+						"SET publication_info.title = ?, " +
+						"publication_info.description = ? " +
+						"WHERE publication_info.publication_id = ? " +
+						"AND publication_info.language_id = " +
 						"(SELECT id FROM a_smart_cookie.language WHERE name = ?); "
 		),
 
 		GET_TOTAL_NUMBER_OF_PUBLICATIONS(
-				"SELECT count(*) as count "+
+				"SELECT count(*) as count " +
 						"FROM a_smart_cookie.publication;"
 		),
 
 		GET_PUBLICATIONS_WITH_INFO_AND_OFFSET_AND_ITEMS_PER_PAGE_BY_LANGUAGE(
-				"SELECT publication.id, genre.name, publication.price_per_month, "+
-						"publication_info.title, publication_info.description "+
-						"FROM a_smart_cookie.publication "+
-						"JOIN a_smart_cookie.publication_info "+
-						"ON publication.id = publication_info.publication_id "+
-						"JOIN a_smart_cookie.genre "+
-						"ON publication.genre_id = genre.id "+
-						"WHERE publication_info.language_id = (SELECT id FROM a_smart_cookie.language WHERE name = ?) "+
+				"SELECT publication.id, genre.name, publication.price_per_month, " +
+						"publication_info.title, publication_info.description " +
+						"FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"JOIN a_smart_cookie.genre " +
+						"ON publication.genre_id = genre.id " +
+						"WHERE publication_info.language_id = (SELECT id FROM a_smart_cookie.language WHERE name = ?) " +
 						"LIMIT ?, ?;"
 		),
 
 		GET_PUBLICATION_WITH_INFO_BY_ID_AND_LANGUAGE(
-				"SELECT publication.id, genre.name, publication.price_per_month, "+
-						"publication_info.title, publication_info.description "+
-						"FROM a_smart_cookie.publication "+
-						"JOIN a_smart_cookie.publication_info "+
-						"ON publication.id = publication_info.publication_id "+
-						"JOIN a_smart_cookie.genre "+
-						"ON publication.genre_id = genre.id "+
-						"WHERE publication_id = ? "+
+				"SELECT publication.id, genre.name, publication.price_per_month, " +
+						"publication_info.title, publication_info.description " +
+						"FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"JOIN a_smart_cookie.genre " +
+						"ON publication.genre_id = genre.id " +
+						"WHERE publication_id = ? " +
 						"AND publication_info.language_id = (SELECT id FROM a_smart_cookie.language WHERE name = ?);"
 		),
 
 		BUILDER_FIND_ALL_BY_LANGUAGE(
-				"SELECT genre.name, "+
-						"publication.id, publication.price_per_month, publication_info.title, publication_info.description "+
-						"FROM a_smart_cookie.publication "+
-						"JOIN a_smart_cookie.publication_info "+
-						"ON publication.id = publication_info.publication_id "+
-						"JOIN a_smart_cookie.genre "+
-						"ON publication.genre_id = genre.id "+
-						"WHERE publication_info.language_id = "+
+				"SELECT genre.name, " +
+						"publication.id, publication.price_per_month, publication_info.title, publication_info.description " +
+						"FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"JOIN a_smart_cookie.genre " +
+						"ON publication.genre_id = genre.id " +
+						"WHERE publication_info.language_id = " +
 						"(SELECT id FROM a_smart_cookie.language WHERE name = ?) "
 		),
 
 		BUILDER_GET_NUMBER_OF_ROWS_FOUNDED_BY_LANGUAGE(
-				"SELECT count(*) AS count FROM a_smart_cookie.publication "+
-						"JOIN a_smart_cookie.publication_info "+
-						"ON publication.id = publication_info.publication_id "+
-						"JOIN a_smart_cookie.genre "+
-						"ON publication.genre_id = genre.id "+
-						"WHERE publication_info.language_id = "+
+				"SELECT count(*) AS count FROM a_smart_cookie.publication " +
+						"JOIN a_smart_cookie.publication_info " +
+						"ON publication.id = publication_info.publication_id " +
+						"JOIN a_smart_cookie.genre " +
+						"ON publication.genre_id = genre.id " +
+						"WHERE publication_info.language_id = " +
 						"(SELECT id FROM a_smart_cookie.language WHERE name = ?) "
 		);
 

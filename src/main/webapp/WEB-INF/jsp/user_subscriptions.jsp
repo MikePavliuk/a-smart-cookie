@@ -15,11 +15,12 @@
 	<div class="container">
 		<h1 class="mt-3 text-center"><fmt:message key="user_page_jsp.header"/></h1>
 		<c:choose>
-			<c:when test="${requestScope.subscriptions.size() gt 0}">
-				<p><b><fmt:message key="user_page_jsp.subscriptions_number"/>:</b> ${requestScope.subscriptions.size()}</p>
+			<c:when test="${requestScope.statistics.activeSubscriptions.size() gt 0}">
+				<p><b><fmt:message key="user_page_jsp.active_subscriptions_number"/>:</b> ${requestScope.statistics.activeSubscriptions.size()}</p>
+				<p><b><fmt:message key="user_page_jsp.inactive_subscriptions_number"/>:</b> ${requestScope.statistics.numberOfInactiveSubscriptions}</p>
 				<p>
-					<b><fmt:message key="user_page_jsp.payment_amount_per_month"/>:</b>
-						${ppm:paymentAmountPerMonthTag(requestScope.subscriptions)}$
+					<b><fmt:message key="user_page_jsp.payment_total_amount"/>:</b>
+						${requestScope.statistics.totalSpentMoney}$
 				</p>
 				<h5 class="mt-3 text-center"><fmt:message key="user_page_jsp.subscriptions_table"/></h5>
 				<table class="table">
@@ -29,17 +30,19 @@
 						<th scope="col"><fmt:message key="user_page_jsp.table.publication_title"/></th>
 						<th scope="col"><fmt:message key="user_page_jsp.table.genre"/></th>
 						<th scope="col"><fmt:message key="user_page_jsp.table.price_per_month"/></th>
-						<th scope="col"><fmt:message key="user_page_jsp.table.days_to_payment"/></th>
+						<th scope="col"><fmt:message key="user_page_jsp.table.start_date"/></th>
+						<th scope="col"><fmt:message key="user_page_jsp.table.end_date"/></th>
 					</tr>
 					</thead>
 					<tbody>
-					<c:forEach var="subscription" items="${requestScope.subscriptions}" varStatus="loop">
+					<c:forEach var="subscription" items="${requestScope.statistics.activeSubscriptions}" varStatus="loop">
 						<tr>
 							<th scope="row">${loop.count}</th>
 							<td>${subscription.publication.title}</td>
 							<td>${subscription.publication.genre.getTranslatedValue(Language.safeFromString(cookie['lang'].value))}</td>
 							<td>${subscription.publication.pricePerMonth}$</td>
-							<td>${cdtp:daysToPaymentTag(subscription.localDate)}</td>
+							<td>${subscription.startDate}</td>
+							<td>${subscription.startDate.plusMonths(subscription.periodInMonths)}</td>
 						</tr>
 					</c:forEach>
 					</tbody>

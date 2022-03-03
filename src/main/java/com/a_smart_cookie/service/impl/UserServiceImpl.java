@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 			transaction.commit();
 			LOG.debug("Finished getting user");
 			return Optional.of(User.UserBuilder.fromUser(userWithoutSubscriptions.get())
-					.withSubscriptions(subscriptionDao.getSubscriptionsByUserId(userWithoutSubscriptions.get().getId()))
+					.withSubscriptions(subscriptionDao.getActiveSubscriptionsByUserId(userWithoutSubscriptions.get().getId()))
 					.build());
 		} catch (DaoException e) {
 			transaction.rollback();
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
 						user.getUserDetail().getLastName(),
 						user.getEmail(),
 						user.getStatus(),
-						subscriptionDao.getNumberOfSubscriptionsByUserId(user.getId())
+						subscriptionDao.getNumberOfActiveSubscriptionsByUserId(user.getId())
 				));
 			}
 

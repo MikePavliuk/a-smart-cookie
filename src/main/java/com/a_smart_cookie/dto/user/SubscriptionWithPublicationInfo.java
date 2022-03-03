@@ -10,26 +10,34 @@ import java.time.LocalDate;
  */
 public class SubscriptionWithPublicationInfo {
 	private final Publication publication;
-	private final LocalDate localDate;
+	private final LocalDate startDate;
+	private final int periodInMonths;
 
-	public SubscriptionWithPublicationInfo(Publication publication, LocalDate localDate) {
+	public SubscriptionWithPublicationInfo(Publication publication, LocalDate startDate, int periodInMonths) {
 		this.publication = publication;
-		this.localDate = localDate;
+		this.startDate = startDate;
+		this.periodInMonths = periodInMonths;
 	}
 
 	public Publication getPublication() {
 		return publication;
 	}
 
-	public LocalDate getLocalDate() {
-		return localDate;
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public int getPeriodInMonths() {
+		return periodInMonths;
 	}
 
 	@Override
 	public String toString() {
 		return "SubscriptionWithPublicationInfo{" +
 				"publication=" + publication +
-				", localDate=" + localDate +
+				", startDate=" + startDate +
+				", periodInMonths=" + periodInMonths +
 				'}';
 	}
+
 }
