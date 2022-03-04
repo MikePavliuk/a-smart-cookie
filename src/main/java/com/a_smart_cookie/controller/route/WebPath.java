@@ -39,7 +39,6 @@ public final class WebPath {
 		CATALOG_FIRST_PAGE("/controller?command=catalog&page=1"),
 		SIGN_IN("/controller?command=sign-in"),
 		SIGN_UP("/controller?command=sign-up"),
-		ERROR("/controller?command=error"),
 		USER_SUBSCRIPTIONS("/controller?command=subscriptions"),
 		ADMIN_USERS("/controller?command=users"),
 		ADMIN_PUBLICATIONS_MANAGEMENT("/controller?command=publications"),

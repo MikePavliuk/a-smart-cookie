@@ -10,6 +10,8 @@
 <c:set var="title" value="${signInTitle}" scope="page"/>
 <%@ include file="/WEB-INF/jspf/head.jspf" %>
 
+<script src='https://www.google.com/recaptcha/api.js?hl=${cookie['lang'].value}'></script>
+
 <body>
 
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
@@ -75,6 +77,17 @@
 						<fmt:message key="sign_in_jsp.blocked_user"/>
 					</span>
 				</c:if>
+
+				<!-- reCAPTCHA -->
+				<div class="g-recaptcha d-flex justify-content-center"
+					 data-sitekey="6LfEvLQeAAAAAG6XVyOjCNvDIOoi6Xoa1Xd_8kyU">
+				</div>
+				<c:if test="${sessionScope.invalidCaptcha != null && sessionScope.invalidCaptcha}">
+					<span class="error text-danger d-flex justify-content-center">
+						<fmt:message key="sign_in_jsp.invalid_captcha"/>
+					</span>
+				</c:if>
+
 				<div class="col text-center">
 					<button type="submit" class="btn btn-primary mt-2">
 						<fmt:message key="sign_in_jsp.button_sign_in"/>
