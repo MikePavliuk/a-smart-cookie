@@ -10,6 +10,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
+/**
+ * Provides with reCAPTCHA handling methods.
+ *
+ */
 public final class RecaptchaHandler {
 
 	private static final Logger LOG = Logger.getLogger(RecaptchaHandler.class);
@@ -18,6 +22,12 @@ public final class RecaptchaHandler {
 	private static final String SITE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
 
 
+	/**
+	 * Verifies whether recaptcha response is valid or no.
+	 *
+	 * @param gRecaptchaResponse Recaptcha response.
+	 * @return Whether recaptcha response is valid or no.
+	 */
 	public static boolean verify(String gRecaptchaResponse) {
 		if (gRecaptchaResponse == null || gRecaptchaResponse.length() == 0) {
 			return false;
