@@ -3,12 +3,13 @@ package com.a_smart_cookie.dto.admin;
 import com.a_smart_cookie.entity.Status;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Data transfer object that used as holder of some user information for managing by admin.
  *
  */
-public class UserForStatusManagement {
+public class UserForManagement {
 	private final Integer id;
 	private final String firstName;
 	private final String lastName;
@@ -18,14 +19,14 @@ public class UserForStatusManagement {
 	private final int numberOfInactiveSubscriptions;
 	private final BigDecimal totalSpentMoney;
 
-	public UserForStatusManagement(Integer id,
-								   String firstName,
-								   String lastName,
-								   String email,
-								   Status status,
-								   int numberOfActiveSubscriptions,
-								   int numberOfInactiveSubscriptions,
-								   BigDecimal totalSpentMoney) {
+	public UserForManagement(Integer id,
+							 String firstName,
+							 String lastName,
+							 String email,
+							 Status status,
+							 int numberOfActiveSubscriptions,
+							 int numberOfInactiveSubscriptions,
+							 BigDecimal totalSpentMoney) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -33,7 +34,7 @@ public class UserForStatusManagement {
 		this.status = status;
 		this.numberOfActiveSubscriptions = numberOfActiveSubscriptions;
 		this.numberOfInactiveSubscriptions = numberOfInactiveSubscriptions;
-		this.totalSpentMoney = totalSpentMoney;
+		this.totalSpentMoney = Objects.requireNonNullElse(totalSpentMoney, BigDecimal.ZERO);
 	}
 
 	public Integer getId() {

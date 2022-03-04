@@ -18,6 +18,13 @@
 		<c:choose>
 			<c:when test="${requestScope.usersForManagement.size() gt 0}">
 				<h5 class="mt-3 text-center"><fmt:message key="users_jsp.table_header"/></h5>
+				<div class="d-flex justify-content-end mt-2 mb-2">
+					<a type="button"
+					   class="btn btn-success"
+					   href="${pageContext.request.contextPath}/controller?command=generate_users_pdf">
+						<fmt:message key="button.export_to_pdf"/>
+					</a>
+				</div>
 				<table class="table">
 					<thead class="thead-light">
 					<tr>

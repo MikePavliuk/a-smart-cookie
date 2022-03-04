@@ -63,7 +63,7 @@
 		<filter-class>com.a_smart_cookie.filter.CommandAccessFilter</filter-class>
 		<init-param>
 			<param-name>admin</param-name>
-			<param-value>users change_user_status publications publication_delete publication_edit_view edit_publication publication_create_view create_publication</param-value>
+			<param-value>users generate_users_pdf change_user_status publications publication_delete publication_edit_view edit_publication publication_create_view create_publication</param-value>
 		</init-param>
 		<init-param>
 			<param-name>subscriber</param-name>

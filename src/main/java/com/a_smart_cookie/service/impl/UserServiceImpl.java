@@ -1,7 +1,7 @@
 package com.a_smart_cookie.service.impl;
 
 import com.a_smart_cookie.dao.*;
-import com.a_smart_cookie.dto.admin.UserForStatusManagement;
+import com.a_smart_cookie.dto.admin.UserForManagement;
 import com.a_smart_cookie.dto.sign_up.UserMapper;
 import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.Status;
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserForStatusManagement> getPaginatedSubscribers(int requestedPage, int itemsPerPage) {
+	public List<UserForManagement> getPaginatedUsersWithStatistics(int requestedPage, int itemsPerPage) {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -135,29 +135,58 @@ public class UserServiceImpl implements UserService {
 
 			List<User> subscribers = userDao.getSubscribersWithLimit(itemsPerPage * (requestedPage-1), itemsPerPage);
 
-			List<UserForStatusManagement> usersForStatusManagement = new ArrayList<>();
-
-			for (User user : subscribers) {
-				usersForStatusManagement.add(new UserForStatusManagement(
-						user.getId(),
-						user.getUserDetail().getFirstName(),
-						user.getUserDetail().getLastName(),
-						user.getEmail(),
-						user.getStatus(),
-						subscriptionDao.getNumberOfActiveSubscriptionsByUserId(user.getId()),
-						subscriptionDao.getNumberOfInactiveSubscriptionsByUserId(user.getId()),
-						subscriptionDao.getTotalAmountOfSpentMoneyByUserId(user.getId())));
-			}
-
-			return usersForStatusManagement;
+			return extractUserForManagementList(subscriptionDao, subscribers);
 
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't get all users for status management", e);
-			throw new ServiceException("Can't get all users for status management", e);
+			LOG.error("Can't get paginated users with statistics", e);
+			throw new ServiceException("Can't get paginated users with statistics", e);
 		} finally {
 			transaction.endTransaction();
 		}
+	}
+
+	@Override
+	public List<UserForManagement> getAllUsersWithStatistics() {
+		LOG.debug("Starts method");
+
+		EntityTransaction transaction = new EntityTransaction();
+
+		try {
+			UserDao userDao = DaoFactory.getInstance().getUserDao();
+			SubscriptionDao subscriptionDao = DaoFactory.getInstance().getSubscriptionDao();
+
+			transaction.initTransaction(userDao, subscriptionDao);
+
+			List<User> subscribers = userDao.getAllSubscribers();
+
+			return extractUserForManagementList(subscriptionDao, subscribers);
+
+		} catch (DaoException e) {
+			transaction.rollback();
+			LOG.error("Can't get all users with statistics", e);
+			throw new ServiceException("Can't get all users with statistics", e);
+		} finally {
+			transaction.endTransaction();
+		}
+	}
+
+	private List<UserForManagement> extractUserForManagementList(SubscriptionDao subscriptionDao, List<User> subscribers) throws DaoException {
+		List<UserForManagement> usersForStatusManagement = new ArrayList<>();
+
+		for (User user : subscribers) {
+			usersForStatusManagement.add(new UserForManagement(
+					user.getId(),
+					user.getUserDetail().getFirstName(),
+					user.getUserDetail().getLastName(),
+					user.getEmail(),
+					user.getStatus(),
+					subscriptionDao.getNumberOfActiveSubscriptionsByUserId(user.getId()),
+					subscriptionDao.getNumberOfInactiveSubscriptionsByUserId(user.getId()),
+					subscriptionDao.getTotalAmountOfSpentMoneyByUserId(user.getId())));
+		}
+
+		return usersForStatusManagement;
 	}
 
 	@Override

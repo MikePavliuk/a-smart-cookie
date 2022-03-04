@@ -46,6 +46,13 @@ public abstract class UserDao extends AbstractDao {
 	public abstract List<User> getSubscribersWithLimit(int offset, int itemsPerPage) throws DaoException;
 
 	/**
+	 * Gets all subscribers.
+	 *
+	 * @return List of subscribers.
+	 */
+	public abstract List<User> getAllSubscribers() throws DaoException;
+
+	/**
 	 * Change user status.
 	 *
 	 * @param userId Users id.
