@@ -12,6 +12,7 @@ import com.a_smart_cookie.exception.HashingException;
 import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
+import com.a_smart_cookie.util.RecaptchaHandler;
 import com.a_smart_cookie.util.hashing.PBKDF2Hash;
 import com.a_smart_cookie.util.validation.user.UserValidator;
 import org.apache.log4j.Logger;
@@ -45,6 +46,17 @@ public class LoginCommand extends Command {
 		if (notValidHttpPath != null) return notValidHttpPath;
 
 		LOG.trace("User is valid");
+
+		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+		LOG.trace("gRecaptchaResponse=" + gRecaptchaResponse);
+
+		// Verify CAPTCHA.
+		if (!RecaptchaHandler.verify(gRecaptchaResponse)) {
+			session.setAttribute("invalidCaptcha",true);
+			setOldEmailToSession(email, session);
+			LOG.debug("Command finished with invalid captcha");
+			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+		}
 
 		try {
 			UserService userService = ServiceFactory.getInstance().getUserService();
