@@ -18,6 +18,13 @@
 		<c:choose>
 			<c:when test="${requestScope.usersForManagement.size() gt 0}">
 				<h5 class="mt-3 text-center"><fmt:message key="users_jsp.table_header"/></h5>
+				<div class="d-flex justify-content-end mt-2 mb-2">
+					<a type="button"
+					   class="btn btn-success"
+					   href="${pageContext.request.contextPath}/controller?command=generate_users_pdf">
+						<fmt:message key="button.export_to_pdf"/>
+					</a>
+				</div>
 				<table class="table">
 					<thead class="thead-light">
 					<tr>
@@ -25,7 +32,9 @@
 						<th scope="col"><fmt:message key="users_jsp.table.first_name"/></th>
 						<th scope="col"><fmt:message key="users_jsp.table.last_name"/></th>
 						<th scope="col"><fmt:message key="users_jsp.table.email"/></th>
-						<th scope="col"><fmt:message key="users_jsp.table.number_of_subscriptions"/></th>
+						<th scope="col"><fmt:message key="users_jsp.table.number_of_active_subscriptions"/></th>
+						<th scope="col"><fmt:message key="users_jsp.table.number_of_inactive_subscriptions"/></th>
+						<th scope="col"><fmt:message key="users_jsp.table.total_spent"/></th>
 						<th scope="col"><fmt:message key="users_jsp.table.status"/></th>
 					</tr>
 					</thead>
@@ -36,7 +45,9 @@
 							<td>${user.firstName}</td>
 							<td>${user.lastName}</td>
 							<td>${user.email}</td>
-							<td>${user.numberOfSubscriptions}</td>
+							<td>${user.numberOfActiveSubscriptions}</td>
+							<td>${user.numberOfInactiveSubscriptions}</td>
+							<td>${user.totalSpentMoney}$</td>
 							<td>
 								<form action="${pageContext.request.contextPath}/controller?command=change_user_status"
 									  method="post">

@@ -39,6 +39,7 @@ public final class CommandContext {
 		commandMap.put("subscriptions", new SubscriptionsCommand());
 		
 		commandMap.put("users", new UsersCommand());
+		commandMap.put("generate_users_pdf", new GenerateUsersPdfCommand());
 		commandMap.put("change_user_status", new ChangeUserStatusCommand());
 		commandMap.put("publications", new PublicationsManagementCommand());
 		commandMap.put("publication_delete", new PublicationDeleteCommand());

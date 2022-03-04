@@ -1,6 +1,6 @@
 package com.a_smart_cookie.service;
 
-import com.a_smart_cookie.dto.admin.UserForStatusManagement;
+import com.a_smart_cookie.dto.admin.UserForManagement;
 import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
@@ -42,11 +42,18 @@ public interface UserService {
 	 * Gets all limited number of subscribers for management.
 	 *
 	 * @return Dto UserForStatusManagement
-	 * @see UserForStatusManagement
+	 * @see UserForManagement
 	 * @param requestedPage Page to be got.
 	 * @param itemsPerPage Items per page.
 	 */
-	List<UserForStatusManagement> getPaginatedSubscribers(int requestedPage, int itemsPerPage);
+	List<UserForManagement> getPaginatedUsersWithStatistics(int requestedPage, int itemsPerPage);
+
+	/**
+	 * Gets all subscribers with statistics for management.
+	 *
+	 * @return List of UserForManagement.
+	 */
+	List<UserForManagement> getAllUsersWithStatistics();
 
 	/**
 	 * Method for getting number of subscribers.
