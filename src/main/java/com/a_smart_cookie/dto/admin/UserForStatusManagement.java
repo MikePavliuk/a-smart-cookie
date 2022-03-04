@@ -2,6 +2,8 @@ package com.a_smart_cookie.dto.admin;
 
 import com.a_smart_cookie.entity.Status;
 
+import java.math.BigDecimal;
+
 /**
  * Data transfer object that used as holder of some user information for managing by admin.
  *
@@ -12,15 +14,26 @@ public class UserForStatusManagement {
 	private final String lastName;
 	private final String email;
 	private final Status status;
-	private final int numberOfSubscriptions;
+	private final int numberOfActiveSubscriptions;
+	private final int numberOfInactiveSubscriptions;
+	private final BigDecimal totalSpentMoney;
 
-	public UserForStatusManagement(Integer id, String firstName, String lastName, String email, Status status, int numberOfSubscriptions) {
+	public UserForStatusManagement(Integer id,
+								   String firstName,
+								   String lastName,
+								   String email,
+								   Status status,
+								   int numberOfActiveSubscriptions,
+								   int numberOfInactiveSubscriptions,
+								   BigDecimal totalSpentMoney) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.status = status;
-		this.numberOfSubscriptions = numberOfSubscriptions;
+		this.numberOfActiveSubscriptions = numberOfActiveSubscriptions;
+		this.numberOfInactiveSubscriptions = numberOfInactiveSubscriptions;
+		this.totalSpentMoney = totalSpentMoney;
 	}
 
 	public Integer getId() {
@@ -43,8 +56,16 @@ public class UserForStatusManagement {
 		return status;
 	}
 
-	public int getNumberOfSubscriptions() {
-		return numberOfSubscriptions;
+	public int getNumberOfActiveSubscriptions() {
+		return numberOfActiveSubscriptions;
+	}
+
+	public int getNumberOfInactiveSubscriptions() {
+		return numberOfInactiveSubscriptions;
+	}
+
+	public BigDecimal getTotalSpentMoney() {
+		return totalSpentMoney;
 	}
 
 	@Override
@@ -55,7 +76,10 @@ public class UserForStatusManagement {
 				", lastName='" + lastName + '\'' +
 				", email='" + email + '\'' +
 				", status=" + status +
-				", numberOfSubscriptions=" + numberOfSubscriptions +
+				", numberOfActiveSubscriptions=" + numberOfActiveSubscriptions +
+				", numberOfInactiveSubscriptions=" + numberOfInactiveSubscriptions +
+				", totalSpentMoney=" + totalSpentMoney +
 				'}';
 	}
+
 }

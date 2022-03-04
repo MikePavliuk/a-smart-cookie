@@ -144,8 +144,9 @@ public class UserServiceImpl implements UserService {
 						user.getUserDetail().getLastName(),
 						user.getEmail(),
 						user.getStatus(),
-						subscriptionDao.getNumberOfActiveSubscriptionsByUserId(user.getId())
-				));
+						subscriptionDao.getNumberOfActiveSubscriptionsByUserId(user.getId()),
+						subscriptionDao.getNumberOfInactiveSubscriptionsByUserId(user.getId()),
+						subscriptionDao.getTotalAmountOfSpentMoneyByUserId(user.getId())));
 			}
 
 			return usersForStatusManagement;

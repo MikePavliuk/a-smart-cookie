@@ -25,7 +25,9 @@
 						<th scope="col"><fmt:message key="users_jsp.table.first_name"/></th>
 						<th scope="col"><fmt:message key="users_jsp.table.last_name"/></th>
 						<th scope="col"><fmt:message key="users_jsp.table.email"/></th>
-						<th scope="col"><fmt:message key="users_jsp.table.number_of_subscriptions"/></th>
+						<th scope="col"><fmt:message key="users_jsp.table.number_of_active_subscriptions"/></th>
+						<th scope="col"><fmt:message key="users_jsp.table.number_of_inactive_subscriptions"/></th>
+						<th scope="col"><fmt:message key="users_jsp.table.total_spent"/></th>
 						<th scope="col"><fmt:message key="users_jsp.table.status"/></th>
 					</tr>
 					</thead>
@@ -36,7 +38,9 @@
 							<td>${user.firstName}</td>
 							<td>${user.lastName}</td>
 							<td>${user.email}</td>
-							<td>${user.numberOfSubscriptions}</td>
+							<td>${user.numberOfActiveSubscriptions}</td>
+							<td>${user.numberOfInactiveSubscriptions}</td>
+							<td>${user.totalSpentMoney}$</td>
 							<td>
 								<form action="${pageContext.request.contextPath}/controller?command=change_user_status"
 									  method="post">
