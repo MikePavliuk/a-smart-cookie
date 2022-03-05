@@ -247,6 +247,26 @@
 
 	</div>
 </div>
+
+<c:choose>
+	<c:when test="${not empty sessionScope.serviceError}">
+		${sar:remove(pageContext.session, "serviceError")}
+		<div class="alert alert-danger alert-dismissable text-center">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<fmt:message key="alert.service_exception"/>
+		</div>
+	</c:when>
+
+	<c:when test="${not empty sessionScope.notUpdatedResult}">
+		${sar:remove(pageContext.session, "notUpdatedResult")}
+		<div class="alert alert-warn alert-dismissable text-center">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<fmt:message key="alert.not_updated_results"/>
+		</div>
+	</c:when>
+
+</c:choose>
+
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
 <script type="text/javascript">
     function subscribe(price, balance, index) {

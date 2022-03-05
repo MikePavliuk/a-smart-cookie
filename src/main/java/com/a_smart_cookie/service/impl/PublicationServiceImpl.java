@@ -29,7 +29,7 @@ public class PublicationServiceImpl implements PublicationService {
 	private static final Logger LOG = Logger.getLogger(PublicationServiceImpl.class);
 
 	@Override
-	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) {
+	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -56,7 +56,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) {
+	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -74,7 +74,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language) {
+	public List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language) throws ServiceException {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -98,7 +98,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public int getTotalNumberOfPublications() {
+	public int getTotalNumberOfPublications() throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -116,7 +116,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public void deletePublication(int publicationId) {
+	public void deletePublication(int publicationId) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -130,7 +130,7 @@ public class PublicationServiceImpl implements PublicationService {
 				throw new ServiceException("Result set is empty");
 			}
 
-		} catch (DaoException e) {
+		} catch (DaoException | ServiceException e) {
 			throw new ServiceException("Can't delete publication by id '" + publicationId + "'", e);
 		} finally {
 			transaction.end();
@@ -138,7 +138,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) {
+	public Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) throws ServiceException {
 		LOG.debug("Method starts");
 
 			EntityTransaction transaction = new EntityTransaction();
@@ -163,7 +163,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public void editPublicationWithInfo(PublicationDto publicationDto) {
+	public void editPublicationWithInfo(PublicationDto publicationDto) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();

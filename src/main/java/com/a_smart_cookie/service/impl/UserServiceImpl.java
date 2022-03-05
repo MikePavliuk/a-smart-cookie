@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
 	private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
 
 	@Override
-	public boolean isUserAlreadyExistsByEmail(String email) {
-		LOG.debug("Starts getting checking if user exists");
+	public boolean isUserAlreadyExistsByEmail(String email) throws ServiceException {
+		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
 
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 			UserDao userDao = DaoFactory.getInstance().getUserDao();
 			transaction.init(userDao);
 
-			LOG.debug("Finished getting checking if user exists");
+			LOG.debug("Finished method");
 			return userDao.isUserExistsByEmail(email);
 		} catch (DaoException e) {
 			throw new ServiceException("Can't check whether user exists", e);
@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> getUserByEmail(String email) {
-		LOG.debug("Starts getting user");
+	public Optional<User> getUserByEmail(String email) throws ServiceException {
+		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
 
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 			}
 
 			transaction.commit();
-			LOG.debug("Finished getting user");
+			LOG.debug("Finished method");
 			return Optional.of(User.UserBuilder.fromUser(userWithoutSubscriptions.get())
 					.withSubscriptions(subscriptionDao.getActiveSubscriptionsByUserId(userWithoutSubscriptions.get().getId()))
 					.build());
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createNewUser(UserSignUpDto userSignUpDto) {
+	public User createNewUser(UserSignUpDto userSignUpDto) throws ServiceException {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserForManagement> getPaginatedUsersWithStatistics(int requestedPage, int itemsPerPage) {
+	public List<UserForManagement> getPaginatedUsersWithStatistics(int requestedPage, int itemsPerPage) throws ServiceException {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserForManagement> getAllUsersWithStatistics() {
+	public List<UserForManagement> getAllUsersWithStatistics() throws ServiceException {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int getTotalNumberOfSubscribers() {
+	public int getTotalNumberOfSubscribers() throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void changeUserStatus(int userId, Status status) {
+	public void changeUserStatus(int userId, Status status) throws ServiceException {
 		LOG.debug("Starts method");
 
 		Status newStatus = status == Status.ACTIVE ? Status.BLOCKED : Status.ACTIVE;
@@ -219,7 +219,7 @@ public class UserServiceImpl implements UserService {
 				throw new ServiceException("Can't update status");
 			}
 
-		} catch (DaoException e) {
+		} catch (DaoException | ServiceException e) {
 			throw new ServiceException("Can't change status for user id = '" + userId + "' to status - " + newStatus, e);
 		} finally {
 			transaction.end();

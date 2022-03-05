@@ -7,6 +7,7 @@ import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dto.admin.PublicationDto;
 import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
+import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import org.apache.log4j.Logger;
@@ -58,15 +59,22 @@ public class EditPublicationCommand extends Command {
 				descriptions
 		);
 
-		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 		HttpSession session = request.getSession();
 
-		HttpPath notValidHttpPath = publicationService.performValidationMechanism(session, publicationDto);
-		if (notValidHttpPath != null) return notValidHttpPath;
+		try {
+			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
 
-		LOG.trace("Publication is valid");
+			HttpPath notValidHttpPath = publicationService.performValidationMechanism(session, publicationDto);
+			if (notValidHttpPath != null) return notValidHttpPath;
 
-		publicationService.editPublicationWithInfo(publicationDto);
+			LOG.trace("Publication is valid");
+			publicationService.editPublicationWithInfo(publicationDto);
+
+		} catch (ServiceException e) {
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.SEND_REDIRECT);
+		}
 
 		LOG.debug("Command finished");
 		return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.FORWARD);

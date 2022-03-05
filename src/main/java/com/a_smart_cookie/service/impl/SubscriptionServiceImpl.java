@@ -24,7 +24,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	private static final Logger LOG = Logger.getLogger(SubscriptionServiceImpl.class);
 
 	@Override
-	public User subscribeToPublication(User user, int publicationId, int periodInMonths) {
+	public User subscribeToPublication(User user, int publicationId, int periodInMonths) throws ServiceException, NotUpdatedResultsException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -101,7 +101,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	}
 
 	@Override
-	public SubscriptionStatistics getSubscriptionsStatistics(User user, Language language) {
+	public SubscriptionStatistics getSubscriptionsStatistics(User user, Language language) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();

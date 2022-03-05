@@ -5,6 +5,7 @@ import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dto.admin.UserForManagement;
+import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
 import com.a_smart_cookie.util.pagination.PaginationHandler;
@@ -12,17 +13,18 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  * Provides with information about users in the system.
  *
  */
-public class UsersCommand extends Command {
+public class UsersManagementCommand extends Command {
 
 	private static final long serialVersionUID = 8660826338889063524L;
 
-	private static final Logger LOG = Logger.getLogger(UsersCommand.class);
+	private static final Logger LOG = Logger.getLogger(UsersManagementCommand.class);
 
 	private static final int ITEMS_PER_PAGE = 15;
 
@@ -30,13 +32,25 @@ public class UsersCommand extends Command {
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
-		UserService userService = ServiceFactory.getInstance().getUserService();
+		List<UserForManagement> usersForManagement;
+		int numberOfPages;
+		int currentPage;
 
-		int totalNumberOfSubscribers = userService.getTotalNumberOfSubscribers();
-		int numberOfPages = PaginationHandler.getRequestedNumberOfPages(ITEMS_PER_PAGE, totalNumberOfSubscribers);
-		int currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
+		try {
 
-		List<UserForManagement> usersForManagement = userService.getPaginatedUsersWithStatistics(currentPage, ITEMS_PER_PAGE);
+			UserService userService = ServiceFactory.getInstance().getUserService();
+			int totalNumberOfSubscribers = userService.getTotalNumberOfSubscribers();
+			numberOfPages = PaginationHandler.getRequestedNumberOfPages(ITEMS_PER_PAGE, totalNumberOfSubscribers);
+			currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
+			usersForManagement = userService.getPaginatedUsersWithStatistics(currentPage, ITEMS_PER_PAGE);
+
+		} catch (ServiceException e) {
+			HttpSession session = request.getSession();
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.ADMIN_USERS, HttpHandlerType.SEND_REDIRECT);
+		}
+
 		LOG.trace("usersForManagement --> " + usersForManagement);
 
 		request.setAttribute("usersForManagement", usersForManagement);

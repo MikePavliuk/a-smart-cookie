@@ -27,3 +27,8 @@ Custom JSTL tag ligrary for checking whether publication is in subscrption list
 Custom JSTL tag ligrary for converting local date into localized display one
 ===========================================================================--%>
 <%@ taglib uri="/WEB-INF/localized_date" prefix="ld" %>
+
+<%--===========================================================================
+Custom JSTL tag ligrary for removing session attribute
+===========================================================================--%>
+<%@ taglib uri="/WEB-INF/session_attribute_remover" prefix="sar" %>

@@ -75,6 +75,27 @@
 	</div>
 </div>
 
+<c:choose>
+	<c:when test="${not empty sessionScope.illegalParams}">
+		${sar:remove(pageContext.session, "illegalParams")}
+		<div class="alert alert-danger alert-dismissable text-center">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<fmt:message key="alert.illegal_params"/>
+		</div>
+	</c:when>
+
+	<c:when test="${not empty sessionScope.serviceError}">
+		${sar:remove(pageContext.session, "serviceError")}
+		<div class="alert alert-danger alert-dismissable text-center">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<fmt:message key="alert.service_exception"/>
+		</div>
+	</c:when>
+</c:choose>
+
+
+
+
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
 
 </body>

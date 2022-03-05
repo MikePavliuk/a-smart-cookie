@@ -7,6 +7,7 @@ import com.a_smart_cookie.dto.catalog.FilterParameters;
 import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
+import com.a_smart_cookie.exception.ServiceException;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -24,7 +25,7 @@ public interface PublicationService {
 	 * @param filterParameters Parameters of searched publications
 	 * @return List of publications and list of used genres.
 	 */
-	PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters);
+	PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException;
 
 	/**
 	 * Method for getting number of requested rows by countRowsParameters.
@@ -32,7 +33,7 @@ public interface PublicationService {
 	 * @param countRowsParameters Parameters of searched publications
 	 * @return Number of founded rows.
 	 */
-	int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters);
+	int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws ServiceException;
 
 	/**
 	 * Gets all limited number of publications for management.
@@ -42,21 +43,21 @@ public interface PublicationService {
 	 * @param language Language to be translated publication into.
 	 * @return List of publications.
 	 */
-	List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language);
+	List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language) throws ServiceException;
 
 	/**
 	 * Gets total number of all publications.
 	 *
 	 * @return Number of publications.
 	 */
-	int getTotalNumberOfPublications();
+	int getTotalNumberOfPublications() throws ServiceException;
 
 	/**
 	 * Deletes publication by id.
 	 *
 	 * @param publicationId Id of publication.
 	 */
-	void deletePublication(int publicationId);
+	void deletePublication(int publicationId) throws ServiceException;
 
 	/**
 	 * Gets publication by id translated into all languages.
@@ -64,21 +65,21 @@ public interface PublicationService {
 	 * @param publicationId Id of publication.
 	 * @return Map with language key and publication translated value.
 	 */
-	Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId);
+	Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) throws ServiceException;
 
 	/**
 	 * Saving updates on publication.
 	 *
 	 * @param publicationDto All needed info for updating publication.
 	 */
-	void editPublicationWithInfo(PublicationDto publicationDto);
+	void editPublicationWithInfo(PublicationDto publicationDto) throws ServiceException;
 
 	/**
 	 * Creates publication.
 	 *
 	 * @param publicationDto All needed info for creating new publication.
 	 */
-	void createPublicationWithInfo(PublicationDto publicationDto);
+	void createPublicationWithInfo(PublicationDto publicationDto) throws ServiceException;
 
 	/**
 	 * Performs validation of publication by its dto and sets result in session if needed.

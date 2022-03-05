@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -34,7 +35,6 @@ public class GenerateUsersPdfCommand extends Command {
 		LOG.debug("Command starts");
 
 		Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
-		UserService userService = ServiceFactory.getInstance().getUserService();
 
 		response.setContentType("application/pdf;charset=UTF-8");
 		response.addHeader("content-disposition", "attachment; filename=Users statistics.pdf");
@@ -42,12 +42,15 @@ public class GenerateUsersPdfCommand extends Command {
 		ServletOutputStream out = null;
 		try {
 			out = response.getOutputStream();
+			UserService userService = ServiceFactory.getInstance().getUserService();
 			ByteArrayOutputStream resultPdf = PdfHandler.generateUsersPdf(userService.getAllUsersWithStatistics() , language);
 			LOG.debug("Command finished");
 			resultPdf.writeTo(out);
-		} catch (PdfException | IOException e) {
-			LOG.error("Can't generate and download pdf");
-			throw new ServiceException("Can't generate users pdf statistics", e);
+		} catch (PdfException | IOException | ServiceException e) {
+			HttpSession session = request.getSession();
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.ADMIN_USERS, HttpHandlerType.SEND_REDIRECT);
 		} finally {
 			if (out != null) {
 				try {

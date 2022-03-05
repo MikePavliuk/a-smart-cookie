@@ -29,29 +29,28 @@ public class SubscribeCommand extends Command {
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
+		HttpSession session = request.getSession();
+
 		String publicationIdParam = request.getParameter("item");
 		String periodParam = request.getParameter("period");
 
-		if (publicationIdParam == null) {
-			LOG.trace("No publication id in request");
-			throw new IllegalArgumentException("Publication id param can't be null");
+		if (publicationIdParam == null || periodParam == null) {
+			session.setAttribute("illegalParams", new Object());
+			LOG.error("Publication id and period params can't be null");
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 		}
-		LOG.trace("Publication id --> " + publicationIdParam);
 
-		if (periodParam == null) {
-			LOG.trace("No period in request");
-			throw new IllegalArgumentException("Period param can't be null");
-		}
+		LOG.trace("Publication id --> " + publicationIdParam);
 
 		int periodInMonths = Integer.parseInt(periodParam);
 		LOG.trace("Period in months --> " + periodInMonths);
 
 		if (periodInMonths <= 0 || periodInMonths > 12) {
-			LOG.trace("Period is not valid.");
-			throw new IllegalArgumentException("Period is not valid");
+			session.setAttribute("illegalParams", new Object());
+			LOG.error("Period is not valid");
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 		}
 
-		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 
 		try {
@@ -62,9 +61,15 @@ public class SubscribeCommand extends Command {
 			LOG.debug("Command finished");
 			return new HttpPath(WebPath.Command.USER_SUBSCRIPTIONS, HttpHandlerType.SEND_REDIRECT);
 
-		} catch (ServiceException | NotUpdatedResultsException e) {
-			session.invalidate();
-			throw e;
+		} catch (ServiceException serviceException) {
+			session.setAttribute("serviceException", new Object());
+			LOG.error("Exception has occurred", serviceException);
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
+
+		} catch (NotUpdatedResultsException notUpdatedResultsException) {
+			session.setAttribute("notUpdatedResult", new Object());
+			LOG.error("Can't update results", notUpdatedResultsException);
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 		}
 	}
 

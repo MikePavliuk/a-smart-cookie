@@ -1,6 +1,6 @@
 package com.a_smart_cookie.exception;
 
-public class NotUpdatedResultsException extends RuntimeException {
+public class NotUpdatedResultsException extends Exception {
 	private static final long serialVersionUID = -3930144120590525753L;
 
 	public NotUpdatedResultsException() {

@@ -68,5 +68,4 @@ public class FrontController extends HttpServlet {
 		LOG.trace("HttpPath --> " + httpPath);
 		return httpPath;
 	}
-
 }

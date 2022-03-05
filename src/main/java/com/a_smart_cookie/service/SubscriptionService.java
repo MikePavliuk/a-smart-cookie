@@ -21,7 +21,7 @@ public interface SubscriptionService {
 	 * @param periodInMonths Period for subscription to be active.
 	 * @return Returns updated user.
 	 */
-	User subscribeToPublication(User user, int publicationId, int periodInMonths) throws ServiceException, NotUpdatedResultsException;
+	User subscribeToPublication(User user, int publicationId, int periodInMonths) throws ServiceException, NotUpdatedResultsException ;
 
 	/**
 	 * Gets subscription statistics for user translated into requested language.
@@ -30,6 +30,6 @@ public interface SubscriptionService {
 	 * @param language Language of publications.
 	 * @return Statistics of subscriptions.
 	 */
-	SubscriptionStatistics getSubscriptionsStatistics(User user, Language language);
+	SubscriptionStatistics getSubscriptionsStatistics(User user, Language language) throws ServiceException;
 
 }

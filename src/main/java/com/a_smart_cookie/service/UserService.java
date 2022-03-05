@@ -4,6 +4,7 @@ import com.a_smart_cookie.dto.admin.UserForManagement;
 import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.Status;
 import com.a_smart_cookie.entity.User;
+import com.a_smart_cookie.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public interface UserService {
 	 * @param email Email value to search by.
 	 * @return Boolean value whether user already exist.
 	 */
-	boolean isUserAlreadyExistsByEmail(String email);
+	boolean isUserAlreadyExistsByEmail(String email) throws ServiceException;
 
 	/**
 	 * Returns Optional of user if he was found by email.
@@ -28,7 +29,7 @@ public interface UserService {
 	 * @param email Email which user should be found by.
 	 * @return Optional of user if he exists, otherwise - empty optional.
 	 */
-	Optional<User> getUserByEmail(String email);
+	Optional<User> getUserByEmail(String email) throws ServiceException;
 
 	/**
 	 * Returns Optional of inserted user with generated id.
@@ -36,7 +37,7 @@ public interface UserService {
 	 * @param userSignUpDto Dto from view that represents new user info.
 	 * @return Newly inserted User
 	 */
-	User createNewUser(UserSignUpDto userSignUpDto);
+	User createNewUser(UserSignUpDto userSignUpDto) throws ServiceException;
 
 	/**
 	 * Gets all limited number of subscribers for management.
@@ -46,21 +47,21 @@ public interface UserService {
 	 * @param requestedPage Page to be got.
 	 * @param itemsPerPage Items per page.
 	 */
-	List<UserForManagement> getPaginatedUsersWithStatistics(int requestedPage, int itemsPerPage);
+	List<UserForManagement> getPaginatedUsersWithStatistics(int requestedPage, int itemsPerPage) throws ServiceException;
 
 	/**
 	 * Gets all subscribers with statistics for management.
 	 *
 	 * @return List of UserForManagement.
 	 */
-	List<UserForManagement> getAllUsersWithStatistics();
+	List<UserForManagement> getAllUsersWithStatistics() throws ServiceException;
 
 	/**
 	 * Method for getting number of subscribers.
 	 *
 	 * @return Number of founded subscribers.
 	 */
-	int getTotalNumberOfSubscribers();
+	int getTotalNumberOfSubscribers() throws ServiceException;
 
 	/**
 	 * Changes user status.
@@ -68,6 +69,6 @@ public interface UserService {
 	 * @param userId Users id.
 	 * @param status New status to be set to user.
 	 */
-	void changeUserStatus(int userId, Status status);
+	void changeUserStatus(int userId, Status status) throws ServiceException;
 
 }

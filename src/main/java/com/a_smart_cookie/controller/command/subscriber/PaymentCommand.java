@@ -33,27 +33,34 @@ public class PaymentCommand extends Command {
 		String paymentAmountParam = request.getParameter("paymentAmount");
 		String paymentMethodParam = request.getParameter("paymentMethod");
 
+		HttpSession session = request.getSession();
+
 		if (paymentAmountParam == null || paymentMethodParam == null) {
-			LOG.error("Command finished with error --> paymentAmount == null");
-			throw new IllegalArgumentException("Payment amount can't be null");
+			LOG.error("Command finished with error --> parameters can't be null");
+			session.setAttribute("illegalParams", new Object());
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 		}
 
 		PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentMethodParam);
 		LOG.trace(paymentAmountParam + " " + paymentMethod);
 
-		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("user");
 		LOG.trace("user --> " + user);
 
-		PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
 		try {
+			PaymentService paymentService = ServiceFactory.getInstance().getPaymentService();
 			User updatedUser = paymentService.addBalanceToUser(new BigDecimal(paymentAmountParam), paymentMethod, user);
 			session.setAttribute("user", updatedUser);
 			session.setAttribute("isCorrectPayment", true);
 			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
-		} catch (ServiceException | NotUpdatedResultsException e) {
-			session.invalidate();
-			throw e;
+		} catch (ServiceException serviceException) {
+			session.setAttribute("isCorrectPayment", false);
+			LOG.error("Exception has occurred", serviceException);
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
+		} catch (NotUpdatedResultsException notUpdatedResultsException) {
+			session.setAttribute("notUpdatedResult", new Object());
+			LOG.error("Can't update results", notUpdatedResultsException);
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 		}
 	}
 
