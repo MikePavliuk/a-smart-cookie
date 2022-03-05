@@ -41,7 +41,6 @@ public class MysqlUserDao extends UserDao {
 			return rs.getBoolean(1);
 
 		} catch (SQLException e) {
-			LOG.error("Can't get user by email " + email, e);
 			throw new DaoException("Can't get user by email " + email, e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -71,7 +70,6 @@ public class MysqlUserDao extends UserDao {
 			return Optional.empty();
 
 		} catch (SQLException e) {
-			LOG.error("Can't get user by email " + email, e);
 			throw new DaoException("Can't get user by email " + email, e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -104,7 +102,6 @@ public class MysqlUserDao extends UserDao {
 			return Optional.empty();
 
 		} catch (SQLException e) {
-			LOG.error("Can't insert user", e);
 			throw new DaoException("Can't insert user", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -131,7 +128,6 @@ public class MysqlUserDao extends UserDao {
 			return extractUsers(rs);
 
 		} catch (SQLException e) {
-			LOG.error("Can't get subscribers", e);
 			throw new DaoException("Can't get subscribers", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -155,7 +151,6 @@ public class MysqlUserDao extends UserDao {
 			return extractUsers(rs);
 
 		} catch (SQLException e) {
-			LOG.error("Can't get subscribers", e);
 			throw new DaoException("Can't get subscribers", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -178,7 +173,6 @@ public class MysqlUserDao extends UserDao {
 			return pstmt.executeUpdate() > 0;
 
 		} catch (SQLException e) {
-			LOG.error("Can't insert user", e);
 			throw new DaoException("Can't insert user", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
@@ -204,7 +198,6 @@ public class MysqlUserDao extends UserDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get number of subscriptions", e);
 			throw new DaoException("Can't get number of subscriptions", e);
 		} finally {
 			ResourceReleaser.close(rs);

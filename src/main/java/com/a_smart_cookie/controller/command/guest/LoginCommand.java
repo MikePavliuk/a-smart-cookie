@@ -25,7 +25,6 @@ import java.util.Optional;
 
 /**
  * Provides with sign in mechanism for user.
- *
  */
 public class LoginCommand extends Command {
 
@@ -52,55 +51,61 @@ public class LoginCommand extends Command {
 
 		// Verify CAPTCHA.
 		if (!RecaptchaHandler.verify(gRecaptchaResponse)) {
-			session.setAttribute("invalidCaptcha",true);
+			session.setAttribute("invalidCaptcha", true);
 			setOldEmailToSession(email, session);
 			LOG.debug("Command finished with invalid captcha");
 			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 		}
 
+		Optional<User> user;
 		try {
 			UserService userService = ServiceFactory.getInstance().getUserService();
+			user = userService.getUserByEmail(email);
+		} catch (ServiceException e) {
+			session.setAttribute("serviceError", true);
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+		}
 
-			Optional<User> user = userService.getUserByEmail(email);
+		if (user.isEmpty()) {
+			session.setAttribute("badCredentials", true);
+			setOldEmailToSession(email, session);
+			LOG.debug("Command finished with not found user");
+			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+		}
 
-			if (user.isEmpty()) {
-				session.setAttribute("badCredentials", true);
-				setOldEmailToSession(email, session);
-				LOG.debug("Command finished with not found user");
-				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
-			}
-
+		try {
 			if (!PBKDF2Hash.verifyHash(password, user.get().getSalt(), user.get().getPassword())) {
 				session.setAttribute("badCredentials", true);
 				setOldEmailToSession(email, session);
 				LOG.debug("Command finished with not equals passwords");
 				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 			}
-
-			if (user.get().getStatus() == Status.BLOCKED) {
-				session.setAttribute("isBlocked",true);
-				setOldEmailToSession(email, session);
-				LOG.debug("Command finished with blocked user");
-				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
-			}
-
-			session.invalidate();
-			session = request.getSession();
-			session.setAttribute("user", user.get());
-			LOG.trace("user --> " + user);
-
-			LOG.debug("Command finished with signed in user");
-			
-			if (user.get().getRole() == Role.ADMIN) {
-				return new HttpPath(WebPath.Command.ADMIN_USERS, HttpHandlerType.SEND_REDIRECT);
-			}
-
-			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
-
-		} catch (ServiceException | HashingException e) {
-			LOG.error("Command ended with exception");
-			throw new ServiceException("Can't perform login user", e);
+		} catch (HashingException e) {
+			session.setAttribute("serviceError", true);
+			LOG.error("Can't perform hashing", e);
+			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
 		}
+
+		if (user.get().getStatus() == Status.BLOCKED) {
+			session.setAttribute("isBlocked", true);
+			setOldEmailToSession(email, session);
+			LOG.debug("Command finished with blocked user");
+			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+		}
+
+		session.invalidate();
+		session = request.getSession();
+		session.setAttribute("user", user.get());
+		LOG.trace("user --> " + user);
+
+		LOG.debug("Command finished with signed in user");
+
+		if (user.get().getRole() == Role.ADMIN) {
+			return new HttpPath(WebPath.Command.ADMIN_USERS, HttpHandlerType.SEND_REDIRECT);
+		}
+
+		return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
 	}
 
 	private HttpPath performValidationMechanism(String email, String password, HttpSession session) {

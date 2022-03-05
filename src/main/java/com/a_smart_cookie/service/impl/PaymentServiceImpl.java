@@ -28,7 +28,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private static final Logger LOG = Logger.getLogger(PaymentServiceImpl.class);
 
 	@Override
-	public User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) {
+	public User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) throws ServiceException, NotUpdatedResultsException {
 		LOG.debug("Method starts");
 
 		PaymentStrategy paymentStrategy = getPaymentStrategy(paymentMethod);
@@ -37,7 +37,6 @@ public class PaymentServiceImpl implements PaymentService {
 		try {
 			paymentContext.performPayment(paymentAmount);
 		} catch (PaymentException e) {
-			LOG.error("Can't perform payment", e);
 			throw new ServiceException("Can't perform payment", e);
 		}
 
@@ -48,8 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
 			transaction.init(userDetailDao);
 
 			if (!userDetailDao.addMoneyToBalanceByUserId(paymentAmount, user.getId())) {
-				transaction.rollback();
-				LOG.debug("Finished method with rollback, because didn't add money");
+				LOG.debug("Finished method without added money");
 				throw new NotUpdatedResultsException("Can't add transaction money to user");
 			}
 
@@ -64,7 +62,6 @@ public class PaymentServiceImpl implements PaymentService {
 					.build();
 
 		} catch (DaoException e) {
-			LOG.error("Can't add funds to user account", e);
 			throw new ServiceException("Can't add funds to user account", e);
 		} finally {
 			transaction.end();

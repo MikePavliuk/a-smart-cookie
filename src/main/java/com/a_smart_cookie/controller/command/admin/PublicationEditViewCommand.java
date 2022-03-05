@@ -6,12 +6,14 @@ import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
+import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -31,12 +33,23 @@ public class PublicationEditViewCommand extends Command {
 		String publicationIdParam = request.getParameter("item");
 
 		if (publicationIdParam == null) {
-			LOG.trace("No publication id in request");
-			throw new IllegalArgumentException("Publication id param can't be null");
+			HttpSession session = request.getSession();
+			session.setAttribute("illegalParams", new Object());
+			LOG.error("No publication id in request");
+			return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.SEND_REDIRECT);
 		}
 
-		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
-		Map<Language, Publication> publicationMap = publicationService.getPublicationInAllLanguagesById(Integer.parseInt(publicationIdParam));
+		Map<Language, Publication> publicationMap;
+
+		try {
+			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
+			publicationMap = publicationService.getPublicationInAllLanguagesById(Integer.parseInt(publicationIdParam));
+		} catch (ServiceException e) {
+			HttpSession session = request.getSession();
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.SEND_REDIRECT);
+		}
 
 		request.setAttribute("publicationMap", publicationMap);
 		request.setAttribute("genre", publicationMap.entrySet().iterator().next().getValue().getGenre());

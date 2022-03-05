@@ -35,7 +35,6 @@ public class MysqlGenreDao extends GenreDao {
 			return extractGenres(rs);
 
 		} catch (SQLException e) {
-			LOG.error("Can't find used in publications genres", e);
 			throw new DaoException("Can't find used in publications genres", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -65,7 +64,6 @@ public class MysqlGenreDao extends GenreDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get genre id", e);
 			throw new DaoException("Can't get genre id", e);
 		} finally {
 			ResourceReleaser.close(rs);

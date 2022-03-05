@@ -10,6 +10,7 @@ import com.a_smart_cookie.dto.catalog.PublicationsWithAllUsedGenres;
 import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
+import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.CookieHandler;
@@ -21,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -37,38 +39,49 @@ public class CatalogCommand extends Command {
 	public HttpPath execute(HttpServletRequest request, HttpServletResponse response) {
 		LOG.debug("Command starts");
 
-		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
-
 		Genre genreRestriction = Genre.fromString(request.getParameter("specificGenre"));
 		String searchedTitle = request.getParameter("search");
 		Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
 		SortingParameter activeSortingParam = SortingParameter.safeFromString(request.getParameter("sort"));
 		SortingDirection activeSortingDirection = SortingDirection.safeFromString(request.getParameter("direction"));
 
-		int itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
-		int totalNumberOfFoundedPublications = publicationService
-				.getTotalNumberOfRequestedQueryRows(new CountRowsParameters(language, genreRestriction, searchedTitle));
-		int numberOfPages = PaginationHandler.getRequestedNumberOfPages(itemsPerPage, totalNumberOfFoundedPublications);
-		int currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
+		PublicationsWithAllUsedGenres publicationsWithAllUsedGenres;
+		int numberOfPages;
+		int currentPage;
+		int itemsPerPage;
 
-		FilterParameters filterParameters = new FilterParameters(
-				itemsPerPage,
-				itemsPerPage * (currentPage-1),
-				language,
-				activeSortingDirection,
-				activeSortingParam,
-				genreRestriction,
-				searchedTitle
-		);
-		LOG.trace("Queried filter parameters --> " + filterParameters);
+		try {
+			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
+			itemsPerPage = ItemsPerPage.safeFromString(request.getParameter("limit")).getLimit();
+			int totalNumberOfFoundedPublications = publicationService
+					.getTotalNumberOfRequestedQueryRows(new CountRowsParameters(language, genreRestriction, searchedTitle));
+			numberOfPages = PaginationHandler.getRequestedNumberOfPages(itemsPerPage, totalNumberOfFoundedPublications);
+			currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
 
-		PublicationsWithAllUsedGenres publicationsWithAllUsedGenres = publicationService
-				.findPublicationsByFilterParameters(filterParameters);
+			FilterParameters filterParameters = new FilterParameters(
+					itemsPerPage,
+					itemsPerPage * (currentPage-1),
+					language,
+					activeSortingDirection,
+					activeSortingParam,
+					genreRestriction,
+					searchedTitle
+			);
+			LOG.trace("Queried filter parameters --> " + filterParameters);
+
+			publicationsWithAllUsedGenres = publicationService
+					.findPublicationsByFilterParameters(filterParameters);
+
+		} catch (ServiceException e) {
+			HttpSession session = request.getSession();
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.CATALOG_FIRST_PAGE, HttpHandlerType.SEND_REDIRECT);
+		}
 
 		List<Publication> publications = publicationsWithAllUsedGenres.getPublications();
 		LOG.trace("Found in DB publications --> " + publications);
 		List<Genre> usedGenres = publicationsWithAllUsedGenres.getGenres();
-
 
 		if (searchedTitle != null) {
 			request.setAttribute("search", searchedTitle);

@@ -20,9 +20,9 @@ public interface PaymentService {
 	 * @param paymentMethod Method of getting money from wallet.
 	 * @param user User to add money to.
 	 * @return Returns updated user
-	 * @throws ServiceException Occurred on dao layer
-	 * @throws NotUpdatedResultsException Occurred when updated results can be got.
+	 * @throws ServiceException Thrown when payment wasn't performed or funds can't be added to the balance.
+	 * @throws NotUpdatedResultsException Thrown when can't add transaction money to user's balance.
 	 */
-	User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user);
+	User addBalanceToUser(BigDecimal paymentAmount, PaymentMethod paymentMethod, User user) throws ServiceException, NotUpdatedResultsException;
 
 }

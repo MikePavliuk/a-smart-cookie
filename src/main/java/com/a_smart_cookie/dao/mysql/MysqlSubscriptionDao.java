@@ -38,7 +38,6 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 			return extractSubscriptions(rs);
 
 		} catch (SQLException e) {
-			LOG.error("Can't get subscriptions by id=" + id, e);
 			throw new DaoException("Can't get subscriptions by id=" + id, e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -63,7 +62,6 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 			return pstmt.executeUpdate() > 0;
 
 		} catch (SQLException e) {
-			LOG.error("Can't insert subscription", e);
 			throw new DaoException("Can't insert subscription", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
@@ -90,7 +88,6 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get number of all subscriptions", e);
 			throw new DaoException("Can't get number of all subscriptions", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -118,7 +115,6 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get number of active subscriptions", e);
 			throw new DaoException("Can't get number of active subscriptions", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -146,7 +142,6 @@ public class MysqlSubscriptionDao extends SubscriptionDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get total spent money value by user id = " + userId, e);
 			throw new DaoException("Can't get total spent money value by user id = " + userId, e);
 		} finally {
 			ResourceReleaser.close(rs);

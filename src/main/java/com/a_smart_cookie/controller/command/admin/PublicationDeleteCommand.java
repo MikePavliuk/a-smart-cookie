@@ -4,12 +4,14 @@ import com.a_smart_cookie.controller.command.Command;
 import com.a_smart_cookie.controller.route.HttpHandlerType;
 import com.a_smart_cookie.controller.route.HttpPath;
 import com.a_smart_cookie.controller.route.WebPath;
+import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Provides with deleting publication.
@@ -28,12 +30,21 @@ public class PublicationDeleteCommand extends Command {
 		String publicationIdParam = request.getParameter("publicationId");
 
 		if (publicationIdParam == null) {
-			LOG.trace("No publication id in request");
-			throw new IllegalArgumentException("Publication id param can't be null");
+			HttpSession session = request.getSession();
+			session.setAttribute("illegalParams", new Object());
+			LOG.error("No publication id in request");
+			return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.SEND_REDIRECT);
 		}
 
-		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
-		publicationService.deletePublication(Integer.parseInt(publicationIdParam));
+		try {
+			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
+			publicationService.deletePublication(Integer.parseInt(publicationIdParam));
+		} catch (ServiceException e) {
+			HttpSession session = request.getSession();
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.SEND_REDIRECT);
+		}
 
 		LOG.debug("Command finished");
 		return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.SEND_REDIRECT);

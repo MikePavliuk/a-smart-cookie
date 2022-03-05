@@ -24,7 +24,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	private static final Logger LOG = Logger.getLogger(SubscriptionServiceImpl.class);
 
 	@Override
-	public User subscribeToPublication(User user, int publicationId, int periodInMonths) {
+	public User subscribeToPublication(User user, int publicationId, int periodInMonths) throws ServiceException, NotUpdatedResultsException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -89,14 +89,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 					.build();
 
 		} catch (DaoException e) {
-
 			if (savepoint != null) {
 				transaction.rollback(savepoint);
 			} else {
 				transaction.rollback();
 			}
-
-			LOG.error("Can't perform subscribing", e);
 			throw new ServiceException("Can't perform subscribing", e);
 		} finally {
 			transaction.endTransaction();
@@ -104,7 +101,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	}
 
 	@Override
-	public SubscriptionStatistics getSubscriptionsStatistics(User user, Language language) {
+	public SubscriptionStatistics getSubscriptionsStatistics(User user, Language language) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -133,7 +130,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't get subscription statistics with '" + user + "' and '" + language + "'", e);
 			throw new ServiceException("Can't get subscription statistics with '" + user + "' and '" + language + "'", e);
 		} finally {
 			transaction.endTransaction();

@@ -7,6 +7,7 @@ import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dto.sign_up.UserSignUpDto;
 import com.a_smart_cookie.entity.User;
+import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.service.UserService;
 import com.a_smart_cookie.util.validation.user.UserValidator;
@@ -19,7 +20,6 @@ import java.util.Map;
 
 /**
  * Provides with sign up mechanism for user.
- *
  */
 public class RegistrationCommand extends Command {
 
@@ -46,24 +46,31 @@ public class RegistrationCommand extends Command {
 
 		LOG.trace("User is valid");
 
-		UserService userService = ServiceFactory.getInstance().getUserService();
+		try {
+			UserService userService = ServiceFactory.getInstance().getUserService();
 
-		if (!userService.isUserAlreadyExistsByEmail(userSignUpDto.getEmail())) {
-			session.invalidate();
-			User user = userService.createNewUser(userSignUpDto);
-			LOG.trace("user --> " + user);
+			if (!userService.isUserAlreadyExistsByEmail(userSignUpDto.getEmail())) {
+				session.invalidate();
+				User user = userService.createNewUser(userSignUpDto);
+				LOG.trace("user --> " + user);
 
-			session = request.getSession();
-			session.setAttribute("registeredEmail", user.getEmail());
+				session = request.getSession();
+				session.setAttribute("registeredEmail", user.getEmail());
 
-			LOG.debug("Command finished with registered user");
-			return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+				LOG.debug("Command finished with registered user");
+				return new HttpPath(WebPath.Command.SIGN_IN, HttpHandlerType.SEND_REDIRECT);
+			}
+
+			session.setAttribute("emailAlreadyExists", true);
+			addOldFieldValuesToSession(request, session);
+			LOG.debug("Command finished with existed user email");
+			return new HttpPath(WebPath.Command.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
+
+		} catch (ServiceException e) {
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
 		}
-
-		session.setAttribute("emailAlreadyExists", true);
-		addOldFieldValuesToSession(request, session);
-		LOG.debug("Command finished with existed user email");
-		return new HttpPath(WebPath.Command.SIGN_UP, HttpHandlerType.SEND_REDIRECT);
 	}
 
 	private HttpPath performValidationMechanism(HttpServletRequest request, HttpSession session, UserSignUpDto userSignUpDto) {

@@ -23,6 +23,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 *
 	 * @param filterParameters Parameters of searched publications.
 	 * @return List of publications.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract List<Publication> findPublicationsByFilterParameters(FilterParameters filterParameters) throws DaoException;
 
@@ -31,6 +32,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 *
 	 * @param countRowsParameters Parameters of searched publications.
 	 * @return Number of founded rows.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws DaoException;
 
@@ -39,6 +41,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 *
 	 * @param id Publication's id.
 	 * @return Optional of publication if publication was found, otherwise - of empty.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract Optional<Publication> getPublicationWithoutInfoById(int id) throws DaoException;
 
@@ -48,6 +51,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @param publicationId Publication's id.
 	 * @param language Requested publication info language.
 	 * @return Optional of publication if publication was found, otherwise - of empty.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract Publication getPublicationWithInfoByIdAndLanguage(int publicationId, Language language) throws DaoException;
 
@@ -58,6 +62,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @param numberOfItems Requested number of publications.
 	 * @param language Requested translate.
 	 * @return List of subscribers.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract List<Publication> getPublicationsWithLimitByLanguage(int offset, int numberOfItems, Language language) throws DaoException;
 
@@ -65,6 +70,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * Method for getting number of publications.
 	 *
 	 * @return Number of founded publications.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract int getTotalNumberOfPublications() throws DaoException;
 
@@ -73,6 +79,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 *
 	 * @param publicationId Id of publication.
 	 * @return Whether operation was correctly performed.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean deletePublicationById(int publicationId) throws DaoException;
 
@@ -83,7 +90,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @param pricePerMonth Updated price per month.
 	 * @param publicationId Id of publication.
 	 * @return Whether updating was performed.
-	 * @throws DaoException When exception occurred on jdbc.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean updatePublicationGenreAndPricePerMonthById(Genre genre, BigDecimal pricePerMonth, int publicationId) throws DaoException;
 
@@ -96,6 +103,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @param publicationId Id of publication to be updated.
 	 * @param language Translation of publication to be updated.
 	 * @return Whether updating was performed.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean updatePublicationInfoByLanguage(String title, String description, int publicationId, Language language) throws DaoException;
 
@@ -105,6 +113,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @param genre_id If of genre of newly created publication.
 	 * @param pricePerMonth Price per month of newly created publication.
 	 * @return Id of newly created publication.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract int createPublication(int genre_id, BigDecimal pricePerMonth) throws DaoException;
 
@@ -115,6 +124,7 @@ public abstract class PublicationDao extends AbstractDao {
 	 * @param titles Map of Id of languages as key and titles as values.
 	 * @param descriptions Map of Id of languages as key and descriptions as values.
 	 * @return Whether transaction was correctly created.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean createPublicationInfos(int publicationId, Map<Integer, String> titles, Map<Integer, String> descriptions) throws DaoException;
 

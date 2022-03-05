@@ -18,6 +18,7 @@ public abstract class UserDetailDao extends AbstractDao {
 	 * @param userDetail UserDetail information for creating record in db.
 	 * @param userId User id of this detail info.
 	 * @return Generated id for inserted UserDetail or empty if something went wrong.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract Optional<UserDetail> insertUserDetail(UserDetail userDetail, int userId) throws DaoException;
 
@@ -27,7 +28,7 @@ public abstract class UserDetailDao extends AbstractDao {
 	 * @param paymentAmount Amount of money to add in dollars.
 	 * @param userId Id of user to add funds.
 	 * @return Whether transaction was correctly performed.
-	 * @throws DaoException Exception on db layer.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean addMoneyToBalanceByUserId(BigDecimal paymentAmount, int userId) throws DaoException;
 
@@ -37,6 +38,7 @@ public abstract class UserDetailDao extends AbstractDao {
 	 * @param paymentAmount Amount of money to minus from user in dollars.
 	 * @param userId Id of user to debit funds.
 	 * @return Whether transaction was correctly performed.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean debitFundsFromBalanceByUserId(BigDecimal paymentAmount, int userId) throws DaoException;
 
@@ -45,6 +47,7 @@ public abstract class UserDetailDao extends AbstractDao {
 	 *
 	 * @param userId Id of user.
 	 * @return Balance of user.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract Optional<BigDecimal> getBalanceByUserId(int userId) throws DaoException;
 

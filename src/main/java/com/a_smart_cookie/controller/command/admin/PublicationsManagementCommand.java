@@ -7,6 +7,7 @@ import com.a_smart_cookie.controller.route.WebPath;
 import com.a_smart_cookie.entity.Language;
 import com.a_smart_cookie.entity.Publication;
 import com.a_smart_cookie.entity.User;
+import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.CookieHandler;
@@ -43,13 +44,24 @@ public class PublicationsManagementCommand extends Command {
 
 		Language language = Language.safeFromString(CookieHandler.readCookieValue(request, "lang").orElse(Language.UKRAINIAN.getAbbr()));
 
-		PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
+		List<Publication> publications;
+		int numberOfPages;
+		int currentPage;
 
-		int totalNumberOfPublications = publicationService.getTotalNumberOfPublications();
-		int numberOfPages = PaginationHandler.getRequestedNumberOfPages(ITEMS_PER_PAGE, totalNumberOfPublications);
-		int currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
+		try {
 
-		List<Publication> publications = publicationService.getLimitedPublicationsByLanguage(currentPage, ITEMS_PER_PAGE, language);
+			PublicationService publicationService = ServiceFactory.getInstance().getPublicationService();
+			int totalNumberOfPublications = publicationService.getTotalNumberOfPublications();
+			numberOfPages = PaginationHandler.getRequestedNumberOfPages(ITEMS_PER_PAGE, totalNumberOfPublications);
+			currentPage = PaginationHandler.getRequestedPageNumber(request, numberOfPages);
+			publications = publicationService.getLimitedPublicationsByLanguage(currentPage, ITEMS_PER_PAGE, language);
+
+		} catch (ServiceException e) {
+			session.setAttribute("serviceError", new Object());
+			LOG.error("Exception has occurred on service layer", e);
+			return new HttpPath(WebPath.Command.ADMIN_PUBLICATIONS_MANAGEMENT, HttpHandlerType.SEND_REDIRECT);
+		}
+
 		LOG.trace("publications --> " + publications);
 
 		request.setAttribute("publications", publications);

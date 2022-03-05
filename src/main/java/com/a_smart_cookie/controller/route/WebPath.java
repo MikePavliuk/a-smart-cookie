@@ -18,7 +18,8 @@ public final class WebPath {
 		ADMIN_USERS("/WEB-INF/jsp/users.jsp"),
 		ADMIN_PUBLICATIONS("/WEB-INF/jsp/publications.jsp"),
 		ADMIN_PUBLICATION_EDIT("/WEB-INF/jsp/publication_edit.jsp"),
-		ADMIN_PUBLICATION_CREATE("/WEB-INF/jsp/publication_create.jsp");
+		ADMIN_PUBLICATION_CREATE("/WEB-INF/jsp/publication_create.jsp"),
+		ERROR_SERVICE_EXCEPTION("/WEB-INF/jsp/error/service-error.jsp");
 
 		private final String value;
 

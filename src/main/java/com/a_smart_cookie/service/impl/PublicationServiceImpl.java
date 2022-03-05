@@ -29,7 +29,7 @@ public class PublicationServiceImpl implements PublicationService {
 	private static final Logger LOG = Logger.getLogger(PublicationServiceImpl.class);
 
 	@Override
-	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) {
+	public PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -49,15 +49,14 @@ public class PublicationServiceImpl implements PublicationService {
 			return publicationsAndGenres;
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't find all publications by filter parameters so made rollback", e);
-			throw new ServiceException("Can't find genres and publications with " + filterParameters, e);
+			throw new ServiceException("Can't find publications by " + filterParameters, e);
 		} finally {
 			transaction.endTransaction();
 		}
 	}
 
 	@Override
-	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) {
+	public int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -68,7 +67,6 @@ public class PublicationServiceImpl implements PublicationService {
 			LOG.debug("Method finished");
 			return publicationDao.getTotalNumberOfRequestedQueryRows(countRowsParameters);
 		} catch (DaoException e) {
-			LOG.error("Can't get number requested publications with " + countRowsParameters, e);
 			throw new ServiceException("Can't get number requested publications with " + countRowsParameters, e);
 		} finally {
 			transaction.end();
@@ -76,7 +74,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language) {
+	public List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language) throws ServiceException {
 		LOG.debug("Starts method");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -93,7 +91,6 @@ public class PublicationServiceImpl implements PublicationService {
 			);
 
 		} catch (DaoException e) {
-			LOG.error("Can't get publications", e);
 			throw new ServiceException("Can't get publications", e);
 		} finally {
 			transaction.end();
@@ -101,7 +98,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public int getTotalNumberOfPublications() {
+	public int getTotalNumberOfPublications() throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -112,7 +109,6 @@ public class PublicationServiceImpl implements PublicationService {
 			LOG.debug("Method finished");
 			return publicationDao.getTotalNumberOfPublications();
 		} catch (DaoException e) {
-			LOG.error("Can't get number of publications", e);
 			throw new ServiceException("Can't get number of publications", e);
 		} finally {
 			transaction.end();
@@ -120,7 +116,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public void deletePublication(int publicationId) {
+	public void deletePublication(int publicationId) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -135,7 +131,6 @@ public class PublicationServiceImpl implements PublicationService {
 			}
 
 		} catch (DaoException e) {
-			LOG.error("Can't delete publication by id '" + publicationId + "'", e);
 			throw new ServiceException("Can't delete publication by id '" + publicationId + "'", e);
 		} finally {
 			transaction.end();
@@ -143,7 +138,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) {
+	public Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) throws ServiceException {
 		LOG.debug("Method starts");
 
 			EntityTransaction transaction = new EntityTransaction();
@@ -161,7 +156,6 @@ public class PublicationServiceImpl implements PublicationService {
 				return publicationMap;
 
 			} catch (DaoException e) {
-				LOG.error("Can't get publication by id '" + publicationId + "'", e);
 				throw new ServiceException("Can't get publication by id '" + publicationId + "'", e);
 			} finally {
 				transaction.end();
@@ -169,7 +163,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public void editPublicationWithInfo(PublicationDto publicationDto) {
+	public void editPublicationWithInfo(PublicationDto publicationDto) throws ServiceException {
 		LOG.debug("Method starts");
 
 		EntityTransaction transaction = new EntityTransaction();
@@ -200,7 +194,6 @@ public class PublicationServiceImpl implements PublicationService {
 
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't edit publication", e);
 			throw new ServiceException("Can't edit publication", e);
 		} finally {
 			transaction.endTransaction();
@@ -246,7 +239,6 @@ public class PublicationServiceImpl implements PublicationService {
 
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't insert publication with translations", e);
 			throw new ServiceException("Can't insert publication with translations", e);
 		} finally {
 			transaction.endTransaction();

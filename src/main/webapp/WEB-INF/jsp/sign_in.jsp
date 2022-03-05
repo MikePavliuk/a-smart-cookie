@@ -108,6 +108,14 @@
 	</div>
 </div>
 
+<c:if test="${not empty sessionScope.serviceError}">
+	${sar:remove(pageContext.session, "serviceError")}
+	<div class="alert alert-danger alert-dismissable text-center">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<fmt:message key="alert.service_exception"/>
+	</div>
+</c:if>
+
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
 
 </body>
