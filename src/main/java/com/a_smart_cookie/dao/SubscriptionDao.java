@@ -17,6 +17,7 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 *
 	 * @param id Users id.
 	 * @return List of subscriptions.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract List<Subscription> getActiveSubscriptionsByUserId(int id) throws DaoException;
 
@@ -27,6 +28,7 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 * @param publicationId Publication's id.
 	 * @param periodInMonths Period for subscription being active.
 	 * @return Whether subscription was correctly inserted.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean insertSubscription(int userId, int publicationId, int periodInMonths) throws DaoException;
 
@@ -36,6 +38,7 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 *
 	 * @param userId Users id.
 	 * @return Number of subscriptions.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract int getNumberOfInactiveSubscriptionsByUserId(int userId) throws DaoException;
 
@@ -44,6 +47,7 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 *
 	 * @param userId Users id.
 	 * @return Number of subscriptions.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract int getNumberOfActiveSubscriptionsByUserId(int userId) throws DaoException;
 
@@ -52,6 +56,7 @@ public abstract class SubscriptionDao extends AbstractDao {
 	 *
 	 * @param userId User's id.
 	 * @return Spent money value.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract BigDecimal getTotalAmountOfSpentMoneyByUserId(int userId) throws DaoException;
 

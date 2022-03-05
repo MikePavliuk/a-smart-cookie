@@ -130,7 +130,7 @@ public class PublicationServiceImpl implements PublicationService {
 				throw new ServiceException("Result set is empty");
 			}
 
-		} catch (DaoException | ServiceException e) {
+		} catch (DaoException e) {
 			throw new ServiceException("Can't delete publication by id '" + publicationId + "'", e);
 		} finally {
 			transaction.end();

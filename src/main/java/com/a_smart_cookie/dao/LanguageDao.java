@@ -13,6 +13,7 @@ public abstract class LanguageDao extends AbstractDao {
 	 *
 	 * @param name Name of language for getting id.
 	 * @return Id of language.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract int getLanguageIdByName(String name) throws DaoException;
 

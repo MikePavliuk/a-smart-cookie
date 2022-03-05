@@ -17,7 +17,7 @@ public abstract class UserDao extends AbstractDao {
 	 *
 	 * @param email Email value to search by.
 	 * @return Boolean value whether user already exist.
-	 * @throws DaoException Exception on db layer.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean isUserExistsByEmail(String email) throws DaoException;
 
@@ -26,7 +26,7 @@ public abstract class UserDao extends AbstractDao {
 	 *
 	 * @param email Email value to search by.
 	 * @return User without subscriptions if he exists - otherwise empty optional.
-	 * @throws DaoException Exception on db layer.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract Optional<User> getUserWithoutSubscriptionsByEmail(String email) throws DaoException;
 
@@ -35,6 +35,7 @@ public abstract class UserDao extends AbstractDao {
 	 *
 	 * @param user User information for creating record in db.
 	 * @return Generated id for inserted user or empty if something went wrong.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract Optional<User> createUser(User user) throws DaoException;
 
@@ -42,6 +43,7 @@ public abstract class UserDao extends AbstractDao {
 	 * Gets limited number of subscribers.
 	 *
 	 * @return List of subscribers.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract List<User> getSubscribersWithLimit(int offset, int itemsPerPage) throws DaoException;
 
@@ -49,6 +51,7 @@ public abstract class UserDao extends AbstractDao {
 	 * Gets all subscribers.
 	 *
 	 * @return List of subscribers.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract List<User> getAllSubscribers() throws DaoException;
 
@@ -58,6 +61,7 @@ public abstract class UserDao extends AbstractDao {
 	 * @param userId Users id.
 	 * @param statusName Updated status name.
 	 * @return Whether user status was changes.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract boolean changeUserStatus(int userId, String statusName) throws DaoException;
 
@@ -65,6 +69,7 @@ public abstract class UserDao extends AbstractDao {
 	 * Method for getting number of subscribers.
 	 *
 	 * @return Number of founded subscribers.
+	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
 	public abstract int getTotalNumberOfSubscribers() throws DaoException;
 }

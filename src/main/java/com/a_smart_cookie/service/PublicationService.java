@@ -24,6 +24,7 @@ public interface PublicationService {
 	 *
 	 * @param filterParameters Parameters of searched publications
 	 * @return List of publications and list of used genres.
+	 * @throws ServiceException Thrown as wrapper for possible DaoException.
 	 */
 	PublicationsWithAllUsedGenres findPublicationsByFilterParameters(FilterParameters filterParameters) throws ServiceException;
 
@@ -32,6 +33,7 @@ public interface PublicationService {
 	 *
 	 * @param countRowsParameters Parameters of searched publications
 	 * @return Number of founded rows.
+	 * @throws ServiceException Thrown as wrapper for possible DaoException.
 	 */
 	int getTotalNumberOfRequestedQueryRows(CountRowsParameters countRowsParameters) throws ServiceException;
 
@@ -42,6 +44,7 @@ public interface PublicationService {
 	 * @param itemsPerPage Items per page.
 	 * @param language Language to be translated publication into.
 	 * @return List of publications.
+	 * @throws ServiceException Thrown as wrapper for possible DaoException.
 	 */
 	List<Publication> getLimitedPublicationsByLanguage(int requestedPage, int itemsPerPage, Language language) throws ServiceException;
 
@@ -49,6 +52,7 @@ public interface PublicationService {
 	 * Gets total number of all publications.
 	 *
 	 * @return Number of publications.
+	 * @throws ServiceException Thrown as wrapper for possible DaoException.
 	 */
 	int getTotalNumberOfPublications() throws ServiceException;
 
@@ -56,6 +60,7 @@ public interface PublicationService {
 	 * Deletes publication by id.
 	 *
 	 * @param publicationId Id of publication.
+	 * @throws ServiceException Thrown as wrapper for possible DaoException or ResultSet it empty.
 	 */
 	void deletePublication(int publicationId) throws ServiceException;
 
@@ -64,6 +69,7 @@ public interface PublicationService {
 	 *
 	 * @param publicationId Id of publication.
 	 * @return Map with language key and publication translated value.
+	 * @throws ServiceException Thrown as wrapper for possible DaoException.
 	 */
 	Map<Language, Publication> getPublicationInAllLanguagesById(int publicationId) throws ServiceException;
 
@@ -71,6 +77,7 @@ public interface PublicationService {
 	 * Saving updates on publication.
 	 *
 	 * @param publicationDto All needed info for updating publication.
+	 * @throws ServiceException Thrown when transaction for editing translation records were not committed.
 	 */
 	void editPublicationWithInfo(PublicationDto publicationDto) throws ServiceException;
 
@@ -78,6 +85,7 @@ public interface PublicationService {
 	 * Creates publication.
 	 *
 	 * @param publicationDto All needed info for creating new publication.
+	 * @throws ServiceException Thrown when transaction for creating translation records were not committed.
 	 */
 	void createPublicationWithInfo(PublicationDto publicationDto) throws ServiceException;
 
