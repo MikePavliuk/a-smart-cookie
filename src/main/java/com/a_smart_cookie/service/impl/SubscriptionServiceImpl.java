@@ -89,14 +89,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 					.build();
 
 		} catch (DaoException e) {
-
 			if (savepoint != null) {
 				transaction.rollback(savepoint);
 			} else {
 				transaction.rollback();
 			}
-
-			LOG.error("Can't perform subscribing", e);
 			throw new ServiceException("Can't perform subscribing", e);
 		} finally {
 			transaction.endTransaction();
@@ -133,7 +130,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't get subscription statistics with '" + user + "' and '" + language + "'", e);
 			throw new ServiceException("Can't get subscription statistics with '" + user + "' and '" + language + "'", e);
 		} finally {
 			transaction.endTransaction();

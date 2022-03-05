@@ -48,7 +48,6 @@ public class MysqlUserDetailDao extends UserDetailDao {
 			return Optional.empty();
 
 		} catch (SQLException e) {
-			LOG.error("Can't insert user detail", e);
 			throw new DaoException("Can't insert user detail", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -70,7 +69,6 @@ public class MysqlUserDetailDao extends UserDetailDao {
 			return pstmt.executeUpdate() >0;
 
 		} catch (SQLException e) {
-			LOG.error("Can't add money to balance", e);
 			throw new DaoException("Can't add money to balance", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
@@ -91,7 +89,6 @@ public class MysqlUserDetailDao extends UserDetailDao {
 			return pstmt.executeUpdate() >0;
 
 		} catch (SQLException e) {
-			LOG.error("Can't debit funds from balance", e);
 			throw new DaoException("Can't debit funds from balance", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
@@ -118,7 +115,6 @@ public class MysqlUserDetailDao extends UserDetailDao {
 			return Optional.empty();
 
 		} catch (SQLException e) {
-			LOG.error("Can't get user balance", e);
 			throw new DaoException("Can't get user balance", e);
 		} finally {
 			ResourceReleaser.close(rs);

@@ -37,7 +37,6 @@ public class PaymentServiceImpl implements PaymentService {
 		try {
 			paymentContext.performPayment(paymentAmount);
 		} catch (PaymentException e) {
-			LOG.error("Can't perform payment", e);
 			throw new ServiceException("Can't perform payment", e);
 		}
 
@@ -64,7 +63,6 @@ public class PaymentServiceImpl implements PaymentService {
 					.build();
 
 		} catch (DaoException e) {
-			LOG.error("Can't add funds to user account", e);
 			throw new ServiceException("Can't add funds to user account", e);
 		} finally {
 			transaction.end();

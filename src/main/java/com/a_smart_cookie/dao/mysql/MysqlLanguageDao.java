@@ -39,7 +39,6 @@ public class MysqlLanguageDao extends LanguageDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get language id", e);
 			throw new DaoException("Can't get language id", e);
 		} finally {
 			ResourceReleaser.close(rs);

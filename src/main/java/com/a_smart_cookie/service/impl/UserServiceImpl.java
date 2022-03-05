@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
 			LOG.debug("Finished getting checking if user exists");
 			return userDao.isUserExistsByEmail(email);
 		} catch (DaoException e) {
-			LOG.error("Can't check whether user exists", e);
 			throw new ServiceException("Can't check whether user exists", e);
 		} finally {
 			transaction.end();
@@ -71,7 +70,6 @@ public class UserServiceImpl implements UserService {
 					.build());
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't get user by email " + email, e);
 			throw new ServiceException("Can't get user by email " + email, e);
 		} finally {
 			transaction.endTransaction();
@@ -114,7 +112,6 @@ public class UserServiceImpl implements UserService {
 
 		} catch (DaoException | HashingException e) {
 			transaction.rollback();
-			LOG.error("Can't insert user", e);
 			throw new ServiceException("Can't insert user", e);
 		} finally {
 			transaction.endTransaction();
@@ -139,7 +136,6 @@ public class UserServiceImpl implements UserService {
 
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't get paginated users with statistics", e);
 			throw new ServiceException("Can't get paginated users with statistics", e);
 		} finally {
 			transaction.endTransaction();
@@ -164,7 +160,6 @@ public class UserServiceImpl implements UserService {
 
 		} catch (DaoException e) {
 			transaction.rollback();
-			LOG.error("Can't get all users with statistics", e);
 			throw new ServiceException("Can't get all users with statistics", e);
 		} finally {
 			transaction.endTransaction();
@@ -201,7 +196,6 @@ public class UserServiceImpl implements UserService {
 			LOG.debug("Finished method");
 			return userDao.getTotalNumberOfSubscribers();
 		} catch (DaoException e) {
-			LOG.error("Can't get number of subscribers", e);
 			throw new ServiceException("Can't get number of subscribers", e);
 		} finally {
 			transaction.end();
@@ -226,7 +220,6 @@ public class UserServiceImpl implements UserService {
 			}
 
 		} catch (DaoException e) {
-			LOG.error("Can't change status for user id = '" + userId + "' to status - " + newStatus, e);
 			throw new ServiceException("Can't change status for user id = '" + userId + "' to status - " + newStatus, e);
 		} finally {
 			transaction.end();

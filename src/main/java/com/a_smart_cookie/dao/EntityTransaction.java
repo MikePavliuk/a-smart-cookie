@@ -132,7 +132,6 @@ public final class EntityTransaction {
 		try {
 			return connection.setSavepoint();
 		} catch (SQLException e) {
-			LOG.error("Can't setSavepoint", e);
 			throw new DaoException("Can't set savepoint");
 		}
 	}

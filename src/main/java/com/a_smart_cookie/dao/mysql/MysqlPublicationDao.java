@@ -47,7 +47,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			return extractPublications(rs);
 
 		} catch (SQLException e) {
-			LOG.error("Can't find all publications with query '" + queryBuilder + "'", e);
 			throw new DaoException("Can't find all publications with query '" + queryBuilder + "'", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -80,7 +79,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			return numberOfRows;
 
 		} catch (SQLException e) {
-			LOG.error("Can't count publications with query '" + queryBuilder + "'", e);
 			throw new DaoException("Can't count publications with query '" + queryBuilder + "'", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -112,7 +110,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			return Optional.empty();
 
 		} catch (SQLException e) {
-			LOG.error("Can't get publication by id " + id, e);
 			throw new DaoException("Can't get publication by id " + id, e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -142,7 +139,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get publication by id " + publicationId + " in " + language, e);
 			throw new DaoException("Can't get publication by id " + publicationId + " in " + language, e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -170,7 +166,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			return extractPublications(rs);
 
 		} catch (SQLException e) {
-			LOG.error("Can't get publications", e);
 			throw new DaoException("Can't get publications", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -197,7 +192,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't get number of publications", e);
 			throw new DaoException("Can't get number of publications", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -219,8 +213,7 @@ public class MysqlPublicationDao extends PublicationDao {
 			return pstmt.executeUpdate() > 0;
 
 		} catch (SQLException e) {
-			LOG.error("Can't delete publication", e);
-			throw new DaoException("Can't delete publication", e);
+			throw new DaoException("Can't delete publication by id = '" + publicationId + "'", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
 		}
@@ -242,7 +235,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			return pstmt.executeUpdate() > 0;
 
 		} catch (SQLException e) {
-			LOG.error("Can't update publication", e);
 			throw new DaoException("Can't update publication", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
@@ -266,7 +258,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			return pstmt.executeUpdate() > 0;
 
 		} catch (SQLException e) {
-			LOG.error("Can't update publication info", e);
 			throw new DaoException("Can't update publication info", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
@@ -297,7 +288,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			throw new DaoException("Result set is empty");
 
 		} catch (SQLException e) {
-			LOG.error("Can't insert publication", e);
 			throw new DaoException("Can't insert publication", e);
 		} finally {
 			ResourceReleaser.close(rs);
@@ -327,7 +317,6 @@ public class MysqlPublicationDao extends PublicationDao {
 			return pstmt.executeBatch().length == Language.values().length;
 
 		} catch (SQLException e) {
-			LOG.error("Can't insert publication info", e);
 			throw new DaoException("Can't insert publication info", e);
 		} finally {
 			ResourceReleaser.close(pstmt);
