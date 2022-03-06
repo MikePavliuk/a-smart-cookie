@@ -8,12 +8,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class LocaleHandlerTesting {
 
 	@ParameterizedTest
 	@MethodSource("provideLanguageAndItsDefinedLocale")
-	void givenLanguage_whenGetLocaleByLanguage_thenReturnLocale() {
-
+	void givenLanguage_whenGetLocaleByLanguage_thenReturnLocale(Language language, Locale expectedLocale) {
+		assertEquals(expectedLocale, LocaleHandler.getLocaleByLanguage(language));
 	}
 
 	private static Stream<Arguments> provideLanguageAndItsDefinedLocale() {

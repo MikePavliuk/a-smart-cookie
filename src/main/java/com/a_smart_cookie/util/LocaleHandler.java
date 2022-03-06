@@ -17,6 +17,9 @@ public final class LocaleHandler {
 	 * @return Locale.
 	 */
 	public static Locale getLocaleByLanguage(Language language) {
+		if (language == null) {
+			return Locale.forLanguageTag("uk-UA");
+		}
 
 		switch (language) {
 			case ENGLISH:
