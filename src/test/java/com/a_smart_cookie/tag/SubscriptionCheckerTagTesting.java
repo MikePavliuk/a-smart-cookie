@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 
 public class SubscriptionCheckerTagTesting {
 
 	@Test
 	void givenNullSubscriptions_whenContains_thenThrowIllegalArgumentException() {
 		assertThrows(IllegalArgumentException.class,
-				() -> SubscriptionCheckerTag.contains(null, anyInt()));
+				() -> SubscriptionCheckerTag.contains(null, 1));
 	}
 
 	@Test
