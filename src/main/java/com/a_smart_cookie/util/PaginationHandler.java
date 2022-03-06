@@ -21,6 +21,11 @@ public final class PaginationHandler {
 	 * @param itemsPerPage Items per page.
 	 */
 	public static void setPaginationAttributes(HttpServletRequest request, int numberOfPages, int currentPage, int itemsPerPage) {
+
+		if (request == null) {
+			throw new IllegalArgumentException("HttpServletRequest can't be null");
+		}
+
 		request.setAttribute("numberOfPages", numberOfPages);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("itemsPerPage", itemsPerPage);
@@ -34,6 +39,10 @@ public final class PaginationHandler {
 	 * @return Requested count of number of pages.
 	 */
 	public static int getRequestedNumberOfPages(int itemsPerPage, int totalNumberOfItems) {
+		if (itemsPerPage <= 0 || totalNumberOfItems < 0) {
+			throw new IllegalArgumentException("Input values should be valid ones");
+		}
+
 		int numberOfPages = totalNumberOfItems / itemsPerPage;
 		if (totalNumberOfItems % itemsPerPage > 0) {
 			++numberOfPages;
@@ -50,6 +59,10 @@ public final class PaginationHandler {
 	 * @return Requested page number.
 	 */
 	public static int getRequestedPageNumber(HttpServletRequest request, int numberOfPages) {
+		if (request == null) {
+			throw new IllegalArgumentException("HttpServletRequest can't be null");
+		}
+
 		int currentPage = 1;
 		String pageNumberParameter = request.getParameter("page");
 		if (pageNumberParameter != null && (Integer.parseInt(pageNumberParameter) >= currentPage) && (Integer.parseInt(pageNumberParameter) <= numberOfPages)) {
