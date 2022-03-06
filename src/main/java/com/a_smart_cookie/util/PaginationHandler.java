@@ -1,4 +1,4 @@
-package com.a_smart_cookie.util.pagination;
+package com.a_smart_cookie.util;
 
 import org.apache.log4j.Logger;
 

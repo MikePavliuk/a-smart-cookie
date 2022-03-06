@@ -1,7 +1,7 @@
 package com.a_smart_cookie.util.translator.strategies;
 
 import com.a_smart_cookie.entity.Language;
-import com.a_smart_cookie.util.sorting.SortingDirection;
+import com.a_smart_cookie.dto.catalog.SortingDirection;
 import com.a_smart_cookie.util.translator.Translator;
 
 /**

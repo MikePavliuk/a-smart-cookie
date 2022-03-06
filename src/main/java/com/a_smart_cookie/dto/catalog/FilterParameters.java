@@ -2,8 +2,6 @@ package com.a_smart_cookie.dto.catalog;
 
 import com.a_smart_cookie.entity.Genre;
 import com.a_smart_cookie.entity.Language;
-import com.a_smart_cookie.util.sorting.SortingDirection;
-import com.a_smart_cookie.util.sorting.SortingParameter;
 
 /**
  * Data transfer object that used as holder of filter params to get requested publications by that params.

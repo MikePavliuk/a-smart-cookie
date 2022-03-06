@@ -11,7 +11,7 @@ import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.CookieHandler;
-import com.a_smart_cookie.util.pagination.PaginationHandler;
+import com.a_smart_cookie.util.PaginationHandler;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
