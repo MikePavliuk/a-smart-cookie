@@ -33,6 +33,10 @@ public final class CookieHandler {
 	 * @return Optional cookie by requested key.
 	 */
 	public static Optional<Cookie> readCookie(HttpServletRequest req, String key) {
+		if (req == null || key == null) {
+			throw new IllegalArgumentException("Input parameters can't be null");
+		}
+
 		return Arrays.stream(req.getCookies())
 				.filter(c -> key.equals(c.getName()))
 				.findAny();
