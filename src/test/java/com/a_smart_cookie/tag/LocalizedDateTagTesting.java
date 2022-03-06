@@ -34,7 +34,6 @@ public class LocalizedDateTagTesting {
 		assertEquals(expectedResult, actual);
 	}
 
-
 	private static Stream<Arguments> provideTestingExamples() {
 		return Stream.of(
 				Arguments.of(LocalDate.of(2022, 3, 3), Language.UKRAINIAN, "03.03.22"),
