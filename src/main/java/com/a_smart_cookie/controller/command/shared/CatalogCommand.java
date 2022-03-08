@@ -14,10 +14,10 @@ import com.a_smart_cookie.exception.ServiceException;
 import com.a_smart_cookie.service.PublicationService;
 import com.a_smart_cookie.service.ServiceFactory;
 import com.a_smart_cookie.util.CookieHandler;
-import com.a_smart_cookie.util.pagination.ItemsPerPage;
-import com.a_smart_cookie.util.pagination.PaginationHandler;
-import com.a_smart_cookie.util.sorting.SortingDirection;
-import com.a_smart_cookie.util.sorting.SortingParameter;
+import com.a_smart_cookie.dto.ItemsPerPage;
+import com.a_smart_cookie.util.PaginationHandler;
+import com.a_smart_cookie.dto.catalog.SortingDirection;
+import com.a_smart_cookie.dto.catalog.SortingParameter;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;

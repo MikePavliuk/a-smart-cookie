@@ -18,14 +18,20 @@ public class LocalizedDateTag {
 	 * @param localDate Local date to be displayed.
 	 * @param language  Language for choosing proper locale.
 	 * @return String localized date.
+	 * @throws IllegalArgumentException Thrown if at least one input parameter is null.
 	 */
 	public static String convert(LocalDate localDate, Language language) {
+
+		if (localDate == null || language  == null) {
+			throw new IllegalArgumentException("Parameters can't be null!");
+		}
 
 		return localDate.format(
 				DateTimeFormatter
 						.ofLocalizedDate(FormatStyle.SHORT)
 						.withLocale(LocaleHandler.getLocaleByLanguage(language))
 		);
+
 	}
 
 }

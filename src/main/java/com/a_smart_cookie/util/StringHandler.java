@@ -13,6 +13,9 @@ public final class StringHandler {
 	 * @return Capitalized fist letter string.
 	 */
 	public static String capitaliseFirstLetter(String input){
+		if (input == null || input.isEmpty()) {
+			throw new IllegalArgumentException("Input can't be null or empty");
+		}
 		return input.substring(0, 1).toUpperCase() + input.substring(1);
 	}
 

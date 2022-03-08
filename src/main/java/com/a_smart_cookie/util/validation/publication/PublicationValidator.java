@@ -2,6 +2,7 @@ package com.a_smart_cookie.util.validation.publication;
 
 import com.a_smart_cookie.dao.EntityColumn;
 import com.a_smart_cookie.dto.admin.PublicationDto;
+import com.a_smart_cookie.entity.Language;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,17 +26,20 @@ public final class PublicationValidator {
 						.isValid(publicationDto.getPricePerMonth().toString())
 		);
 
-		publicationDto.getTitles().forEach((language, title) ->
-				validationResult.put(EntityColumn.PublicationInfo.TITLE.getName() + "_" + language.getAbbr(),
-				PublicationFieldValidator.getValidatorByFieldName(EntityColumn.PublicationInfo.TITLE.getName())
-						.isValid(title)
-		));
+		for (Language language : Language.values()) {
+			validationResult.put(EntityColumn.PublicationInfo.TITLE.getName() + "_" + language.getAbbr(),
+					PublicationFieldValidator
+							.getValidatorByFieldName(EntityColumn.PublicationInfo.TITLE.getName())
+							.isValid(publicationDto.getTitles().get(language))
+			);
 
-		publicationDto.getDescriptions().forEach((language, description) ->
-				validationResult.put(EntityColumn.PublicationInfo.DESCRIPTION.getName() + "_" + language.getAbbr(),
-				PublicationFieldValidator.getValidatorByFieldName(EntityColumn.PublicationInfo.DESCRIPTION.getName())
-						.isValid(description)
-		));
+			validationResult.put(EntityColumn.PublicationInfo.DESCRIPTION.getName() + "_" + language.getAbbr(),
+					PublicationFieldValidator
+							.getValidatorByFieldName(EntityColumn.PublicationInfo.DESCRIPTION.getName())
+							.isValid(publicationDto.getDescriptions().get(language))
+			);
+
+		}
 
 		return validationResult;
 	}

@@ -18,6 +18,10 @@ public class SubscriptionCheckerTag {
 	 * @return Is publication in subscription list.
 	 */
 	public static boolean contains(List<Subscription> subscriptions, Integer publicationId) {
+		if (subscriptions == null || publicationId == null) {
+			throw new IllegalArgumentException("Parameters can't be null");
+		}
+
 		return subscriptions.stream().anyMatch(subscription -> subscription.getPublicationId().equals(publicationId));
 	}
 
