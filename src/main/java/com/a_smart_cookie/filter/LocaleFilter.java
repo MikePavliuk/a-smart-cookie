@@ -26,7 +26,9 @@ public class LocaleFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-		LOG.debug("Cookie 'lang' before init -->" + CookieHandler.readCookieValue(req, "lang").get());
+		if (CookieHandler.readCookieValue(req, "lang").isPresent()) {
+			LOG.debug("Cookie 'lang' before init -->" + CookieHandler.readCookieValue(req, "lang").get());
+		}
 
 		if (CookieHandler.readCookieValue(req, "lang").isEmpty()) {
 			LOG.trace("Cookie 'lang' is empty");
@@ -39,7 +41,9 @@ public class LocaleFilter implements Filter {
 			CookieHandler.updateCookie("lang", lang, 60*60*24*7, req.getContextPath(), req, resp);
 		}
 
-		LOG.debug("Cookie 'lang' after init -->" + CookieHandler.readCookieValue(req, "lang").get());
+		if (CookieHandler.readCookieValue(req, "lang").isPresent()) {
+			LOG.debug("Cookie 'lang' after init -->" + CookieHandler.readCookieValue(req, "lang").get());
+		}
 
 		LOG.debug("Locale filter finished filtering");
 		filterChain.doFilter(req, servletResponse);
