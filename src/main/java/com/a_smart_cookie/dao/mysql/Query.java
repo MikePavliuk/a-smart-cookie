@@ -211,6 +211,48 @@ public final class Query {
 	}
 
 	/**
+	 * Represents queries holder for obtaining roles.
+	 */
+	public enum Role {
+		GET_ID_BY_NAME(
+				"SELECT role.id " +
+						"FROM a_smart_cookie.role " +
+						"WHERE role.name = ?;"
+		);
+
+		private final String query;
+
+		Role(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
+
+	/**
+	 * Represents queries holder for obtaining roles.
+	 */
+	public enum UserStatus {
+		GET_ID_BY_NAME(
+				"SELECT user_status.id " +
+						"FROM a_smart_cookie.user_status " +
+						"WHERE user_status.name = ?;"
+		);
+
+		private final String query;
+
+		UserStatus(String query) {
+			this.query = query;
+		}
+
+		public String getQuery() {
+			return query;
+		}
+	}
+
+	/**
 	 * Represents queries holder for user entity.
 	 */
 	public enum User {

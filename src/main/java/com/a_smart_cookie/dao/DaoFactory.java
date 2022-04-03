@@ -100,4 +100,18 @@ public abstract class DaoFactory {
 	 */
 	public abstract LanguageDao getLanguageDao();
 
+	/**
+	 * Method for getting instance of UserStatusDao.
+	 *
+	 * @return Instance of requested implementation of UserStatusDao.
+	 */
+	public abstract UserStatusDao getUserStatusDao();
+
+	/**
+	 * Method for getting instance of RoleDao.
+	 *
+	 * @return Instance of requested implementation of RoleDao.
+	 */
+	public abstract RoleDao getRoleDao();
+
 }

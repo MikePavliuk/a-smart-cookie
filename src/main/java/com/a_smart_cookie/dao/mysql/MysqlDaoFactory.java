@@ -38,5 +38,14 @@ public class MysqlDaoFactory extends DaoFactory {
 		return new MysqlLanguageDao();
 	}
 
+	@Override
+	public UserStatusDao getUserStatusDao() {
+		return new MysqlUserStatusDao();
+	}
+
+	@Override
+	public RoleDao getRoleDao() {
+		return new MysqlRoleDao();
+	}
 
 }

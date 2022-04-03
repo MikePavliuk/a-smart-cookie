@@ -85,11 +85,16 @@ public class UserServiceImpl implements UserService {
 		try {
 			UserDao userDao = DaoFactory.getInstance().getUserDao();
 			UserDetailDao userDetailDao = DaoFactory.getInstance().getUserDetailDao();
+			RoleDao roleDao = DaoFactory.getInstance().getRoleDao();
+			UserStatusDao userStatusDao = DaoFactory.getInstance().getUserStatusDao();
 
-			transaction.initTransaction(userDao, userDetailDao);
+			transaction.initTransaction(userDao, userDetailDao, roleDao, userStatusDao);
 
 			User user = UserMapper.convertFromDtoToEntity(userSignUpDto);
-			Optional<User> insertedUser = userDao.createUser(user);
+			int roleId = roleDao.getIdByName(user.getRole().name().toLowerCase());
+			int statusId = userStatusDao.getIdByName(user.getStatus().name().toLowerCase());
+
+			Optional<User> insertedUser = userDao.createUser(user, roleId, statusId);
 
 			if (insertedUser.isEmpty()) {
 				transaction.rollback();

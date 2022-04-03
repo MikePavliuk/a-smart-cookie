@@ -78,7 +78,7 @@ public class MysqlUserDao extends UserDao {
 	}
 
 	@Override
-	public Optional<User> createUser(User user) throws DaoException {
+	public Optional<User> createUser(User user, int roleId, int statusId) throws DaoException {
 		LOG.debug("Starts inserting user");
 
 		PreparedStatement pstmt = null;
@@ -88,8 +88,8 @@ public class MysqlUserDao extends UserDao {
 			pstmt.setString(1, user.getEmail());
 			pstmt.setBytes(2, user.getPassword());
 			pstmt.setBytes(3, user.getSalt());
-			pstmt.setInt(4, user.getRole().getId());
-			pstmt.setInt(5, user.getStatus().getId());
+			pstmt.setInt(4, roleId);
+			pstmt.setInt(5, statusId);
 
 			LOG.trace(pstmt);
 

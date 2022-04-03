@@ -34,10 +34,12 @@ public abstract class UserDao extends AbstractDao {
 	 * Insert user into db and returns its set id.
 	 *
 	 * @param user User information for creating record in db.
+	 * @param roleId Role if for newly crated user.
+	 * @param statusId Status if for newly crated user.
 	 * @return Generated id for inserted user or empty if something went wrong.
 	 * @throws DaoException Occurred when something went wrong on JDBC layer.
 	 */
-	public abstract Optional<User> createUser(User user) throws DaoException;
+	public abstract Optional<User> createUser(User user, int roleId, int statusId) throws DaoException;
 
 	/**
 	 * Gets limited number of subscribers.
