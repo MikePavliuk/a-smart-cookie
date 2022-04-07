@@ -7,7 +7,8 @@
 The following functional requirements have been identified for the program:
 
 - There is a list of publications in the system, which are grouped by topic.
-- The reader can subscribe to one or more publications. -For the list of publications it is necessary to realize the
+- The reader can subscribe to one or more publications. 
+- -For the list of publications it is necessary to realize the
   possibility:
     - sorting publications by title;
     - sorting publications by price;
@@ -36,7 +37,7 @@ The following non-functional requirements were identified for the developed prog
    the database:
    - it must be possible to switch the interface language; 
    - there should be support for input, output and storage of information (in the database), recorded in different languages; 
-   - c. choose at least two languages: one based on Cyrillic (Ukrainian), another based on Latin (English).
+   - choose at least two languages: one based on Cyrillic (Ukrainian), another based on Latin (English).
 7. The application architecture must conform to the MVC template.
 8. When implementing business logic, it is necessary to use design patterns: Strategy, Factory, Builder, Singleton, Front Controller, Observer, Adapter, etc.
 9. Using servlets and JSP, implement the functionality described in the functional requirements.
