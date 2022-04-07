@@ -58,7 +58,7 @@ The following non-functional requirements were identified for the developed prog
 22. The use of HTML, CSS, JS frameworks for the user interface (Bootstrap, Materialize, etc.) is encouraged!
 
 ### ER-diagram 
-![ER-diagram](../assets/screenshots/A Smart Cookie DB.drawio.png)
+![ER-diagram](../assets/screenshots/ER-diagram.png)
 
 ### UI
 
